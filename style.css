@@ -297,11 +297,19 @@ svg { color: var(--gold); }
 .cover-emblem.ganesha { display: block; width: 96px; height: auto; margin: 0 auto 10px; padding: 0; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .35)); }
 /* the gold-foil Ganesha: theme gold engraved in deep maroon, with a red tilak */
 .gn-foil { --g1: var(--gs1); --g2: var(--gs2); --g3: var(--gs3); --g4: var(--gs4); --gn-cut: #6b1015; --gn-red: #c8202c; }
-.gn-foil .g1 { stop-color: var(--g1); } .gn-foil .g2 { stop-color: var(--g2); } .gn-foil .g3 { stop-color: var(--g3); } .gn-foil .g4 { stop-color: var(--g4); }
+.ganesha .g1 { stop-color: var(--g1); } .ganesha .g2 { stop-color: var(--g2); } .ganesha .g3 { stop-color: var(--g3); } .ganesha .g4 { stop-color: var(--g4); }
 .gn-foil .gn-cut { stroke: var(--gn-cut); } .gn-foil .gn-cut-f { fill: var(--gn-cut); }
 .gn-foil .gn-red { fill: var(--gn-red); } .gn-foil .gn-red path[fill="none"] { stroke: var(--gn-red); }
 .halo .gn-foil { width: 68%; }
 .cover-emblem.gn-foil { width: 116px; }
+/* the brush-stroke Ganesha: theme gold on the silk, royal-red ink on the pale cover */
+.gn-brush { --g1: var(--gs1); --g2: var(--gs2); --g3: var(--gs3); --g4: var(--gs4); }
+.gn-brush .gn-tilak { fill: #f0503c; }
+.halo .gn-brush { width: 74%; }
+.gn-brush .gb { stop-color: var(--silk-1, #9a1c22); }
+.gn-back { display: none; }
+.halo .gn-back { display: inline; }
+.cover-emblem.gn-brush { width: 118px; }
 .emblem.initials { font-family: var(--script); font-size: calc(clamp(30px, 9vw, 40px) * var(--script-k)); }
 .invocation { margin-top: 4px; font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 17px; color: var(--gold); }
 .invocation.latin { font-family: var(--serif); font-style: italic; font-size: 19px; }
@@ -688,6 +696,8 @@ svg { color: var(--gold); }
 .gold-cover .ganesha { color: var(--royal); filter: none; }
 .gold-cover .gn-foil { --g1: #7a5518; --g2: #c49a45; --g3: #f6dc93; --g4: #a27a2c; --gn-cut: var(--royal); filter: drop-shadow(0 2px 2.5px rgba(90, 50, 10, .3)); }
 :root[data-cover="gold"] .gold-cover .gn-foil { --g1: #5e0910; --g2: #9a1820; --g3: #c63a40; --g4: #6e0b12; --gn-cut: #f3d58a; --gn-red: #f3d58a; }
+.gold-cover .gn-brush { --g1: #5e0910; --g2: #9a1820; --g3: #c0353c; --g4: #6e0b12; }
+.gold-cover .gn-brush .gn-tilak { fill: #c8202c; }
 .gold-cover .cover-lace { opacity: .1; }
 .gold-cover .cover-lace path { stroke: var(--orn, var(--royal)); }
 .gold-cover .cover-lace path[fill] { fill: var(--orn, var(--royal)); }
