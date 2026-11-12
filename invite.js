@@ -183,7 +183,7 @@
   // K sits high on the left, J low on the right, interlocking on the diagonal.
   const CREST_FONTS = {
     bodoni: { cls: 'lg-bodoni', size: 134, ax: 114, ay: 158, bx: 184, by: 214, gap: 8 },
-    cinzel: { cls: 'lg-cinzel', size: 114, ax: 110, ay: 160, bx: 188, by: 214, gap: 7 },
+    cinzel: { cls: 'lg-cinzel', size: 114, ax: 110, ay: 152, bx: 188, by: 205, gap: 7 },
     imperial: { cls: 'lg-imperial', size: 128, ax: 120, ay: 154, bx: 180, by: 206, gap: 8, plain: true },
     garamond: { cls: 'lg-serif', size: 132, ax: 116, ay: 158, bx: 182, by: 214, gap: 8 },
   };
@@ -252,7 +252,7 @@
       + `${crown()}<g fill="url(#gS)">${lotusMark(150, 289, -1)}<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/></g>`
       + (f.plain ? '' : paisley(216, 96, 0) + paisley(84, 206, 180))
       + pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap).replace(/fill="url\(#gS\)"/g, `fill="${letterFill}"`)
-      + `<text class="lg-date" x="150" y="245" text-anchor="middle">${esc(date)}</text></svg>`;
+      + `<text class="lg-date" x="150" y="249" text-anchor="middle">${esc(date)}</text></svg>`;
   }
 
   const ICON = {
