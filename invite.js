@@ -6,7 +6,7 @@
 (() => {
   'use strict';
 
-  const THEMES = ['peacock', 'midnight', 'rani', 'marigold'];
+  const THEMES = ['marigold', 'red'];
   const root = document.documentElement;
   const params = new URLSearchParams(location.search);
   const $ = (sel) => document.querySelector(sel);
@@ -416,8 +416,8 @@
 
   function themeBar() {
     if (root.dataset.switcher !== '1' && params.get('themes') !== '1') return;
-    const labels = { peacock: 'Peacock', midnight: 'Midnight', rani: 'Rani', marigold: 'Ivory' };
-    const swatch = { peacock: '#0b3a37', midnight: '#111a3d', rani: '#5a0e38', marigold: '#efdfb9' };
+    const labels = { marigold: 'Ivory', red: 'Royal Red' };
+    const swatch = { marigold: '#efdfb9', red: '#8e1b1f' };
     const bar = document.createElement('div');
     bar.className = 'theme-bar';
     bar.setAttribute('role', 'group');

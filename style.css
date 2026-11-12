@@ -5,69 +5,8 @@
    ===================================================================== */
 
 :root,
-[data-theme="peacock"] {
-  /* Peacock: deep peacock-emerald silk, antique gold */
-  --silk-1: #10504c;
-  --silk-2: #04211f;
-  --silk-ink: #f5eedc;
-  --silk-soft: rgba(245, 238, 220, .74);
-  --paper: #fbf7ee;
-  --paper-2: #fffdf8;
-  --ink: #12403c;
-  --ink-soft: #5c736e;
-  --gs1: #8c6a2a; --gs2: #d8b462; --gs3: #fcefc0; --gs4: #b68e3e;   /* gold on silk */
-  --gp1: #6a4a13; --gp2: #a57e2d; --gp3: #d9b866; --gp4: #87621f;   /* gold on paper */
-  --gold-s: #d4b062;
-  --gold-p: #a98536;
-  --line-s: rgba(212, 176, 98, .45);
-  --line-p: rgba(169, 133, 54, .42);
-  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23d8b462' stroke-opacity='.075' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
-  --script: 'Pinyon Script', cursive;
-  --script-k: 1;
-  --caps: 'Cinzel', 'Cormorant SC', serif;
-  --caps-weight: 500;
-  --serif: 'Cormorant Garamond', Georgia, serif;
-}
-
-[data-theme="midnight"] {
-  /* Midnight: navy silk, champagne gold */
-  --silk-1: #1b2856;
-  --silk-2: #070c22;
-  --silk-ink: #f4ecd9;
-  --silk-soft: rgba(244, 236, 217, .72);
-  --paper: #f9f6ee;
-  --paper-2: #fffdf8;
-  --ink: #1c2652;
-  --ink-soft: #5d6383;
-  --script: 'Imperial Script', cursive;
-  --script-k: .96;
-}
-
-[data-theme="rani"] {
-  /* Rani: deep rani-wine silk, rose gold */
-  --silk-1: #741349;
-  --silk-2: #2c0518;
-  --silk-ink: #faeedf;
-  --silk-soft: rgba(250, 238, 223, .74);
-  --paper: #fdf8f3;
-  --paper-2: #fffdfa;
-  --ink: #5f1239;
-  --ink-soft: #87566d;
-  --gs1: #8f5f32; --gs2: #e0b47a; --gs3: #fde9cc; --gs4: #b9844f;
-  --gp1: #6b3f1c; --gp2: #a8733f; --gp3: #dcae76; --gp4: #8a5a2c;
-  --gold-s: #deb07a;
-  --gold-p: #a8733f;
-  --line-s: rgba(222, 176, 122, .45);
-  --line-p: rgba(168, 115, 63, .42);
-  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23e0b47a' stroke-opacity='.08' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
-  --script: 'Luxurious Script', cursive;
-  --script-k: 1.02;
-  --caps: 'Bodoni Moda', 'Cinzel', serif;
-  --caps-weight: 500;
-}
-
 [data-theme="marigold"] {
-  /* Marigold: ivory and champagne, deep gold foil (the light option) */
+  /* Ivory: ivory and champagne silk, deep gold foil */
   --silk-1: #f8eed8;
   --silk-2: #e8d2a4;
   --silk-ink: #4b2f10;
@@ -76,8 +15,8 @@
   --paper-2: #fffefa;
   --ink: #57340f;
   --ink-soft: #8b6c49;
-  --gs1: #6a4a13; --gs2: #a57e2d; --gs3: #e3c272; --gs4: #87621f;
-  --gp1: #6a4a13; --gp2: #a57e2d; --gp3: #d9b866; --gp4: #87621f;
+  --gs1: #6a4a13; --gs2: #a57e2d; --gs3: #e3c272; --gs4: #87621f;   /* gold on silk */
+  --gp1: #6a4a13; --gp2: #a57e2d; --gp3: #d9b866; --gp4: #87621f;   /* gold on paper */
   --gold-s: #9c7a2f;
   --gold-p: #a07c30;
   --line-s: rgba(140, 104, 38, .45);
@@ -86,8 +25,28 @@
   --script: 'Corinthia', cursive;
   --script-k: 1.18;
   --script-weight: 700;
-  --caps: 'Cormorant SC', 'Cinzel', serif;
+  --caps: 'Cormorant SC', 'Cormorant Garamond', serif;
   --caps-weight: 600;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+}
+
+[data-theme="red"] {
+  /* Royal Red: deep red silk, bright gold foil, ivory card stock */
+  --silk-1: #9a1c22;
+  --silk-2: #3f0609;
+  --silk-ink: #fbf0dc;
+  --silk-soft: rgba(251, 240, 220, .76);
+  --paper: #fffaf1;
+  --paper-2: #fffdf8;
+  --ink: #6e1616;
+  --ink-soft: #8d5d52;
+  --gs1: #8c6a2a; --gs2: #dcb867; --gs3: #fcefc0; --gs4: #b68e3e;
+  --gp1: #6a4a13; --gp2: #a57e2d; --gp3: #d9b866; --gp4: #87621f;
+  --gold-s: #d9b466;
+  --gold-p: #a98536;
+  --line-s: rgba(217, 180, 102, .5);
+  --line-p: rgba(169, 133, 54, .42);
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23dcb867' stroke-opacity='.09' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* gradient stops for the SVG ornaments */
@@ -303,7 +262,7 @@ svg { color: var(--gold); }
 .finial { position: absolute; top: 20px; left: 50%; width: 56px; height: 32px; transform: translateX(-50%); }
 .fn-fill { opacity: .85; }
 .fn-line { fill: none; stroke: currentColor; stroke-width: .9; }
-.ev-name { margin-top: 10px; font-size: calc(clamp(36px, 11vw, 44px) * var(--script-k)); }
+.ev-name { margin-top: 10px; font-size: calc(clamp(32px, 9.4vw, 40px) * var(--script-k)); text-wrap: balance; }
 .ev-day { margin-top: 8px; }
 .ev-num { display: inline-block; padding: 0 .1em; font-family: var(--serif); font-size: 72px; font-weight: 500; line-height: 1.05; }
 .ev-month { font-size: 19px; font-style: italic; font-weight: 500; }
