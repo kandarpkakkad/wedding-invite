@@ -465,9 +465,11 @@
     ? `<span class="${cls} foil"${isDevanagari(emblem) ? ' lang="sa"' : ''}>${esc(emblem)}</span>`
     : `<span class="${cls} initials foil">${esc(initials)}</span>`);
 
-  function eventCard(ev, index, inv) {
+  function eventCard(ev, index, inv, look = {}) {
     const maps = safeUrl(ev.maps);
-    return `<div class="card reveal ev-${esc(ev.id)}">
+    const cls = `${look.pastel ? ' pastel' : ''}${look.decor ? ' decor' : ''}`;
+    return `<div class="card reveal ev-${esc(ev.id)}${cls}">
+      ${look.decor ? corner('bl') + corner('br') : ''}
       ${eventIcon(ev.id)}
       <h3 class="ev-name script foil">${esc(ev.name)}</h3>
       <p class="ev-day tiny">${esc(ev.weekday)}</p>
@@ -517,6 +519,10 @@
       motif: pick('motif', t.logoMotif, ['paisley', 'peacock'], 'paisley'),
       anim: pick('anim', t.logoAnim, ['subtle', 'strong'], 'subtle'),
     };
+    const cardLook = {
+      pastel: pick('cards', t.cardBg, ['ivory', 'pastel'], 'ivory') === 'pastel',
+      decor: pick('border', t.cardBorder, ['plain', 'decorated'], 'plain') === 'decorated',
+    };
 
     $('#invite').innerHTML = `
       <section class="hero silk${logoStyle ? ' has-logo' : ''}">
@@ -562,7 +568,7 @@
         <p class="kicker reveal">You are warmly invited to</p>
         <h2 class="title foil reveal">${inv.events.length > 1 ? 'Functions &amp; Ceremonies' : 'The Ceremony'}</h2>
         <div class="reveal">${divider('S')}</div>
-        <div class="cards">${inv.events.map((ev, i) => eventCard(ev, i, inv)).join('')}</div>
+        <div class="cards">${inv.events.map((ev, i) => eventCard(ev, i, inv, cardLook)).join('')}</div>
         <div class="patola bottom"></div>
       </section>
 
