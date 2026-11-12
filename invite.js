@@ -775,7 +775,7 @@
     // one song loops; several play in order and then start again from the first
     const tracks = src.split('|').filter(Boolean);
     let track = 0;
-    const VOLUME = 0.3;
+    const VOLUME = 0.6;
     const audio = new Audio();
     audio.src = tracks[0];
     audio.loop = tracks.length === 1;
@@ -825,7 +825,7 @@
       ensureGraph();
       if (ctx && ctx.state === 'suspended') ctx.resume();
       const p = audio.play();
-      if (p && p.then) p.then(() => { fadeTo(VOLUME, 3); setUi(); }).catch(() => { wanted = false; setUi(); });
+      if (p && p.then) p.then(() => { fadeTo(VOLUME, 1.5); setUi(); }).catch(() => { wanted = false; setUi(); });
     };
     const pause = () => {
       wanted = false;
