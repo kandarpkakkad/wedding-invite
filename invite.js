@@ -767,16 +767,24 @@
     }
   }
 
-  /* ---------------- soft background music (a song in the repo's music/ folder) ---------------- */
+  /* ---------------- soft background music (the songs in the repo's music/ folder) ---------------- */
 
   const music = (() => {
     const src = root.dataset.music;
     if (!src || src.includes('{{')) return null;
+    // one song loops; several play in order and then start again from the first
+    const tracks = src.split('|').filter(Boolean);
+    let track = 0;
     const VOLUME = 0.3;
     const audio = new Audio();
-    audio.src = src;
-    audio.loop = true;
+    audio.src = tracks[0];
+    audio.loop = tracks.length === 1;
     audio.preload = 'none';
+    audio.addEventListener('ended', () => {
+      track = (track + 1) % tracks.length;
+      audio.src = tracks[track];
+      if (wanted) audio.play().catch(() => {});
+    });
     let ctx = null;
     let gain = null;
     let wanted = false;
