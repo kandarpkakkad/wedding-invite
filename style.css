@@ -283,6 +283,10 @@ svg { color: var(--gold); }
 .halo { position: relative; display: grid; place-items: center; width: min(56vw, 232px, 30svh); aspect-ratio: 1; }
 .halo .mandala { position: absolute; inset: 0; animation: spin 180s linear infinite; }
 .emblem { position: relative; padding: .1em .2em; font-family: 'Tiro Devanagari Sanskrit', serif; font-size: clamp(34px, 11vw, 46px); line-height: 1.2; }
+/* Shri Ganesh in front of the mandala, which becomes his halo */
+.halo .ganesha { position: relative; width: 72%; height: auto; overflow: visible; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, .3)); }
+.hero.has-logo .halo:has(.ganesha) { width: min(46vw, 178px, 24svh); }
+.cover-emblem.ganesha { display: block; width: 96px; height: auto; margin: 0 auto 10px; padding: 0; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .35)); }
 .emblem.initials { font-family: var(--script); font-size: calc(clamp(30px, 9vw, 40px) * var(--script-k)); }
 .invocation { margin-top: 4px; font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 17px; color: var(--gold); }
 .invocation.latin { font-family: var(--serif); font-style: italic; font-size: 19px; }

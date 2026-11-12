@@ -89,6 +89,29 @@
     + '<path class="cn-curl" d="M24 6C35 6 41 13 37 19C34 23 28 22 29 17M6 24C6 35 13 41 19 37C23 34 22 28 17 29M37 19C44 12 51 10 58 11M19 37C12 44 10 51 11 58"/>'
     + '<circle class="cn-fill" cx="43" cy="5.5" r="1.3"/><circle class="cn-fill" cx="5.5" cy="43" r="1.3"/><circle class="cn-fill" cx="27" cy="27" r="1.6"/></svg>';
 
+  /* Shri Ganesh: an original gold drawing (crown, ears, tilak, curled trunk, tusks) */
+  const GANESHA_EAR = '<path d="M42 54C33 45 15 46 11 58C7 71 15 85 29 88C36 89.5 41 83 43 75Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".9"/>'
+    + '<path d="M38 59C31 54 21.5 56 18.5 64C16 72 21 80 30 82" fill="none" stroke="#6e4f16" stroke-width=".8" opacity=".75"/>'
+    + '<g fill="#a3161f"><circle cx="23" cy="62" r="1.3"/><circle cx="20.6" cy="70" r="1.3"/><circle cx="24" cy="77.5" r="1.3"/></g>';
+  const ganesha = (cls) => `<svg class="${cls} ganesha" viewBox="0 0 120 120" role="img" aria-label="Shri Ganesh">`
+    + GANESHA_EAR + `<g transform="translate(120 0) scale(-1 1)">${GANESHA_EAR}</g>`
+    + '<path d="M40 56C40 44 80 44 80 56C80 70 74 80 66 84H54C46 80 40 70 40 56Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".9"/>'
+    + '<path d="M51 36C51 29 69 29 69 36Z M60 15C64 21 64.5 26 60 30C55.5 26 56 21 60 15Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".8"/>'
+    + '<path d="M45 44C45 35 75 35 75 44Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".8"/>'
+    + '<path d="M40 50C40 43 80 43 80 50C80 52.6 40 52.6 40 50Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".8"/>'
+    + '<circle cx="60" cy="12.6" r="2.2" fill="url(#gS)" stroke="#6e4f16" stroke-width=".6"/>'
+    + '<g fill="#a3161f"><circle cx="60" cy="48" r="2.3"/><circle cx="49.5" cy="48.4" r="1.4"/><circle cx="70.5" cy="48.4" r="1.4"/></g>'
+    + '<circle cx="60" cy="39.6" r="1.7" fill="#1f6f52"/><circle cx="60" cy="33" r="1.2" fill="#a3161f"/>'
+    + '<path d="M56.6 53.4Q60 60.5 63.4 53.4" fill="none" stroke="#a3161f" stroke-width="1.5" stroke-linecap="round"/><circle cx="60" cy="58.4" r="1.3" fill="#a3161f"/>'
+    + '<path d="M49.4 63.8Q52.4 61.9 55.4 63.8Q52.4 65.3 49.4 63.8ZM64.6 63.8Q67.6 61.9 70.6 63.8Q67.6 65.3 64.6 63.8Z" fill="#3a0a0e"/>'
+    + '<path d="M48.6 60.6Q52.4 59.2 56 60.8M64 60.8Q67.6 59.2 71.4 60.6" fill="none" stroke="#6e4f16" stroke-width=".8" stroke-linecap="round"/>'
+    + '<circle cx="53.3" cy="63.3" r=".55" fill="#fff3d6"/><circle cx="68.5" cy="63.3" r=".55" fill="#fff3d6"/>'
+    + '<path d="M60 68C59 80 59.5 92 63.5 101" fill="none" stroke="url(#gS)" stroke-width="10" stroke-linecap="round"/>'
+    + '<path d="M63.5 101C68 110 79 111 82.5 104.5C85.5 98 79 93 74.5 96.5C71 99.5 72.5 104 76.5 104" fill="none" stroke="url(#gS)" stroke-width="5.5" stroke-linecap="round"/>'
+    + '<path d="M55.4 76Q60 78.2 64.6 76M56 83.4Q60.5 85.6 65 83.4M57.6 90.6Q61.6 92.6 65.6 90.6" fill="none" stroke="#6e4f16" stroke-width=".8"/>'
+    + '<path d="M53.5 75.5C48.5 79.5 47.5 85.5 50 90" fill="none" stroke="#fff3d6" stroke-width="3.2" stroke-linecap="round"/>'
+    + '<path d="M66.5 75.5C69.5 77.5 70 80 69 82.4" fill="none" stroke="#fff3d6" stroke-width="3.2" stroke-linecap="round"/></svg>';
+
   /* a kalash: gold pot with a red band, mango leaves and a coconut */
   const kalash = () => '<svg class="kalash" viewBox="0 0 80 96" aria-hidden="true">'
     + '<g class="acc-green-f"><path d="M40 40C30 35 18 37 7 46C18 48.5 30 46.5 40 40Z"/><path d="M40 40C50 35 62 37 73 46C62 48.5 50 46.5 40 40Z"/>'
@@ -225,7 +248,7 @@
   // K sits high on the left, J low on the right, interlocking on the diagonal.
   const CREST_FONTS = {
     bodoni: { cls: 'lg-bodoni', size: 134, ax: 114, ay: 158, bx: 184, by: 214, gap: 8 },
-    cinzel: { cls: 'lg-cinzel', size: 114, ax: 110, ay: 152, bx: 188, by: 205, gap: 7 },
+    cinzel: { cls: 'lg-cinzel', size: 116, ax: 118, ay: 154, bx: 181, by: 200, gap: 7 },
     imperial: { cls: 'lg-imperial', size: 128, ax: 120, ay: 154, bx: 180, by: 206, gap: 8, plain: true },
     garamond: { cls: 'lg-serif', size: 132, ax: 116, ay: 158, bx: 182, by: 214, gap: 8 },
   };
@@ -461,9 +484,12 @@
   }
 
   const initialsOf = (c) => [c.name1, c.name2].map((n) => (n || '').trim().charAt(0).toUpperCase()).filter(Boolean).join(' & ');
-  const emblemHtml = (emblem, initials, cls) => (emblem
-    ? `<span class="${cls} foil"${isDevanagari(emblem) ? ' lang="sa"' : ''}>${esc(emblem)}</span>`
-    : `<span class="${cls} initials foil">${esc(initials)}</span>`);
+  const emblemHtml = (emblem, initials, cls) => {
+    if ((emblem || '').trim().toLowerCase() === 'ganesha') return ganesha(cls);
+    return emblem
+      ? `<span class="${cls} foil"${isDevanagari(emblem) ? ' lang="sa"' : ''}>${esc(emblem)}</span>`
+      : `<span class="${cls} initials foil">${esc(initials)}</span>`;
+  };
 
   function eventCard(ev, index, inv, look = {}) {
     const maps = safeUrl(ev.maps);
