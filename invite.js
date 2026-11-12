@@ -467,7 +467,8 @@
 
   function eventCard(ev, index, inv, look = {}) {
     const maps = safeUrl(ev.maps);
-    const cls = `${look.pastel ? ' pastel' : ''}${look.decor ? ' decor' : ''}`;
+    const withProps = look.decor && ['mandap', 'haldi', 'sangeet', 'wedding'].includes(ev.id);
+    const cls = `${look.pastel ? ' pastel' : ''}${look.decor ? ' decor' : ''}${withProps ? ' has-props' : ''}`;
     return `<div class="card reveal ev-${esc(ev.id)}${cls}">
       ${look.decor ? corner('bl') + corner('br') : ''}
       ${eventIcon(ev.id)}
