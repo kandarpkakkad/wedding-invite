@@ -20,6 +20,9 @@
   const themeParam = (params.get('theme') || '').toLowerCase();
   applyTheme(THEMES.includes(themeParam) ? themeParam : (THEMES.includes(root.dataset.theme) ? root.dataset.theme : THEMES[0]));
   if (params.get('open') === '1') root.classList.add('static');
+  const SCRIPTS = ['corinthia', 'pinyon', 'imperial', 'luxurious'];
+  const scriptParam = (params.get('script') || '').toLowerCase();
+  if (SCRIPTS.includes(scriptParam)) root.dataset.script = scriptParam;
 
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -89,28 +92,20 @@
     + '<path class="cn-curl" d="M24 6C35 6 41 13 37 19C34 23 28 22 29 17M6 24C6 35 13 41 19 37C23 34 22 28 17 29M37 19C44 12 51 10 58 11M19 37C12 44 10 51 11 58"/>'
     + '<circle class="cn-fill" cx="43" cy="5.5" r="1.3"/><circle class="cn-fill" cx="5.5" cy="43" r="1.3"/><circle class="cn-fill" cx="27" cy="27" r="1.6"/></svg>';
 
-  /* Shri Ganesh: an original gold drawing (crown, ears, tilak, curled trunk, tusks) */
-  const GANESHA_EAR = '<path d="M42 54C33 45 15 46 11 58C7 71 15 85 29 88C36 89.5 41 83 43 75Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".9"/>'
-    + '<path d="M38 59C31 54 21.5 56 18.5 64C16 72 21 80 30 82" fill="none" stroke="#6e4f16" stroke-width=".8" opacity=".75"/>'
-    + '<g fill="#a3161f"><circle cx="23" cy="62" r="1.3"/><circle cx="20.6" cy="70" r="1.3"/><circle cx="24" cy="77.5" r="1.3"/></g>';
+  /* Shri Ganesh: a simple, original gold line drawing (crown, ears, eyes, curled trunk, tusk) with a red tilak */
+  const GANESHA_EAR = '<path d="M43 52C33 43 16 47 14.5 60C13 73 25 82 40 74"/>';
   const ganesha = (cls) => `<svg class="${cls} ganesha" viewBox="0 0 120 120" role="img" aria-label="Shri Ganesh">`
+    + '<g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">'
     + GANESHA_EAR + `<g transform="translate(120 0) scale(-1 1)">${GANESHA_EAR}</g>`
-    + '<path d="M40 56C40 44 80 44 80 56C80 70 74 80 66 84H54C46 80 40 70 40 56Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".9"/>'
-    + '<path d="M51 36C51 29 69 29 69 36Z M60 15C64 21 64.5 26 60 30C55.5 26 56 21 60 15Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".8"/>'
-    + '<path d="M45 44C45 35 75 35 75 44Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".8"/>'
-    + '<path d="M40 50C40 43 80 43 80 50C80 52.6 40 52.6 40 50Z" fill="url(#gS)" stroke="#6e4f16" stroke-width=".8"/>'
-    + '<circle cx="60" cy="12.6" r="2.2" fill="url(#gS)" stroke="#6e4f16" stroke-width=".6"/>'
-    + '<g fill="#a3161f"><circle cx="60" cy="48" r="2.3"/><circle cx="49.5" cy="48.4" r="1.4"/><circle cx="70.5" cy="48.4" r="1.4"/></g>'
-    + '<circle cx="60" cy="39.6" r="1.7" fill="#1f6f52"/><circle cx="60" cy="33" r="1.2" fill="#a3161f"/>'
-    + '<path d="M56.6 53.4Q60 60.5 63.4 53.4" fill="none" stroke="#a3161f" stroke-width="1.5" stroke-linecap="round"/><circle cx="60" cy="58.4" r="1.3" fill="#a3161f"/>'
-    + '<path d="M49.4 63.8Q52.4 61.9 55.4 63.8Q52.4 65.3 49.4 63.8ZM64.6 63.8Q67.6 61.9 70.6 63.8Q67.6 65.3 64.6 63.8Z" fill="#3a0a0e"/>'
-    + '<path d="M48.6 60.6Q52.4 59.2 56 60.8M64 60.8Q67.6 59.2 71.4 60.6" fill="none" stroke="#6e4f16" stroke-width=".8" stroke-linecap="round"/>'
-    + '<circle cx="53.3" cy="63.3" r=".55" fill="#fff3d6"/><circle cx="68.5" cy="63.3" r=".55" fill="#fff3d6"/>'
-    + '<path d="M60 68C59 80 59.5 92 63.5 101" fill="none" stroke="url(#gS)" stroke-width="10" stroke-linecap="round"/>'
-    + '<path d="M63.5 101C68 110 79 111 82.5 104.5C85.5 98 79 93 74.5 96.5C71 99.5 72.5 104 76.5 104" fill="none" stroke="url(#gS)" stroke-width="5.5" stroke-linecap="round"/>'
-    + '<path d="M55.4 76Q60 78.2 64.6 76M56 83.4Q60.5 85.6 65 83.4M57.6 90.6Q61.6 92.6 65.6 90.6" fill="none" stroke="#6e4f16" stroke-width=".8"/>'
-    + '<path d="M53.5 75.5C48.5 79.5 47.5 85.5 50 90" fill="none" stroke="#fff3d6" stroke-width="3.2" stroke-linecap="round"/>'
-    + '<path d="M66.5 75.5C69.5 77.5 70 80 69 82.4" fill="none" stroke="#fff3d6" stroke-width="3.2" stroke-linecap="round"/></svg>';
+    + '<path d="M60 9C63.5 14 63.5 18.5 60 22C56.5 18.5 56.5 14 60 9Z"/>'
+    + '<path d="M52 30Q60 21 68 30M46 38.5Q60 27 74 38.5M41.5 46Q60 33.5 78.5 46"/>'
+    + '<path d="M41.5 46H78.5"/>'
+    + '<path d="M42.5 50C41.5 62 46 72 53 77M77.5 50C78.5 62 74 72 67 77"/>'
+    + '<path d="M50 61Q53 58.6 56 61M64 61Q67 58.6 70 61" stroke-width="2.2"/>'
+    + '<path d="M60 64C59 77 59.5 88 64.5 96C69.5 103.5 80 102 81 94.5C82 88 74 85.5 70.6 90.2C68.4 93.4 70.6 97 74.4 96"/>'
+    + '<path d="M54 76C49.6 79.6 49 84.4 51.2 88" stroke-width="2.4"/></g>'
+    + '<path d="M57.6 49.6Q60 55.6 62.4 49.6" fill="none" stroke="#c8202c" stroke-width="2" stroke-linecap="round"/>'
+    + '<circle cx="60" cy="53.6" r="1.6" fill="#c8202c"/></svg>';
 
   /* a kalash: gold pot with a red band, mango leaves and a coconut */
   const kalash = () => '<svg class="kalash" viewBox="0 0 80 96" aria-hidden="true">'
