@@ -679,11 +679,34 @@ svg { color: var(--gold); }
 }
 .gold-cover .ganesha { color: var(--royal); filter: none; }
 .gold-cover .cover-lace { opacity: .1; }
-.gold-cover .cover-lace path { stroke: var(--royal); }
-.gold-cover .cover-lace path[fill] { fill: var(--royal); }
-.gold-cover .chains, .gold-cover .jhalar, .gold-cover .divider { color: var(--royal); }
-.gold-cover .chains path[fill^="url"], .gold-cover .jhalar path[fill^="url"] { fill: var(--royal); }
-.gold-cover .jhalar path[stroke^="url"], .gold-cover .divider path[stroke^="url"] { stroke: var(--royal); }
+.gold-cover .cover-lace path { stroke: var(--orn, var(--royal)); }
+.gold-cover .cover-lace path[fill] { fill: var(--orn, var(--royal)); }
+.gold-cover .chains, .gold-cover .jhalar, .gold-cover .divider { color: var(--orn, var(--royal)); }
+.gold-cover .chains path[fill^="url"], .gold-cover .jhalar path[fill^="url"] { fill: var(--orn, var(--royal)); }
+.gold-cover .jhalar path[stroke^="url"], .gold-cover .divider path[stroke^="url"] { stroke: var(--orn, var(--royal)); }
+
+/* cover background options (Details → cover_background): gold (above), green or ivory */
+:root[data-cover="green"] .cover.gold-cover,
+:root[data-cover="ivory"] .cover.gold-cover {
+  --orn: #a9832f;
+  --line: rgba(169, 131, 47, .55);
+}
+:root[data-cover="green"] .cover.gold-cover {
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0) 28%, rgba(255, 255, 255, .4) 46%, rgba(255, 255, 255, 0) 62%),
+    radial-gradient(125% 75% at 50% 30%, #f7fcf7 0%, #e3f1e6 42%, #c9e1cf 100%);
+}
+:root[data-cover="green"] .cover.gold-cover::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%231f6f52' stroke-opacity='.08' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
+}
+:root[data-cover="ivory"] .cover.gold-cover {
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0) 28%, rgba(255, 255, 255, .45) 46%, rgba(255, 255, 255, 0) 62%),
+    radial-gradient(125% 75% at 50% 30%, #fffdf8 0%, #fbf2e2 45%, #f0dfc2 100%);
+}
+:root[data-cover="ivory"] .cover.gold-cover::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23a9832f' stroke-opacity='.12' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
+}
 .gold-cover .c-pearl { fill: #fff7e4; }
 .gold-cover .cover-when { color: #7a0f17; }
 .gold-cover .btn-gold {

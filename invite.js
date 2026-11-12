@@ -23,6 +23,8 @@
   const SCRIPTS = ['corinthia', 'pinyon', 'imperial', 'luxurious'];
   const scriptParam = (params.get('script') || '').toLowerCase();
   if (SCRIPTS.includes(scriptParam)) root.dataset.script = scriptParam;
+  const coverParam = (params.get('cover') || '').toLowerCase();
+  if (['gold', 'green', 'ivory'].includes(coverParam)) root.dataset.cover = coverParam;
 
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
