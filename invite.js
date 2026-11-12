@@ -179,13 +179,17 @@
     + `<text class="${cls}" x="${ax}" y="${ay}" font-size="${size}" text-anchor="middle" fill="url(#gS)" mask="url(#${id})">${A}</text>`
     + `<text class="${cls}" x="${bx}" y="${by}" font-size="${size}" text-anchor="middle" fill="url(#gS)">${B}</text>`;
 
-  // typefaces for the crest's K and J (Details → logo_font), with each one's size and placement
+  // typefaces for the crest's K and J (Details → logo_font). The letters are staggered:
+  // K sits high on the left, J low on the right, interlocking on the diagonal.
   const CREST_FONTS = {
-    bodoni: { cls: 'lg-bodoni', size: 150, ax: 117, ay: 184, bx: 183, by: 192, gap: 8 },
-    cinzel: { cls: 'lg-cinzel', size: 128, ax: 110, ay: 190, bx: 190, by: 190, gap: 7 },
-    imperial: { cls: 'lg-imperial', size: 140, ax: 124, ay: 178, bx: 178, by: 182, gap: 8 },
-    garamond: { cls: 'lg-serif', size: 146, ax: 122, ay: 180, bx: 178, by: 192, gap: 8 },
+    bodoni: { cls: 'lg-bodoni', size: 134, ax: 114, ay: 158, bx: 184, by: 214, gap: 8 },
+    cinzel: { cls: 'lg-cinzel', size: 114, ax: 110, ay: 160, bx: 188, by: 214, gap: 7 },
+    imperial: { cls: 'lg-imperial', size: 128, ax: 120, ay: 154, bx: 180, by: 206, gap: 8, plain: true },
+    garamond: { cls: 'lg-serif', size: 132, ax: 116, ay: 158, bx: 182, by: 214, gap: 8 },
   };
+  // a small diamond-and-dots fleuron, balancing the empty corners of the diagonal
+  const fleuron = (x, y) => `<path d="M${x} ${y - 7}l5 7-5 7-5-7z"/><circle cx="${x - 10}" cy="${y}" r="1.5"/><circle cx="${x + 10}" cy="${y}" r="1.5"/>`
+    + `<circle cx="${x}" cy="${y - 12}" r="1.2"/><circle cx="${x}" cy="${y + 12}" r="1.2"/>`;
 
   function logo(style, couple, date, fontName) {
     const A = esc((couple.name1 || '').trim().charAt(0).toUpperCase());
@@ -223,8 +227,12 @@
     return `<svg class="logo logo-crest" viewBox="0 0 300 300" ${label}>`
       + '<g fill="none" stroke="url(#gS)"><circle cx="150" cy="150" r="140" stroke-width="1.4"/><circle cx="150" cy="150" r="133" stroke-width=".7"/></g>'
       + `<g fill="url(#gS)">${dots}${lotusMark(150, 11, 1)}${lotusMark(150, 289, -1)}<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/></g>`
-      + (() => { const f = CREST_FONTS[fontName] || CREST_FONTS.bodoni; return pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap); })()
-      + `<text class="lg-date" x="150" y="244" text-anchor="middle">${esc(date)}</text></svg>`;
+      + (() => {
+        const f = CREST_FONTS[fontName] || CREST_FONTS.bodoni;
+        return (f.plain ? '' : `<g fill="currentColor">${fleuron(206, 92)}${fleuron(94, 204)}</g>`)
+          + pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap);
+      })()
+      + `<text class="lg-date" x="150" y="256" text-anchor="middle">${esc(date)}</text></svg>`;
   }
 
   const ICON = {
