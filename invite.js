@@ -775,7 +775,8 @@
     // one song loops; several play in order and then start again from the first
     const tracks = src.split('|').filter(Boolean);
     let track = 0;
-    const VOLUME = 0.6;
+    const VOLUME = 1;      // full volume
+    const FADE_IN = 0;     // seconds; 0 starts at full volume straight away
     const audio = new Audio();
     audio.src = tracks[0];
     audio.loop = tracks.length === 1;
@@ -817,6 +818,7 @@
       if (!gain) { audio.volume = v; return; }
       const t = ctx.currentTime;
       gain.gain.cancelScheduledValues(t);
+      if (secs <= 0) { gain.gain.setValueAtTime(v, t); return; }
       gain.gain.setValueAtTime(gain.gain.value, t);
       gain.gain.linearRampToValueAtTime(v, t + secs);
     };
@@ -824,8 +826,9 @@
       wanted = true;
       ensureGraph();
       if (ctx && ctx.state === 'suspended') ctx.resume();
+      fadeTo(VOLUME, FADE_IN);   // full volume from the first note
       const p = audio.play();
-      if (p && p.then) p.then(() => { fadeTo(VOLUME, 1.5); setUi(); }).catch(() => { wanted = false; setUi(); });
+      if (p && p.then) p.then(setUi).catch(() => { wanted = false; setUi(); });
     };
     const pause = () => {
       wanted = false;
