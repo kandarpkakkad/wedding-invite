@@ -334,7 +334,7 @@
         + `<path d="${l.stem}${r.stem}" fill="none" stroke="url(#gS)" stroke-width="1.2"/>`
         + `<g fill="url(#gS)">${l.leaves}${r.leaves}${lotusMark(150, 276, -1.1)}<path d="M150 30l4 5-4 5-4-5z"/></g>`
         + pair(id, 'lg-script', 132, 120, 188, 184, 196, A, B, 8)
-        + `<text class="lg-date" x="150" y="312" text-anchor="middle">${esc(date)}</text></svg>`;
+        + '</svg>';
     }
     if (style === 'arch') {
       const l = laurel(150, 192, 104, 197, 229, 6.4);
@@ -348,7 +348,7 @@
         + `<path d="M40 326l4-4 4 4-4 4zM252 326l4-4 4 4-4 4z"/>${l.leaves}${r.leaves}</g>`
         + `<text class="lg-caps" x="99" y="236" font-size="112" text-anchor="middle" fill="url(#gS)">${A}</text>`
         + `<text class="lg-caps" x="201" y="236" font-size="112" text-anchor="middle" fill="url(#gS)">${B}</text>`
-        + `<text class="lg-date" x="150" y="310" text-anchor="middle">${esc(date)}</text></svg>`;
+        + '</svg>';
     }
     // mehndi-style scalloped ring with tiny dots where the scallops meet
     const P = (R, deg) => [150 + R * Math.sin((deg * Math.PI) / 180), 150 - R * Math.cos((deg * Math.PI) / 180)];
@@ -377,7 +377,6 @@
       + `${crown()}<g fill="url(#gS)">${lotusMark(150, 289, -1)}${peacock ? '' : '<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/>'}</g>`
       + corners
       + pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap).replace(/fill="url\(#gS\)"/g, `fill="${letterFill}"`)
-      + `<text class="lg-date" x="150" y="249" text-anchor="middle">${esc(date)}</text>`
       + (strong && !reduceMotion ? sparkles() : '')
       + '</svg>';
   }
