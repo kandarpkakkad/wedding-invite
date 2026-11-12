@@ -92,12 +92,36 @@
     + '<path class="fn-line" d="M30 32C22 31 16 25 15 18C22 19 27 25 30 32ZM30 32C38 31 44 25 45 18C38 19 33 25 30 32ZM30 32C18 33 8 29 3 22M30 32C42 33 52 29 57 22"/>'
     + '<circle cx="30" cy="2.5" r="2" fill="currentColor"/></svg>';
 
-  /* fine gold chains with small temple bells, hanging from the top edge */
+  /* jhalar: a fine gold scalloped fringe with tiny drops, across the top edge */
+  function jhalar() {
+    const n = 12;
+    const w = 400 / n;
+    let swags = '';
+    let inner = '';
+    let drops = '';
+    let joints = '';
+    for (let i = 0; i < n; i += 1) {
+      const x0 = i * w;
+      const xm = x0 + w / 2;
+      swags += `M${r1(x0)} 4Q${r1(xm)} 22 ${r1(x0 + w)} 4`;
+      inner += `M${r1(x0 + 3)} 5Q${r1(xm)} 15 ${r1(x0 + w - 3)} 5`;
+      drops += `M${r1(xm)} 14.5c-2.4 3.4-2.6 6.4 0 8.6c2.6-2.2 2.4-5.2 0-8.6Z`;
+      joints += `M${r1(x0 - 2.2)} 4a2.2 2.2 0 1 0 4.4 0a2.2 2.2 0 1 0 -4.4 0`;
+    }
+    joints += 'M397.8 4a2.2 2.2 0 1 0 4.4 0a2.2 2.2 0 1 0 -4.4 0';
+    return '<svg class="jhalar" viewBox="0 0 400 30" aria-hidden="true">'
+      + '<path d="M0 1.5H400" stroke="currentColor" stroke-width=".8"/>'
+      + `<path d="${swags}" fill="none" stroke="url(#gS)" stroke-width="1.3"/>`
+      + `<path d="${inner}" fill="none" stroke="currentColor" stroke-width=".6" opacity=".7"/>`
+      + `<path d="${drops}" fill="url(#gS)"/><path d="${joints}" fill="url(#gS)"/></svg>`;
+  }
+
+  /* fine gold chains with small temple bells, hanging from the jhalar */
   function chains() {
-    const cols = [[30, 58], [64, 98], [336, 98], [370, 58]];
+    const cols = [[33.3, 58], [66.7, 98], [333.3, 98], [366.7, 58]];
     return '<svg class="chains" viewBox="0 0 400 140" aria-hidden="true">' + cols.map(([x, len], i) => {
       let beads = '';
-      for (let y = 2; y < len; y += 4.2) beads += `M${x - 0.9} ${r1(y)}a.9 .9 0 1 0 1.8 0a.9 .9 0 1 0 -1.8 0`;
+      for (let y = 6; y < len; y += 4.2) beads += `M${r1(x - 0.9)} ${r1(y)}a.9 .9 0 1 0 1.8 0a.9 .9 0 1 0 -1.8 0`;
       const y = len;
       return `<g class="sway" style="animation-delay:-${(i * 1.3).toFixed(1)}s"><path class="c-bead" d="${beads}"/>`
         + `<circle class="c-pearl" cx="${x}" cy="${y + 2.5}" r="2.6"/>`
@@ -115,8 +139,85 @@
     + '<path fill="url(#gS)" d="M160 28C156 22 156 14 160 6C164 14 164 22 160 28ZM160 28C153 27 148 22 147 16C154 17 158 22 160 28ZM160 28C167 27 172 22 173 16C166 17 162 22 160 28Z"/>'
     + '<circle cx="160" cy="2.6" r="1.8" fill="currentColor"/>'
     + '<path fill="currentColor" d="M19 200l3-3 3 3-3 3zM295 200l3-3 3 3-3 3z"/></svg>'
-    + '<svg class="arch-sides" viewBox="0 0 320 100" preserveAspectRatio="none">'
-    + '<path class="a-line" d="M14 0V100M306 0V100"/><path class="a-thin" d="M24 0V100M296 0V100"/></svg></div>';
+    + '<div class="arch-pillars"><svg class="arch-sides" viewBox="0 0 320 100" preserveAspectRatio="none">'
+    + '<path class="a-line" d="M14 0V100M306 0V100"/><path class="a-thin" d="M24 0V100M296 0V100"/></svg>'
+    + '<span class="pillar l"></span><span class="pillar r"></span></div></div>';
+
+  /* a diya (oil lamp) with a softly flickering flame */
+  const diya = (side) => `<svg class="diya ${side}" viewBox="0 0 40 46" aria-hidden="true">`
+    + '<circle class="d-glow" cx="20" cy="15" r="15" fill="url(#flameGlow)"/>'
+    + '<path class="d-flame" fill="url(#flame)" d="M20 3C23 9 25.5 13.5 25.5 18C25.5 22.5 23 25.5 20 25.5C17 25.5 14.5 22.5 14.5 18C14.5 13.5 17 9 20 3Z"/>'
+    + '<path fill="#fff8dc" opacity=".8" d="M20 13C21.4 16 22 18 22 20C22 22 21.1 23.4 20 23.4C18.9 23.4 18 22 18 20C18 18 18.6 16 20 13Z"/>'
+    + '<path fill="url(#gS)" d="M3 27C5 36.5 35 36.5 37 27Z"/>'
+    + '<path d="M1.5 27H38.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>'
+    + '<path fill="url(#gS)" d="M15 35.5L13 42H27L25 35.5Z"/><path d="M10 43H30" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>';
+
+  /* ---------------- the KJ logo (Details → logo: crest, script or arch) ---------------- */
+
+  const lotusMark = (x, y, s) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 8C-4 3-4-2 0-8C4-2 4 3 0 8ZM0 8C-7 7-11 3-12-2C-6-2-2 2 0 8ZM0 8C7 7 11 3 12-2C6-2 2 2 0 8Z"/>`;
+
+  function laurel(cx, cy, R, from, to, step) { // angles in degrees, 0 = top, clockwise
+    const dir = to > from ? 1 : -1;
+    const P = (a) => [cx + R * Math.sin((a * Math.PI) / 180), cy - R * Math.cos((a * Math.PI) / 180)];
+    let leaves = '';
+    let k = 0;
+    for (let a = from; dir > 0 ? a <= to : a >= to; a += step * dir, k += 1) {
+      const [x, y] = P(a);
+      const along = dir > 0 ? a : a + 180;
+      const len = 15 - (Math.abs(a - from) / Math.abs(to - from)) * 5;
+      leaves += `<path d="M0 0C${r1(len * 0.3)} -5.5 ${r1(len * 0.7)} -5.5 ${r1(len)} 0C${r1(len * 0.7)} 5.5 ${r1(len * 0.3)} 5.5 0 0Z" `
+        + `transform="translate(${r1(x)} ${r1(y)}) rotate(${r1(along + (k % 2 ? 34 : -34))})"/>`;
+    }
+    const [x1, y1] = P(from);
+    const [x2, y2] = P(to);
+    return { leaves, stem: `M${r1(x1)} ${r1(y1)}A${R} ${R} 0 0 ${dir > 0 ? 1 : 0} ${r1(x2)} ${r1(y2)}` };
+  }
+
+  // the second letter is cut out of the first with a mask, so they interlock with a clean gap
+  const pair = (id, cls, size, ax, ay, bx, by, A, B, gap) => `<defs><mask id="${id}" maskUnits="userSpaceOnUse" x="-50" y="-50" width="400" height="440">`
+    + `<rect x="-50" y="-50" width="400" height="440" fill="#fff"/><text class="${cls}" x="${bx}" y="${by}" font-size="${size}" text-anchor="middle" fill="#000" stroke="#000" stroke-width="${gap}" stroke-linejoin="round">${B}</text></mask></defs>`
+    + `<text class="${cls}" x="${ax}" y="${ay}" font-size="${size}" text-anchor="middle" fill="url(#gS)" mask="url(#${id})">${A}</text>`
+    + `<text class="${cls}" x="${bx}" y="${by}" font-size="${size}" text-anchor="middle" fill="url(#gS)">${B}</text>`;
+
+  function logo(style, couple, date) {
+    const A = esc((couple.name1 || '').trim().charAt(0).toUpperCase());
+    const B = esc((couple.name2 || '').trim().charAt(0).toUpperCase());
+    const id = `lg${Math.random().toString(36).slice(2, 8)}`;
+    const label = 'aria-hidden="true"';
+    if (style === 'script') {
+      const l = laurel(150, 156, 118, 203, 337, 8.4);
+      const r = laurel(150, 156, 118, 157, 23, 8.4);
+      return `<svg class="logo logo-script" viewBox="0 0 300 320" ${label}>`
+        + `<path d="${l.stem}${r.stem}" fill="none" stroke="url(#gS)" stroke-width="1.2"/>`
+        + `<g fill="url(#gS)">${l.leaves}${r.leaves}${lotusMark(150, 276, -1.1)}<path d="M150 30l4 5-4 5-4-5z"/></g>`
+        + pair(id, 'lg-script', 132, 120, 188, 184, 196, A, B, 8)
+        + `<text class="lg-date" x="150" y="312" text-anchor="middle">${esc(date)}</text></svg>`;
+    }
+    if (style === 'arch') {
+      const l = laurel(150, 192, 104, 197, 229, 6.4);
+      const r = laurel(150, 192, 104, 163, 131, 6.4);
+      return `<svg class="logo logo-arch" viewBox="0 0 300 340" ${label}>`
+        + '<g fill="none" stroke="url(#gS)"><path stroke-width="1.4" d="M40 326V156C40 98 94 60 150 44C206 60 260 98 260 156V326Z"/>'
+        + '<path stroke-width=".7" d="M49 317V159C49 104 99 70 150 55C201 70 251 104 251 159V317Z"/>'
+        + `<path d="${l.stem}${r.stem}" stroke-width="1.1"/></g>`
+        + '<path d="M150 146V182M150 210V246" stroke="currentColor" stroke-width=".9"/>'
+        + `<g fill="url(#gS)">${lotusMark(150, 32, 1.2)}<circle cx="150" cy="14" r="2.4"/><path d="M150 189l6 7-6 7-6-7z"/>`
+        + `<path d="M40 326l4-4 4 4-4 4zM252 326l4-4 4 4-4 4z"/>${l.leaves}${r.leaves}</g>`
+        + `<text class="lg-caps" x="99" y="236" font-size="112" text-anchor="middle" fill="url(#gS)">${A}</text>`
+        + `<text class="lg-caps" x="201" y="236" font-size="112" text-anchor="middle" fill="url(#gS)">${B}</text>`
+        + `<text class="lg-date" x="150" y="310" text-anchor="middle">${esc(date)}</text></svg>`;
+    }
+    let dots = '';
+    for (let i = 0; i < 48; i += 1) {
+      const a = (i * 7.5 * Math.PI) / 180;
+      dots += `<circle cx="${r1(150 + 126 * Math.sin(a))}" cy="${r1(150 - 126 * Math.cos(a))}" r="1.2"/>`;
+    }
+    return `<svg class="logo logo-crest" viewBox="0 0 300 300" ${label}>`
+      + '<g fill="none" stroke="url(#gS)"><circle cx="150" cy="150" r="140" stroke-width="1.4"/><circle cx="150" cy="150" r="133" stroke-width=".7"/></g>'
+      + `<g fill="url(#gS)">${dots}${lotusMark(150, 11, 1)}${lotusMark(150, 289, -1)}<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/></g>`
+      + pair(id, 'lg-serif', 146, 122, 180, 178, 192, A, B, 8)
+      + `<text class="lg-date" x="150" y="244" text-anchor="middle" style="letter-spacing:3px">${esc(date)}</text></svg>`;
+  }
 
   const ICON = {
     pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>',
@@ -260,19 +361,27 @@
     const contacts = (inv.contacts || []).filter((x) => x.tel);
     const first = inv.events[0];
     const dev = isDevanagari(t.invocation);
+    const LOGOS = ['crest', 'script', 'arch'];
+    const logoParam = (params.get('logo') || '').toLowerCase();
+    const logoStyle = LOGOS.includes(logoParam) ? logoParam : (LOGOS.includes(t.logo) ? t.logo : '');
 
     $('#invite').innerHTML = `
-      <section class="hero silk">
-        ${chains()}
+      <section class="hero silk${logoStyle ? ' has-logo' : ''}">
+        <div class="hero-lace">${mandala('S', false)}</div>
         ${arch()}
+        ${chains()}
+        ${jhalar()}
         <div class="hero-inner">
           <div class="halo reveal" style="--d:.1s">${mandala('S', true)}${emblemHtml(t.emblem, initialsOf(c), 'emblem')}</div>
           ${t.invocation ? `<p class="invocation reveal${dev ? '' : ' latin'}" style="--d:.4s"${dev ? ' lang="sa"' : ''}>${esc(t.invocation)}</p>` : ''}
-          <h1 class="hero-title script foil write" style="--d:.8s">${heroTitle}</h1>
+          ${logoStyle
+            ? `<h1 class="hero-logo reveal" style="--d:.8s"><span class="sr-only">${esc(c.name1)} &amp; ${esc(c.name2)}</span>${logo(logoStyle, c, inv.logoDate || '')}</h1>`
+            : `<h1 class="hero-title script foil write" style="--d:.8s">${heroTitle}</h1>`}
           <div class="reveal" style="--d:1.3s">${divider('S')}</div>
           <p class="hero-date reveal" style="--d:1.5s">${esc(inv.dates)}</p>
           <button class="cue tiny reveal" style="--d:1.9s" type="button" id="cue">Scroll${ICON.down}</button>
         </div>
+        ${diya('l')}${diya('r')}
       </section>
 
       <section class="couple paper" id="welcome">
@@ -530,7 +639,7 @@
   async function main() {
     themeBar();
     $('#cover-lace').innerHTML = mandala('S', false);
-    $('#cover-chains').innerHTML = chains();
+    $('#cover-chains').innerHTML = jhalar() + chains();
     $('#cover-div').innerHTML = divider('S');
     const code = getCode();
     let result;
