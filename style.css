@@ -406,6 +406,42 @@ svg { color: var(--gold); }
 .cover-place { margin-top: 2px; font-size: 18px; font-style: italic; color: var(--soft); }
 .cover-when.msg { font-family: var(--serif); font-size: 18px; font-style: italic; letter-spacing: 0; text-transform: none; }
 
+/* ================= Music button ================= */
+
+.music-btn {
+  position: fixed;
+  right: max(14px, calc(50vw - 240px + 14px));
+  bottom: 16px;
+  z-index: 115;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border: 1px solid var(--gold-s);
+  border-radius: 50%;
+  outline: 1px solid var(--line-s);
+  outline-offset: 3px;
+  background: var(--silk-2);
+  color: var(--silk-ink);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, .3);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.music-btn[hidden] { display: none; }
+.music-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.music-btn.on .mute { display: none; }
+.music-btn.on::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--gold-s);
+  border-radius: 50%;
+  animation: ripple 2.6s ease-out infinite;
+  pointer-events: none;
+}
+@keyframes ripple { from { transform: scale(1); opacity: .7; } to { transform: scale(1.45); opacity: 0; } }
+
 /* ================= Gold dust, toast, theme buttons ================= */
 
 .dust {

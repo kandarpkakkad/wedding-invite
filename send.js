@@ -66,7 +66,8 @@
         <label><input type="checkbox" id="hide-sent"> Hide sent</label>
       </div>
       <div id="rows">${list.map((g, i) => {
-        const meta = [g.seats ? `${g.seats} seat${g.seats > 1 ? 's' : ''}` : '', g.events.join(', ')].filter(Boolean).join(' · ');
+        const seats = g.seats === 'all' ? 'All of the family' : g.seats ? `${g.seats} seat${g.seats > 1 ? 's' : ''}` : '';
+        const meta = [seats, g.events.join(', ')].filter(Boolean).join(' · ');
         const whatsapp = `https://wa.me/${g.phone}?text=${encodeURIComponent(g.message)}`;
         return `<article class="guest-row${isSent(g) ? ' is-sent' : ''}" data-i="${i}">
           <div class="row-head">

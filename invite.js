@@ -206,11 +206,14 @@
 
   const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
     'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
-  /* invite_line can say {you}: "you", "both of you", "all four of you" (from max_guests) */
+  /* invite_line can say {you}: "you", "both of you", "all four of you", "all of you" (max_guests ALL) */
   function fillInvite(template, n) {
     if (!template) return '';
-    const you = !n || n === 1 ? 'you' : n === 2 ? 'both of you' : `all ${WORDS[n] || n} of you`;
-    return template.replace(/\{you\}/g, you).replace(/\{count\}/g, n ? (WORDS[n] || String(n)) : '');
+    const you = n === 'all' ? 'all of you'
+      : !n || n === 1 ? 'you'
+        : n === 2 ? 'both of you'
+          : `all ${WORDS[n] || n} of you`;
+    return template.replace(/\{you\}/g, you).replace(/\{count\}/g, typeof n === 'number' ? (WORDS[n] || String(n)) : '');
   }
 
   const initialsOf = (c) => [c.name1, c.name2].map((n) => (n || '').trim().charAt(0).toUpperCase()).filter(Boolean).join(' & ');
@@ -392,6 +395,75 @@
     }
   }
 
+  /* ---------------- soft background music (a song in the repo's music/ folder) ---------------- */
+
+  const music = (() => {
+    const src = root.dataset.music;
+    if (!src || src.includes('{{')) return null;
+    const VOLUME = 0.3;
+    const audio = new Audio();
+    audio.src = src;
+    audio.loop = true;
+    audio.preload = 'none';
+    let ctx = null;
+    let gain = null;
+    let wanted = false;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'music-btn';
+    btn.hidden = true;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/>'
+      + '<circle cx="17" cy="16" r="3"/><path class="mute" d="M3 3l18 18"/></svg>';
+    document.body.appendChild(btn);
+
+    const setUi = () => {
+      const on = wanted && !audio.paused;
+      btn.classList.toggle('on', on);
+      btn.setAttribute('aria-label', on ? 'Pause music' : 'Play music');
+    };
+    // a gain node gives smooth fades everywhere (iPhones ignore audio.volume)
+    const ensureGraph = () => {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (ctx || !AC) return;
+      try {
+        ctx = new AC();
+        gain = ctx.createGain();
+        gain.gain.value = 0;
+        ctx.createMediaElementSource(audio).connect(gain).connect(ctx.destination);
+      } catch (_) { ctx = null; gain = null; }
+    };
+    const fadeTo = (v, secs) => {
+      if (!gain) { audio.volume = v; return; }
+      const t = ctx.currentTime;
+      gain.gain.cancelScheduledValues(t);
+      gain.gain.setValueAtTime(gain.gain.value, t);
+      gain.gain.linearRampToValueAtTime(v, t + secs);
+    };
+    const play = () => {
+      wanted = true;
+      ensureGraph();
+      if (ctx && ctx.state === 'suspended') ctx.resume();
+      const p = audio.play();
+      if (p && p.then) p.then(() => { fadeTo(VOLUME, 3); setUi(); }).catch(() => { wanted = false; setUi(); });
+    };
+    const pause = () => {
+      wanted = false;
+      fadeTo(0, 0.5);
+      setTimeout(() => { if (!wanted) audio.pause(); setUi(); }, 550);
+    };
+
+    btn.addEventListener('click', () => { if (wanted && !audio.paused) pause(); else play(); });
+    audio.addEventListener('playing', setUi);
+    audio.addEventListener('pause', setUi);
+    // stop when the guest switches apps; carry on when they come back
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) audio.pause();
+      else if (wanted) audio.play().catch(() => {});
+    });
+    return { start() { btn.hidden = false; play(); } };
+  })();
+
   /* ---------------- the cover ---------------- */
 
   const MESSAGES = {
@@ -421,6 +493,7 @@
       if (!cover || cover.classList.contains('gone')) return;
       cover.classList.add('gone');
       document.body.classList.remove('locked');
+      if (music) music.start(); // inside the tap, so phones allow sound
       startReveal();
       setTimeout(() => cover.remove(), 1200);
     };
