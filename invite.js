@@ -256,7 +256,7 @@
           <h1 class="hero-title script foil write" style="--d:.8s">${esc(t.heroTitle || 'Wedding Invitation').replace(/\s+/, '<br>')}</h1>
           <div class="reveal" style="--d:1.3s">${divider('S')}</div>
           <p class="hero-date reveal" style="--d:1.5s">${esc(inv.dates)}</p>
-          <a class="cue tiny reveal" style="--d:1.9s" href="#welcome">Scroll${ICON.down}</a>
+          <button class="cue tiny reveal" style="--d:1.9s" type="button" id="cue">Scroll${ICON.down}</button>
         </div>
       </section>
 
@@ -324,6 +324,10 @@
     });
     const soon = $('#rsvp-soon');
     if (soon) soon.addEventListener('click', () => toast('The RSVP form will be available here soon.'));
+    // scroll without touching the address: the part after # is the guest's code
+    $('#cue').addEventListener('click', () => {
+      $('#welcome').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
     startCountdown(first.start);
   }
 
@@ -457,6 +461,11 @@
     goldDust();
   }
 
-  window.addEventListener('hashchange', () => location.reload());
+  // someone pasted a different invite code into the address: load that one
+  const startCode = getCode();
+  window.addEventListener('hashchange', () => {
+    const next = getCode();
+    if (next !== startCode && /^[a-z0-9]{8,32}$/.test(next)) location.reload();
+  });
   main();
 })();
