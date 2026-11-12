@@ -660,6 +660,40 @@ svg { color: var(--gold); }
 }
 @keyframes ripple { from { transform: scale(1); opacity: .7; } to { transform: scale(1.45); opacity: 0; } }
 
+/* ================= Gold cover with royal-red lettering ================= */
+
+.cover.gold-cover {
+  --royal: #8e1a20;
+  --line: rgba(142, 26, 32, .5);
+  --soft: rgba(110, 12, 18, .85);
+  color: #7a0f17;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0) 28%, rgba(255, 250, 225, .32) 46%, rgba(255, 255, 255, 0) 62%),
+    radial-gradient(125% 75% at 50% 30%, #fbedc4 0%, #edcd80 36%, #d4a852 70%, #b5853a 100%);
+}
+.cover.gold-cover::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%238e1a20' stroke-opacity='.07' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
+}
+.gold-cover .foil {
+  background-image: linear-gradient(105deg, #5e0910 0%, #9a1820 22%, #c63a40 36%, #9a1820 50%, #6e0b12 66%, #b3252d 82%, #5e0910 100%);
+}
+.gold-cover .ganesha { color: var(--royal); filter: none; }
+.gold-cover .cover-lace { opacity: .1; }
+.gold-cover .cover-lace path { stroke: var(--royal); }
+.gold-cover .cover-lace path[fill] { fill: var(--royal); }
+.gold-cover .chains, .gold-cover .jhalar, .gold-cover .divider { color: var(--royal); }
+.gold-cover .chains path[fill^="url"], .gold-cover .jhalar path[fill^="url"] { fill: var(--royal); }
+.gold-cover .jhalar path[stroke^="url"], .gold-cover .divider path[stroke^="url"] { stroke: var(--royal); }
+.gold-cover .c-pearl { fill: #fff7e4; }
+.gold-cover .cover-when { color: #7a0f17; }
+.gold-cover .btn-gold {
+  border-color: var(--royal);
+  outline-color: rgba(142, 26, 32, .4);
+  background: rgba(255, 248, 228, .3);
+  color: #7a0f17;
+}
+.gold-cover .btn-gold::after { background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent); }
+
 /* ================= Gold dust, toast, theme buttons ================= */
 
 .dust {
