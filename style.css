@@ -51,6 +51,19 @@
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23dcb867' stroke-opacity='.09' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
 }
 
+/* accent colours used sparingly across the sections (Patola-inspired) */
+:root {
+  --acc-red: #a3161f;
+  --acc-green: #1f6f52;
+  --acc-marigold: #e39b26;
+  --acc-pink: #b23a6e;
+  /* Patola double-ikat diamond lattice */
+  --patola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'%3E%3Crect width='28' height='16' fill='%235c0b12'/%3E%3Cpath d='M14 0L28 8L14 16L0 8Z' fill='%23f4e2bd'/%3E%3Cpath d='M14 2.6L23.4 8L14 13.4L4.6 8Z' fill='%23a3161f'/%3E%3Cpath d='M14 5.2L18.6 8L14 10.8L9.4 8Z' fill='%231f6f52'/%3E%3Ccircle cx='14' cy='8' r='1.3' fill='%23f0b13a'/%3E%3Cg fill='%23f0b13a'%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='28' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='16' r='1.6'/%3E%3Ccircle cx='28' cy='16' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
+}
+.acc-red-f { fill: var(--acc-red); }
+.acc-green-f { fill: var(--acc-green); }
+.acc-marigold-f { fill: var(--acc-marigold); }
+
 /* gradient stops for the SVG ornaments */
 .s1 { stop-color: var(--gs1); } .s2 { stop-color: var(--gs2); } .s3 { stop-color: var(--gs3); } .s4 { stop-color: var(--gs4); }
 .p1 { stop-color: var(--gp1); } .p2 { stop-color: var(--gp2); } .p3 { stop-color: var(--gp3); } .p4 { stop-color: var(--gp4); }
@@ -281,8 +294,41 @@ svg { color: var(--gold); }
 
 /* ================= The couple ================= */
 
-.couple, .info { padding: 26px 16px; }
+.couple, .info { padding: 26px 16px; overflow: hidden; }
 .mini { width: 70px; height: 70px; margin: 0 auto 20px; }
+
+/* warm glow and a faint mandala watermark behind the ivory sections */
+.paper { background: radial-gradient(110% 55% at 50% 0%, rgba(255, 205, 150, .32), transparent 70%), radial-gradient(90% 40% at 50% 100%, rgba(230, 160, 120, .16), transparent 70%); }
+.paper-lace { position: absolute; left: 50%; top: 50%; z-index: 0; width: 520px; aspect-ratio: 1; translate: -50% -50%; opacity: .07; pointer-events: none; }
+.kalash-wrap { width: 78px; margin: -10px auto 14px; }
+.kalash { display: block; width: 100%; height: auto; filter: drop-shadow(0 4px 6px rgba(120, 40, 20, .18)); }
+
+/* Patola double-ikat border bands on the coloured sections */
+.patola {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 18px;
+  border-top: 1px solid var(--gold-s);
+  border-bottom: 1px solid var(--gold-s);
+  background: var(--patola) repeat-x center / 28px 16px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
+  pointer-events: none;
+}
+.patola.top { top: 0; }
+.patola.bottom { bottom: 0; }
+.band:has(.patola) { box-shadow: none; }
+
+/* red and green accents in the ornaments on ivory */
+.paper .dv-orn, .card .dv-orn { fill: var(--acc-red); fill-opacity: .9; }
+.paper .dv-dot, .card .dv-dot { fill: var(--acc-green); }
+.card .dv-orn { fill: var(--ev-acc); }
+
+/* the closing section repeats the crest as a signature */
+.foot-crest { width: 156px; margin: 0 auto 22px; }
+.foot-crest .logo { width: 100%; }
+.foot-crest .logo.motif-peacock { width: 100%; }
 .dear { font-size: 22px; font-style: italic; font-weight: 600; }
 .lead { max-width: 300px; margin: 10px auto 0; font-size: 19px; font-style: italic; line-height: 1.4; color: var(--soft); white-space: pre-line; }
 .person { margin-top: 18px; font-size: calc(clamp(52px, 15vw, 62px) * var(--script-k)); overflow-wrap: anywhere; }
@@ -295,7 +341,7 @@ svg { color: var(--gold); }
 
 /* ================= Functions ================= */
 
-.events { padding: 70px 18px 76px; }
+.events { padding: 82px 18px 92px; }
 .lace { position: absolute; width: 380px; height: 380px; opacity: .13; pointer-events: none; animation: spin 220s linear infinite; }
 .lace.l1 { left: -190px; top: -130px; }
 .lace.l2 { right: -190px; bottom: -130px; }
@@ -314,6 +360,26 @@ svg { color: var(--gold); }
     0 22px 44px rgba(0, 0, 0, .38);
 }
 .finial { position: absolute; top: 20px; left: 50%; width: 56px; height: 32px; transform: translateX(-50%); }
+
+/* each function card: its own accent colour and illustration */
+.card { --ev-acc: var(--acc-red); }
+.card.ev-mandap { --ev-acc: var(--acc-green); }
+.card.ev-haldi { --ev-acc: var(--acc-marigold); }
+.card.ev-sangeet { --ev-acc: var(--acc-pink); }
+.card.ev-wedding { --ev-acc: var(--acc-red); }
+.events .card {
+  padding-top: 26px;
+  box-shadow:
+    inset 0 0 0 7px var(--paper-2),
+    inset 0 0 0 8.5px var(--ev-acc),
+    inset 0 0 0 11px var(--paper-2),
+    inset 0 0 0 11.6px var(--line-p),
+    0 0 0 1px var(--gold-s),
+    0 22px 44px rgba(0, 0, 0, .38);
+}
+.ev-icon { display: block; width: 62px; height: auto; margin: 6px auto 0; color: var(--gold-p); overflow: visible; }
+.ev-icon .ev-acc { fill: var(--ev-acc); }
+.card .ev-dress .tiny { color: var(--ev-acc); }
 .fn-fill { opacity: .85; }
 .fn-line { fill: none; stroke: currentColor; stroke-width: .9; }
 .ev-name { margin-top: 10px; font-size: calc(clamp(32px, 9.4vw, 40px) * var(--script-k)); text-wrap: balance; }
@@ -421,9 +487,19 @@ svg { color: var(--gold); }
 
 .info .framed > .divider { margin: 34px auto; }
 .sub { margin-top: 4px; font-size: 17px; font-style: italic; color: var(--soft); }
-.clock { display: flex; max-width: 300px; margin: 22px auto 0; }
-.clock > div { flex: 1; padding: 4px 0; }
-.clock > div + div { border-left: 1px solid var(--line); }
+.clock { display: flex; gap: 8px; max-width: 316px; margin: 22px auto 0; }
+/* each number sits in a small red arched tile edged in gold */
+.clock > div {
+  flex: 1;
+  padding: 16px 0 10px;
+  border-radius: 40px 40px 6px 6px;
+  background: radial-gradient(120% 90% at 50% 0%, var(--silk-1), var(--silk-2));
+  box-shadow: inset 0 0 0 3px var(--silk-2), inset 0 0 0 4px var(--gold-s), 0 8px 16px rgba(80, 10, 10, .2);
+}
+.clock .tiny { color: var(--silk-soft); }
+.paper .clock .foil {
+  background-image: linear-gradient(105deg, var(--gs1) 0%, var(--gs2) 20%, var(--gs3) 34%, var(--gs2) 48%, var(--gs4) 64%, var(--gs3) 80%, var(--gs1) 100%);
+}
 .clock b { display: inline-block; padding: 0 .08em; font-family: var(--serif); font-size: 42px; font-weight: 500; line-height: 1.05; font-variant-numeric: tabular-nums lining-nums; }
 .clock span { display: block; margin-top: 4px; font-size: 9.5px; }
 .clock-done { margin-top: 16px; font-size: 21px; font-style: italic; }
@@ -435,7 +511,7 @@ svg { color: var(--gold); }
 
 /* ================= Closing ================= */
 
-.foot { padding: 76px 24px 84px; }
+.foot { padding: 84px 24px 84px; }
 .foot > .lace { left: 50%; top: 50%; width: 440px; height: 440px; translate: -50% -50%; opacity: .12; }
 .closing { font-size: 20px; font-style: italic; line-height: 1.4; white-space: pre-line; }
 .tag { display: inline-block; margin-top: 24px; padding: 12px 24px; border: 1px solid var(--line); outline: 1px solid var(--line); outline-offset: 4px; }

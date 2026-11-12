@@ -83,9 +83,51 @@
     + '<path class="dv-dot" d="M100 12l3-3 3 3-3 3zM134 12l3-3 3 3-3 3z"/></svg>';
 
   const corner = (pos) => `<svg class="corner ${pos}" viewBox="0 0 60 60" aria-hidden="true">`
-    + '<path class="cn-fill" d="M14 7L21 14 14 21 7 14Z"/>'
+    + '<path class="acc-green-f" d="M20 20C25 20 29.5 23 30.5 28.5C25 28.5 21 25 20 20Z"/>'
+    + '<path class="acc-red-f" d="M14 5.5L22.5 14 14 22.5 5.5 14Z" stroke="currentColor" stroke-width=".9"/>'
+    + '<circle cx="14" cy="14" r="2" fill="#f0b13a"/>'
     + '<path class="cn-curl" d="M24 6C35 6 41 13 37 19C34 23 28 22 29 17M6 24C6 35 13 41 19 37C23 34 22 28 17 29M37 19C44 12 51 10 58 11M19 37C12 44 10 51 11 58"/>'
     + '<circle class="cn-fill" cx="43" cy="5.5" r="1.3"/><circle class="cn-fill" cx="5.5" cy="43" r="1.3"/><circle class="cn-fill" cx="27" cy="27" r="1.6"/></svg>';
+
+  /* a kalash: gold pot with a red band, mango leaves and a coconut */
+  const kalash = () => '<svg class="kalash" viewBox="0 0 80 96" aria-hidden="true">'
+    + '<g class="acc-green-f"><path d="M40 40C30 35 18 37 7 46C18 48.5 30 46.5 40 40Z"/><path d="M40 40C50 35 62 37 73 46C62 48.5 50 46.5 40 40Z"/>'
+    + '<path d="M40 38C33 29.5 22 25.5 11 27.5C18.5 35 30 39.5 40 38Z"/><path d="M40 38C47 29.5 58 25.5 69 27.5C61.5 35 50 39.5 40 38Z"/></g>'
+    + '<path d="M40 40L9 46M40 40L71 46M40 38L13 28M40 38L67 28" fill="none" stroke="#e9d39a" stroke-width=".6" opacity=".7"/>'
+    + '<ellipse cx="40" cy="26" rx="10.5" ry="13.5" fill="#94612c"/><ellipse cx="36.5" cy="21" rx="3" ry="6" fill="#b98146" opacity=".7"/>'
+    + '<path d="M40 13C38.5 8 40 4 43.5 1.5M40 13C41.5 8.5 44.5 7 48 6.5M40 13C38 9.5 35 8 32 8" fill="none" stroke="#c98a3a" stroke-width="1.1" stroke-linecap="round"/>'
+    + '<path class="acc-red-f" d="M30 30.5C36 34 44 34 50 30.5L49.5 35C44 38.5 36 38.5 30.5 35Z"/>'
+    + '<path d="M30 49C14 51 10 70 22 82C28 88 52 88 58 82C70 70 66 51 50 49Z" fill="url(#gP)"/>'
+    + '<path d="M31 43H49L50.5 49.5H29.5Z" fill="url(#gP)"/><ellipse cx="40" cy="42.5" rx="15" ry="3.2" fill="url(#gP)"/>'
+    + '<path class="acc-red-f" d="M15.6 61.5C26 66 54 66 64.4 61.5L65 68C54 72.5 26 72.5 15 68Z"/>'
+    + '<g class="acc-marigold-f"><circle cx="22" cy="66.5" r="1.5"/><circle cx="31" cy="68" r="1.5"/><circle cx="40" cy="68.5" r="1.5"/><circle cx="49" cy="68" r="1.5"/><circle cx="58" cy="66.5" r="1.5"/></g>'
+    + '<path d="M22 56C30 58.5 50 58.5 58 56" fill="none" stroke="#fff3cf" stroke-width=".8" opacity=".6"/>'
+    + '<path d="M28 87.5H52L49 93.5H31Z" fill="url(#gP)"/></svg>';
+
+  /* a small illustration for each function, gold line art with colour accents */
+  const EVENT_ICONS = {
+    mandap: '<path class="ev-acc" d="M6 16C10 5 38 5 42 16Z" opacity=".9"/><path d="M6 16C10 5 38 5 42 16" fill="none" stroke="currentColor" stroke-width="1.2"/>'
+      + '<path d="M3 16.5H45M3 38.5H45" stroke="currentColor" stroke-width="1.4"/><path d="M8 17V38M40 17V38" stroke="currentColor" stroke-width="2"/><path d="M16 17V38M32 17V38" stroke="currentColor" stroke-width="1"/>'
+      + '<path d="M8 19Q12 25.5 16 19Q24 27 32 19Q36 25.5 40 19" fill="none" stroke="#f0b13a" stroke-width="1.6" stroke-dasharray="1.6 1.1"/>'
+      + '<circle cx="24" cy="3.6" r="2.4" fill="url(#gP)"/><path d="M24 6V8" stroke="currentColor"/>',
+    haldi: '<g fill="#ec8a1a"><circle cx="15" cy="15" r="4.6"/><circle cx="25" cy="11.5" r="5"/><circle cx="34" cy="15.5" r="4.4"/></g>'
+      + '<g fill="#f7c53b"><circle cx="15" cy="15" r="2.4"/><circle cx="25" cy="11.5" r="2.7"/><circle cx="34" cy="15.5" r="2.3"/></g>'
+      + '<path class="acc-green-f" d="M20 18C17 21 12 21 9 19C12 16.5 17 16.5 20 18ZM29 18C32 21 37 21 40 19C37 16.5 32 16.5 29 18Z"/>'
+      + '<path d="M7 22H41C40 32 33 37.5 24 37.5C15 37.5 8 32 7 22Z" fill="url(#gP)"/><ellipse cx="24" cy="22" rx="17" ry="3.6" fill="#f2b632"/>'
+      + '<path class="ev-acc" d="M10 27.5C18 30 30 30 38 27.5L37 30C30 32.5 18 32.5 11 30Z"/>',
+    sangeet: '<path d="M11 13C16 3 32 3 37 13" fill="none" stroke="currentColor" stroke-width="1.2"/>'
+      + '<rect class="ev-acc" x="10" y="12" width="28" height="21" rx="2"/>'
+      + '<path d="M10 12L17 33L24 12L31 33L38 12" fill="none" stroke="#f3d27a" stroke-width="1.1"/>'
+      + '<ellipse cx="10" cy="22.5" rx="4" ry="10.5" fill="url(#gP)"/><ellipse cx="38" cy="22.5" rx="4" ry="10.5" fill="url(#gP)"/>'
+      + '<path d="M43 5v9.5" stroke="currentColor" stroke-width="1.1"/><ellipse cx="41.3" cy="14.6" rx="2.2" ry="1.6" fill="currentColor"/><path d="M43 5c2 1 3.5 2 3.5 4" fill="none" stroke="currentColor"/>',
+    wedding: '<circle cx="24" cy="18" r="15" fill="url(#flameGlow)"/>'
+      + '<path class="d-flame" fill="url(#flame)" d="M24 3C28 9.5 31 14 31 19C31 23.5 28 26 24 26C20 26 17 23.5 17 19C17 14 20 9.5 24 3Z"/>'
+      + '<path fill="url(#flame)" d="M16.5 12C18.5 15.5 20 18 20 21C20 23.5 18.5 25.5 16.5 25.5C14.5 25.5 13 23.5 13 21C13 18 14.5 15.5 16.5 12ZM31.5 12C33.5 15.5 35 18 35 21C35 23.5 33.5 25.5 31.5 25.5C29.5 25.5 28 23.5 28 21C28 18 29.5 15.5 31.5 12Z" opacity=".9"/>'
+      + '<path class="ev-acc" d="M5 25H43V28.5H5Z"/><path d="M8 28.5H40L36 38H12Z" fill="url(#gP)"/>'
+      + '<path d="M11 32H37M13.5 35H34.5" stroke="#fff3cf" stroke-width=".7" opacity=".7"/>',
+  };
+  const eventIcon = (id) => `<svg class="ev-icon" viewBox="0 0 48 40" aria-hidden="true">${EVENT_ICONS[id]
+    || '<path class="ev-acc" d="M24 36C17 30 16 18 24 6C32 18 31 30 24 36ZM24 36C13 35 6 27 4 18C13 19 20 26 24 36ZM24 36C35 35 42 27 44 18C35 19 28 26 24 36Z"/>'}</svg>`;
 
   const finial = () => '<svg class="finial" viewBox="0 0 60 34" aria-hidden="true">'
     + '<path class="fn-fill" fill="url(#gP)" d="M30 32C25 25 25 15 30 6C35 15 35 25 30 32Z"/>'
@@ -425,8 +467,8 @@
 
   function eventCard(ev, index, inv) {
     const maps = safeUrl(ev.maps);
-    return `<div class="card reveal">
-      ${finial()}
+    return `<div class="card reveal ev-${esc(ev.id)}">
+      ${eventIcon(ev.id)}
       <h3 class="ev-name script foil">${esc(ev.name)}</h3>
       <p class="ev-day tiny">${esc(ev.weekday)}</p>
       <p><span class="ev-num foil">${esc(ev.dayNum)}</span></p>
@@ -496,9 +538,10 @@
       </section>
 
       <section class="couple paper" id="welcome">
+        <div class="paper-lace">${mandala('P', false)}</div>
         <div class="framed">
           ${corner('tl')}${corner('tr')}${corner('bl')}${corner('br')}
-          <div class="mini reveal">${mandala('P', false)}</div>
+          <div class="kalash-wrap reveal">${kalash()}</div>
           <p class="dear reveal">Dear ${esc(g.name)},</p>
           ${lead ? `<p class="lead reveal">${esc(lead)}</p>` : ''}
           <h2 class="person script foil write">${esc(c.name1)}</h2>
@@ -513,22 +556,25 @@
       </section>
 
       <section class="events silk">
+        <div class="patola top"></div>
         <div class="lace l1">${mandala('S', false)}</div>
         <div class="lace l2">${mandala('S', false)}</div>
         <p class="kicker reveal">You are warmly invited to</p>
         <h2 class="title foil reveal">${inv.events.length > 1 ? 'Functions &amp; Ceremonies' : 'The Ceremony'}</h2>
         <div class="reveal">${divider('S')}</div>
         <div class="cards">${inv.events.map((ev, i) => eventCard(ev, i, inv)).join('')}</div>
+        <div class="patola bottom"></div>
       </section>
 
       <section class="info paper">
+        <div class="paper-lace">${mandala('P', false)}</div>
         <div class="framed">
           ${corner('tl')}${corner('tr')}${corner('bl')}${corner('br')}
           <div id="countdown">
             <h2 class="title foil reveal">Counting the Days</h2>
             <p class="sub reveal">until the ${esc(first.name)}</p>
             <div class="clock reveal">
-              ${['Days', 'Hours', 'Minutes', 'Seconds'].map((u) => `<div><b class="foil" data-unit="${u}">00</b><span class="tiny">${u}</span></div>`).join('')}
+              ${[['Days', 'Days'], ['Hours', 'Hours'], ['Minutes', 'Mins'], ['Seconds', 'Secs']].map(([u, label]) => `<div><b class="foil" data-unit="${u}">00</b><span class="tiny">${label}</span></div>`).join('')}
             </div>
           </div>
           ${divider('P')}
@@ -544,7 +590,9 @@
       </section>
 
       <section class="foot silk">
+        <div class="patola top"></div>
         <div class="lace">${mandala('S', false)}</div>
+        ${logoStyle ? `<div class="foot-crest hero-logo reveal">${logo(logoStyle, c, inv.logoDate || '', logoFont, { motif: logoOpts.motif, anim: 'subtle' })}</div>` : ''}
         ${t.closing ? `<p class="closing reveal">${esc(t.closing)}</p>` : ''}
         ${t.hashtag ? `<div class="tag reveal"><span class="title foil">${esc(t.hashtag)}</span></div>` : ''}
         ${t.signoff ? `<p class="signoff script foil reveal">${esc(t.signoff)}</p>` : ''}
