@@ -179,7 +179,15 @@
     + `<text class="${cls}" x="${ax}" y="${ay}" font-size="${size}" text-anchor="middle" fill="url(#gS)" mask="url(#${id})">${A}</text>`
     + `<text class="${cls}" x="${bx}" y="${by}" font-size="${size}" text-anchor="middle" fill="url(#gS)">${B}</text>`;
 
-  function logo(style, couple, date) {
+  // typefaces for the crest's K and J (Details → logo_font), with each one's size and placement
+  const CREST_FONTS = {
+    bodoni: { cls: 'lg-bodoni', size: 150, ax: 117, ay: 184, bx: 183, by: 192, gap: 8 },
+    cinzel: { cls: 'lg-cinzel', size: 128, ax: 110, ay: 190, bx: 190, by: 190, gap: 7 },
+    imperial: { cls: 'lg-imperial', size: 140, ax: 124, ay: 178, bx: 178, by: 182, gap: 8 },
+    garamond: { cls: 'lg-serif', size: 146, ax: 122, ay: 180, bx: 178, by: 192, gap: 8 },
+  };
+
+  function logo(style, couple, date, fontName) {
     const A = esc((couple.name1 || '').trim().charAt(0).toUpperCase());
     const B = esc((couple.name2 || '').trim().charAt(0).toUpperCase());
     const id = `lg${Math.random().toString(36).slice(2, 8)}`;
@@ -215,8 +223,8 @@
     return `<svg class="logo logo-crest" viewBox="0 0 300 300" ${label}>`
       + '<g fill="none" stroke="url(#gS)"><circle cx="150" cy="150" r="140" stroke-width="1.4"/><circle cx="150" cy="150" r="133" stroke-width=".7"/></g>'
       + `<g fill="url(#gS)">${dots}${lotusMark(150, 11, 1)}${lotusMark(150, 289, -1)}<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/></g>`
-      + pair(id, 'lg-serif', 146, 122, 180, 178, 192, A, B, 8)
-      + `<text class="lg-date" x="150" y="244" text-anchor="middle" style="letter-spacing:3px">${esc(date)}</text></svg>`;
+      + (() => { const f = CREST_FONTS[fontName] || CREST_FONTS.bodoni; return pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap); })()
+      + `<text class="lg-date" x="150" y="244" text-anchor="middle">${esc(date)}</text></svg>`;
   }
 
   const ICON = {
@@ -364,6 +372,8 @@
     const LOGOS = ['crest', 'script', 'arch'];
     const logoParam = (params.get('logo') || '').toLowerCase();
     const logoStyle = LOGOS.includes(logoParam) ? logoParam : (LOGOS.includes(t.logo) ? t.logo : '');
+    const fontParam = (params.get('logofont') || '').toLowerCase();
+    const logoFont = CREST_FONTS[fontParam] ? fontParam : (CREST_FONTS[t.logoFont] ? t.logoFont : 'bodoni');
 
     $('#invite').innerHTML = `
       <section class="hero silk${logoStyle ? ' has-logo' : ''}">
@@ -375,7 +385,7 @@
           <div class="halo reveal" style="--d:.1s">${mandala('S', true)}${emblemHtml(t.emblem, initialsOf(c), 'emblem')}</div>
           ${t.invocation ? `<p class="invocation reveal${dev ? '' : ' latin'}" style="--d:.4s"${dev ? ' lang="sa"' : ''}>${esc(t.invocation)}</p>` : ''}
           ${logoStyle
-            ? `<h1 class="hero-logo reveal" style="--d:.8s"><span class="sr-only">${esc(c.name1)} &amp; ${esc(c.name2)}</span>${logo(logoStyle, c, inv.logoDate || '')}</h1>`
+            ? `<h1 class="hero-logo reveal" style="--d:.8s"><span class="sr-only">${esc(c.name1)} &amp; ${esc(c.name2)}</span>${logo(logoStyle, c, inv.logoDate || '', logoFont)}</h1>`
             : `<h1 class="hero-title script foil write" style="--d:.8s">${heroTitle}</h1>`}
           <div class="reveal" style="--d:1.3s">${divider('S')}</div>
           <p class="hero-date reveal" style="--d:1.5s">${esc(inv.dates)}</p>

@@ -224,7 +224,10 @@ svg { color: var(--gold); }
 .lg-serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; }
 .lg-script { font-family: 'Pinyon Script', 'Corinthia', cursive; font-weight: 400; }
 .lg-caps { font-family: 'Cormorant SC', 'Cormorant Garamond', serif; font-weight: 600; }
-.lg-date { font-family: 'Cormorant SC', 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; letter-spacing: 4px; fill: var(--gold); }
+.lg-bodoni { font-family: 'Bodoni Moda', 'Cormorant Garamond', serif; font-weight: 500; }
+.lg-cinzel { font-family: 'Cinzel Decorative', 'Cinzel', serif; font-weight: 400; }
+.lg-imperial { font-family: 'Imperial Script', 'Pinyon Script', cursive; font-weight: 400; }
+.lg-date { font-family: 'Cinzel', 'Cormorant SC', serif; font-size: 13px; font-weight: 500; letter-spacing: 3.5px; fill: var(--gold); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .a-line { fill: none; stroke: currentColor; stroke-width: 1.1; vector-effect: non-scaling-stroke; }
 .a-thin { fill: none; stroke: currentColor; stroke-width: .6; opacity: .7; vector-effect: non-scaling-stroke; }
