@@ -257,6 +257,7 @@ svg { color: var(--gold); }
 /* stronger animation: letters are written in gold, then filled; glow and sparkles */
 .logo.anim-strong .draw { transition-duration: 3.4s; }
 .logo.anim-strong .lg-letter { fill-opacity: 0; stroke: var(--gold-s); stroke-width: .9; stroke-dasharray: 900; stroke-dashoffset: 900; }
+.logo.anim-strong .lg-drawn { stroke-width: 1.7; }   /* drawn at twice the size, then scaled down */
 .hero-logo.in .logo.anim-strong .lg-letter { animation: lg-write 2.8s cubic-bezier(.5, .1, .3, 1) .5s forwards, lg-fill 1.4s ease 2.4s forwards; }
 .static .logo.anim-strong .lg-letter { fill-opacity: 1; stroke-dashoffset: 0; stroke-opacity: .2; animation: none; }
 @keyframes lg-write { to { stroke-dashoffset: 0; } }
@@ -294,6 +295,13 @@ svg { color: var(--gold); }
 .halo .ganesha { position: relative; width: 62%; height: auto; overflow: visible; filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .3)); }
 .hero.has-logo .halo:has(.ganesha) { width: min(46vw, 178px, 24svh); }
 .cover-emblem.ganesha { display: block; width: 96px; height: auto; margin: 0 auto 10px; padding: 0; filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .35)); }
+/* the gold-foil Ganesha: theme gold engraved in deep maroon, with a red tilak */
+.gn-foil { --g1: var(--gs1); --g2: var(--gs2); --g3: var(--gs3); --g4: var(--gs4); --gn-cut: #6b1015; --gn-red: #c8202c; }
+.gn-foil .g1 { stop-color: var(--g1); } .gn-foil .g2 { stop-color: var(--g2); } .gn-foil .g3 { stop-color: var(--g3); } .gn-foil .g4 { stop-color: var(--g4); }
+.gn-foil .gn-cut { stroke: var(--gn-cut); } .gn-foil .gn-cut-f { fill: var(--gn-cut); }
+.gn-foil .gn-red { fill: var(--gn-red); } .gn-foil .gn-red path[fill="none"] { stroke: var(--gn-red); }
+.halo .gn-foil { width: 68%; }
+.cover-emblem.gn-foil { width: 116px; }
 .emblem.initials { font-family: var(--script); font-size: calc(clamp(30px, 9vw, 40px) * var(--script-k)); }
 .invocation { margin-top: 4px; font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 17px; color: var(--gold); }
 .invocation.latin { font-family: var(--serif); font-style: italic; font-size: 19px; }
@@ -678,6 +686,8 @@ svg { color: var(--gold); }
   background-image: linear-gradient(105deg, #5e0910 0%, #9a1820 22%, #c63a40 36%, #9a1820 50%, #6e0b12 66%, #b3252d 82%, #5e0910 100%);
 }
 .gold-cover .ganesha { color: var(--royal); filter: none; }
+.gold-cover .gn-foil { --g1: #7a5518; --g2: #c49a45; --g3: #f6dc93; --g4: #a27a2c; --gn-cut: var(--royal); filter: drop-shadow(0 2px 2.5px rgba(90, 50, 10, .3)); }
+:root[data-cover="gold"] .gold-cover .gn-foil { --g1: #5e0910; --g2: #9a1820; --g3: #c63a40; --g4: #6e0b12; --gn-cut: #f3d58a; --gn-red: #f3d58a; }
 .gold-cover .cover-lace { opacity: .1; }
 .gold-cover .cover-lace path { stroke: var(--orn, var(--royal)); }
 .gold-cover .cover-lace path[fill] { fill: var(--orn, var(--royal)); }
