@@ -187,9 +187,20 @@
     imperial: { cls: 'lg-imperial', size: 128, ax: 120, ay: 154, bx: 180, by: 206, gap: 8, plain: true },
     garamond: { cls: 'lg-serif', size: 132, ax: 116, ay: 158, bx: 182, by: 214, gap: 8 },
   };
-  // a small diamond-and-dots fleuron, balancing the empty corners of the diagonal
-  const fleuron = (x, y) => `<path d="M${x} ${y - 7}l5 7-5 7-5-7z"/><circle cx="${x - 10}" cy="${y}" r="1.5"/><circle cx="${x + 10}" cy="${y}" r="1.5"/>`
-    + `<circle cx="${x}" cy="${y - 12}" r="1.2"/><circle cx="${x}" cy="${y + 12}" r="1.2"/>`;
+  // a paisley (kairi) with its tail curling up-right, balancing the empty corners of the diagonal
+  const PAISLEY = 'M0 12C-11 12-16 2-12-6C-8-14 4-15 10-10C14-7 18-12 17-19C22-12 21-2 14 5C10 9 5 12 0 12Z';
+  // (position on the outer group; the inner group animates, so its CSS transform can't override the position)
+  const paisley = (x, y, deg, s = 1.15) => `<g transform="translate(${x} ${y}) rotate(${deg}) scale(${s})"><g class="bloom">`
+    + `<path d="${PAISLEY}" fill="none" stroke="url(#gS)" stroke-width="1.1"/>`
+    + `<path d="${PAISLEY}" transform="translate(-1.5 1.5) scale(.55)" fill="url(#gS)" opacity=".75"/>`
+    + '<path d="M17-19c3-2 6.5 0 5.5 3.2c-.8 2.2-3.2 2.4-4.2 1" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/>'
+    + '<g fill="currentColor"><circle cx="-3.5" cy="1.5" r="1.5"/><circle cx="-17.5" cy="0" r="1.1"/><circle cx="-14.5" cy="10" r="1.1"/><circle cx="-6" cy="17" r="1.1"/><circle cx="4" cy="17.5" r="1.1"/></g></g></g>';
+  // a three-petal lotus crown sitting on top of the ring
+  const crown = () => '<g fill="url(#gS)">'
+    + '<path d="M150 10C145 2 145-8 150-18C155-8 155 2 150 10Z"/>'
+    + '<path d="M146 11C138 8 132 0 130-10C137-6 143 2 146 11Z"/><path d="M154 11C162 8 168 0 170-10C163-6 157 2 154 11Z"/>'
+    + '<path d="M141 12C134 12 127 8 122 2C129 3 136 6 141 12Z"/><path d="M159 12C166 12 173 8 178 2C171 3 164 6 159 12Z"/>'
+    + '<circle cx="150" cy="-23" r="2.2"/><circle cx="129" cy="-14" r="1.6"/><circle cx="171" cy="-14" r="1.6"/></g>';
 
   function logo(style, couple, date, fontName) {
     const A = esc((couple.name1 || '').trim().charAt(0).toUpperCase());
@@ -219,20 +230,29 @@
         + `<text class="lg-caps" x="201" y="236" font-size="112" text-anchor="middle" fill="url(#gS)">${B}</text>`
         + `<text class="lg-date" x="150" y="310" text-anchor="middle">${esc(date)}</text></svg>`;
     }
+    // mehndi-style scalloped ring with tiny dots where the scallops meet
+    const P = (R, deg) => [150 + R * Math.sin((deg * Math.PI) / 180), 150 - R * Math.cos((deg * Math.PI) / 180)];
+    let scallops = '';
     let dots = '';
-    for (let i = 0; i < 48; i += 1) {
-      const a = (i * 7.5 * Math.PI) / 180;
-      dots += `<circle cx="${r1(150 + 126 * Math.sin(a))}" cy="${r1(150 - 126 * Math.cos(a))}" r="1.2"/>`;
+    const N = 40;
+    const rr = r1(124 * Math.sin(Math.PI / N) * 1.12);
+    for (let i = 0; i < N; i += 1) {
+      const [x0, y0] = P(124, (i * 360) / N);
+      const [x1, y1] = P(124, ((i + 1) * 360) / N);
+      scallops += `M${r1(x0)} ${r1(y0)}A${rr} ${rr} 0 0 1 ${r1(x1)} ${r1(y1)}`;
+      const [dx, dy] = P(119, (i * 360) / N);
+      dots += `<circle cx="${r1(dx)}" cy="${r1(dy)}" r="1.1"/>`;
     }
-    return `<svg class="logo logo-crest" viewBox="0 0 300 300" ${label}>`
-      + '<g fill="none" stroke="url(#gS)"><circle cx="150" cy="150" r="140" stroke-width="1.4"/><circle cx="150" cy="150" r="133" stroke-width=".7"/></g>'
-      + `<g fill="url(#gS)">${dots}${lotusMark(150, 11, 1)}${lotusMark(150, 289, -1)}<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/></g>`
-      + (() => {
-        const f = CREST_FONTS[fontName] || CREST_FONTS.bodoni;
-        return (f.plain ? '' : `<g fill="currentColor">${fleuron(206, 92)}${fleuron(94, 204)}</g>`)
-          + pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap);
-      })()
-      + `<text class="lg-date" x="150" y="256" text-anchor="middle">${esc(date)}</text></svg>`;
+    const f = CREST_FONTS[fontName] || CREST_FONTS.cinzel;
+    const letterFill = reduceMotion ? 'url(#gS)' : 'url(#gLogo)';
+    return `<svg class="logo logo-crest" viewBox="0 -28 300 328" ${label}>`
+      + '<g fill="none" stroke="url(#gS)"><circle class="draw" pathLength="1" cx="150" cy="150" r="140" stroke-width="1.4"/>'
+      + '<circle class="draw" pathLength="1" cx="150" cy="150" r="133" stroke-width=".7"/></g>'
+      + `<path class="bloom" d="${scallops}" fill="none" stroke="url(#gS)" stroke-width=".8"/><g class="bloom" fill="url(#gS)">${dots}</g>`
+      + `${crown()}<g fill="url(#gS)">${lotusMark(150, 289, -1)}<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/></g>`
+      + (f.plain ? '' : paisley(216, 96, 0) + paisley(84, 206, 180))
+      + pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap).replace(/fill="url\(#gS\)"/g, `fill="${letterFill}"`)
+      + `<text class="lg-date" x="150" y="245" text-anchor="middle">${esc(date)}</text></svg>`;
   }
 
   const ICON = {
@@ -381,7 +401,7 @@
     const logoParam = (params.get('logo') || '').toLowerCase();
     const logoStyle = LOGOS.includes(logoParam) ? logoParam : (LOGOS.includes(t.logo) ? t.logo : '');
     const fontParam = (params.get('logofont') || '').toLowerCase();
-    const logoFont = CREST_FONTS[fontParam] ? fontParam : (CREST_FONTS[t.logoFont] ? t.logoFont : 'bodoni');
+    const logoFont = CREST_FONTS[fontParam] ? fontParam : (CREST_FONTS[t.logoFont] ? t.logoFont : 'cinzel');
 
     $('#invite').innerHTML = `
       <section class="hero silk${logoStyle ? ' has-logo' : ''}">
