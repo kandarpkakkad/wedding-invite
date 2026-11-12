@@ -204,6 +204,15 @@
 
   /* ---------------- rendering ---------------- */
 
+  const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+    'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+  /* invite_line can say {you}: "you", "both of you", "all four of you" (from max_guests) */
+  function fillInvite(template, n) {
+    if (!template) return '';
+    const you = !n || n === 1 ? 'you' : n === 2 ? 'both of you' : `all ${WORDS[n] || n} of you`;
+    return template.replace(/\{you\}/g, you).replace(/\{count\}/g, n ? (WORDS[n] || String(n)) : '');
+  }
+
   const initialsOf = (c) => [c.name1, c.name2].map((n) => (n || '').trim().charAt(0).toUpperCase()).filter(Boolean).join(' & ');
   const emblemHtml = (emblem, initials, cls) => (emblem
     ? `<span class="${cls} foil"${isDevanagari(emblem) ? ' lang="sa"' : ''}>${esc(emblem)}</span>`
@@ -240,7 +249,10 @@
     const c = inv.couple;
     const t = inv.text || {};
     const g = inv.guest;
-    const seats = !g.seats ? '' : (g.seats === 1 ? '1 Seat' : `${g.seats} Seats`);
+    const lead = fillInvite(t.invite, g.seats);
+    const heroTitle = t.heroTitle
+      ? esc(t.heroTitle).replace(/\s+/, '<br>')
+      : `${esc(c.name1)}<span class="hero-amp">${esc(c.joiner || '&')}</span>${esc(c.name2)}`;
     const rsvp = rsvpUrl(inv, code);
     const contacts = (inv.contacts || []).filter((x) => x.tel);
     const first = inv.events[0];
@@ -253,7 +265,7 @@
         <div class="hero-inner">
           <div class="halo reveal" style="--d:.1s">${mandala('S', true)}${emblemHtml(t.emblem, initialsOf(c), 'emblem')}</div>
           ${t.invocation ? `<p class="invocation reveal${dev ? '' : ' latin'}" style="--d:.4s"${dev ? ' lang="sa"' : ''}>${esc(t.invocation)}</p>` : ''}
-          <h1 class="hero-title script foil write" style="--d:.8s">${esc(t.heroTitle || 'Wedding Invitation').replace(/\s+/, '<br>')}</h1>
+          <h1 class="hero-title script foil write" style="--d:.8s">${heroTitle}</h1>
           <div class="reveal" style="--d:1.3s">${divider('S')}</div>
           <p class="hero-date reveal" style="--d:1.5s">${esc(inv.dates)}</p>
           <button class="cue tiny reveal" style="--d:1.9s" type="button" id="cue">Scroll${ICON.down}</button>
@@ -265,7 +277,7 @@
           ${corner('tl')}${corner('tr')}${corner('bl')}${corner('br')}
           <div class="mini reveal">${mandala('P', false)}</div>
           <p class="dear reveal">Dear ${esc(g.name)},</p>
-          ${t.invite ? `<p class="lead reveal">${esc(t.invite)}</p>` : ''}
+          ${lead ? `<p class="lead reveal">${esc(lead)}</p>` : ''}
           <h2 class="person script foil write">${esc(c.name1)}</h2>
           ${t.parents1 ? `<p class="parents reveal">${esc(t.parents1)}</p>` : ''}
           <p class="and script foil reveal">${esc(c.joiner || '&')}</p>
@@ -274,7 +286,6 @@
           <div class="reveal">${divider('P')}</div>
           <p class="when reveal">${esc(inv.dates)}</p>
           ${t.location ? `<p class="place reveal">${esc(t.location)}</p>` : ''}
-          ${seats ? `<p class="seats reveal"><span class="tiny">Reserved in your honour</span><span class="seat-n">${esc(seats)}</span></p>` : ''}
         </div>
       </section>
 
@@ -401,6 +412,7 @@
     const t = inv.text || {};
     $('#cover-emblem').outerHTML = emblemHtml(t.emblem, initialsOf(inv.couple), 'cover-emblem');
     $('#cover-dear').textContent = `Dear ${inv.guest.name},`;
+    $('#cover-title').textContent = t.coverTitle || 'Wedding Invitation';
     $('#cover-when').textContent = inv.dates;
     $('#cover-place').textContent = t.location || '';
     $('#open-btn').hidden = false;

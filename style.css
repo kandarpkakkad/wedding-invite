@@ -225,18 +225,7 @@ svg { color: var(--gold); }
 .and { margin-top: 10px; font-size: calc(40px * var(--script-k)); }
 .when { font-family: var(--caps); font-size: 14px; font-weight: var(--caps-weight); letter-spacing: .26em; text-transform: uppercase; }
 .place { margin-top: 4px; font-size: 17px; font-style: italic; color: var(--soft); }
-.seats {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 2px;
-  margin-top: 26px;
-  padding: 12px 26px 10px;
-  border: 1px solid var(--line);
-  outline: 1px solid var(--line);
-  outline-offset: 3px;
-}
-.seats .tiny { font-size: 9.5px; }
-.seat-n { font-size: 22px; font-style: italic; font-weight: 600; }
+.hero-amp { display: block; font-size: .5em; line-height: 1.2; }
 .lead, .parents, .title, .closing, .signoff, .who, .ev-notes, .cover-place { text-wrap: balance; }
 
 /* ================= Functions ================= */
