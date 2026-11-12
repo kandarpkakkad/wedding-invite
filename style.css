@@ -230,6 +230,26 @@ svg { color: var(--gold); }
 .logo .bloom { opacity: 0; transform: scale(.7); transform-box: fill-box; transform-origin: center; transition: opacity 1.2s ease 1.2s, transform 1.4s cubic-bezier(.2, .8, .2, 1) 1.2s; }
 .hero-logo.in .logo .draw, .static .logo .draw { stroke-dashoffset: 0; }
 .hero-logo.in .logo .bloom, .static .logo .bloom { opacity: 1; transform: none; }
+.logo-crest.motif-peacock { width: min(78vw, 306px); }
+.logo .eye-core { fill: var(--silk-2); }
+/* peacock feathers unfurl upwards */
+.logo .feather { opacity: 0; transform: scale(.35); transform-box: fill-box; transform-origin: 50% 100%; transition: opacity 1.4s ease .9s, transform 2.2s cubic-bezier(.2, .9, .25, 1.08) .9s; }
+.hero-logo.in .logo .feather, .static .logo .feather { opacity: 1; transform: none; }
+
+/* stronger animation: letters are written in gold, then filled; glow and sparkles */
+.logo.anim-strong .draw { transition-duration: 3.4s; }
+.logo.anim-strong .lg-letter { fill-opacity: 0; stroke: var(--gold-s); stroke-width: .9; stroke-dasharray: 900; stroke-dashoffset: 900; }
+.hero-logo.in .logo.anim-strong .lg-letter { animation: lg-write 2.8s cubic-bezier(.5, .1, .3, 1) .5s forwards, lg-fill 1.4s ease 2.4s forwards; }
+.static .logo.anim-strong .lg-letter { fill-opacity: 1; stroke-dashoffset: 0; stroke-opacity: .2; animation: none; }
+@keyframes lg-write { to { stroke-dashoffset: 0; } }
+@keyframes lg-fill { to { fill-opacity: 1; stroke-opacity: .2; } }
+.logo .glow { transform-box: fill-box; transform-origin: center; animation: lg-glow 4.5s ease-in-out infinite alternate; }
+@keyframes lg-glow { from { opacity: .35; transform: scale(.9); } to { opacity: 1; transform: scale(1.08); } }
+.logo .twinkle { opacity: 0; transform-box: fill-box; transform-origin: center; animation: lg-twinkle 3.2s ease-in-out infinite; }
+@keyframes lg-twinkle { 0%, 100% { opacity: 0; transform: scale(.3) rotate(0deg); } 50% { opacity: 1; transform: scale(1) rotate(45deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .logo.anim-strong .lg-letter { fill-opacity: 1 !important; stroke-dashoffset: 0 !important; stroke-opacity: .2; }
+}
 .lg-bodoni { font-family: 'Bodoni Moda', 'Cormorant Garamond', serif; font-weight: 500; }
 .lg-cinzel { font-family: 'Cinzel Decorative', 'Cinzel', serif; font-weight: 400; }
 .lg-imperial { font-family: 'Imperial Script', 'Pinyon Script', cursive; font-weight: 400; }

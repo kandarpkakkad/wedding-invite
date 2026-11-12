@@ -176,8 +176,8 @@
   // the second letter is cut out of the first with a mask, so they interlock with a clean gap
   const pair = (id, cls, size, ax, ay, bx, by, A, B, gap) => `<defs><mask id="${id}" maskUnits="userSpaceOnUse" x="-50" y="-50" width="400" height="440">`
     + `<rect x="-50" y="-50" width="400" height="440" fill="#fff"/><text class="${cls}" x="${bx}" y="${by}" font-size="${size}" text-anchor="middle" fill="#000" stroke="#000" stroke-width="${gap}" stroke-linejoin="round">${B}</text></mask></defs>`
-    + `<text class="${cls}" x="${ax}" y="${ay}" font-size="${size}" text-anchor="middle" fill="url(#gS)" mask="url(#${id})">${A}</text>`
-    + `<text class="${cls}" x="${bx}" y="${by}" font-size="${size}" text-anchor="middle" fill="url(#gS)">${B}</text>`;
+    + `<text class="${cls} lg-letter" x="${ax}" y="${ay}" font-size="${size}" text-anchor="middle" fill="url(#gS)" mask="url(#${id})">${A}</text>`
+    + `<text class="${cls} lg-letter" x="${bx}" y="${by}" font-size="${size}" text-anchor="middle" fill="url(#gS)">${B}</text>`;
 
   // typefaces for the crest's K and J (Details → logo_font). The letters are staggered:
   // K sits high on the left, J low on the right, interlocking on the diagonal.
@@ -195,6 +195,64 @@
     + `<path d="${PAISLEY}" transform="translate(-1.5 1.5) scale(.55)" fill="url(#gS)" opacity=".75"/>`
     + '<path d="M17-19c3-2 6.5 0 5.5 3.2c-.8 2.2-3.2 2.4-4.2 1" fill="none" stroke="currentColor" stroke-width=".9" stroke-linecap="round"/>'
     + '<g fill="currentColor"><circle cx="-3.5" cy="1.5" r="1.5"/><circle cx="-17.5" cy="0" r="1.1"/><circle cx="-14.5" cy="10" r="1.1"/><circle cx="-6" cy="17" r="1.1"/><circle cx="4" cy="17.5" r="1.1"/></g></g></g>';
+  // the eye of a peacock feather, drawn along +x (rotate it to point the feather)
+  const peacockEye = (rx, ry) => `<ellipse rx="${rx}" ry="${ry}" fill="url(#gS)" opacity=".28" stroke="currentColor" stroke-width=".7"/>`
+    + `<ellipse rx="${r1(rx * 0.64)}" ry="${r1(ry * 0.66)}" fill="url(#gS)"/>`
+    + `<ellipse class="eye-core" rx="${r1(rx * 0.34)}" ry="${r1(ry * 0.36)}"/>`
+    + `<ellipse cx="${r1(-rx * 0.06)}" cy="${r1(-ry * 0.06)}" rx="${r1(rx * 0.13)}" ry="${r1(ry * 0.13)}" fill="#fff4d6"/>`;
+
+  // a small peacock feather (quill, fanned barbs, eye) pointing up-right, for the diagonal corners
+  function featherEye(x, y, deg) {
+    const d = [Math.SQRT1_2, -Math.SQRT1_2]; // along the quill, towards the eye
+    const p = [Math.SQRT1_2, Math.SQRT1_2]; // across the quill
+    let barbs = '';
+    for (let i = 0; i <= 8; i += 1) {
+      const t = i / 8;
+      const qx = -15 + 21 * t;
+      const qy = 15 - 21 * t;
+      const L = 2.5 + 6.5 * t;
+      for (const s of [1, -1]) {
+        barbs += `M${r1(qx)} ${r1(qy)}l${r1(L * (0.85 * s * p[0] + 0.5 * d[0]))} ${r1(L * (0.85 * s * p[1] + 0.5 * d[1]))}`;
+      }
+    }
+    return `<g transform="translate(${x} ${y}) rotate(${deg}) scale(1.15)"><g class="bloom">`
+      + '<path d="M-17 17Q-6 6 6-6" fill="none" stroke="currentColor" stroke-width="1"/>'
+      + `<path d="${barbs}" fill="none" stroke="currentColor" stroke-width=".55" opacity=".85"/>`
+      + `<g transform="translate(10 -10) rotate(-45)">${peacockEye(11, 7.5)}</g></g></g>`;
+  }
+
+  // a long peacock feather rising from the bottom lotus and curving up the left side of the ring
+  function bigFeather() {
+    const Rq = 151;
+    const a0 = 198;
+    const a1 = 290;
+    const P = (R, deg) => [150 + R * Math.sin((deg * Math.PI) / 180), 150 - R * Math.cos((deg * Math.PI) / 180)];
+    let barbs = '';
+    for (let a = a0 + 22; a <= a1; a += 1.9) {
+      const t = (a - a0 - 22) / (a1 - a0 - 22);
+      const L = 3 + 14 * t;
+      const lean = 3 + 4 * t;
+      const [qx, qy] = P(Rq, a);
+      const [ox, oy] = P(Rq + L, a + lean);
+      const [ix, iy] = P(Rq - Math.min(L, 8), a + lean);
+      barbs += `M${r1(qx)} ${r1(qy)}L${r1(ox)} ${r1(oy)}M${r1(qx)} ${r1(qy)}L${r1(ix)} ${r1(iy)}`;
+    }
+    const [sx, sy] = P(Rq, a0);
+    const [ex, ey] = P(Rq, a1);
+    const [cx, cy] = P(Rq + 2, a1 + 6);
+    return '<g class="feather">'
+      + `<path d="M${r1(sx)} ${r1(sy)}A${Rq} ${Rq} 0 0 1 ${r1(ex)} ${r1(ey)}" fill="none" stroke="currentColor" stroke-width="1.2"/>`
+      + `<path d="${barbs}" fill="none" stroke="currentColor" stroke-width=".55" opacity=".85"/>`
+      + `<g transform="translate(${r1(cx)} ${r1(cy)}) rotate(${a1 + 6})">${peacockEye(20, 13)}</g></g>`;
+  }
+
+  // gold sparkles that twinkle around the ring (strong animation)
+  const sparkles = () => [[35, 146], [118, 150], [158, 128], [212, 150], [252, 128], [322, 146]].map(([deg, R], i) => {
+    const x = r1(150 + R * Math.sin((deg * Math.PI) / 180));
+    const y = r1(150 - R * Math.cos((deg * Math.PI) / 180));
+    return `<g transform="translate(${x} ${y})"><path class="twinkle" style="animation-delay:${(i * 0.55).toFixed(2)}s" fill="#fff6d8" d="M0-6.5L1.5-1.5 6.5 0 1.5 1.5 0 6.5-1.5 1.5-6.5 0-1.5-1.5Z"/></g>`;
+  }).join('');
+
   // a three-petal lotus crown sitting on top of the ring
   const crown = () => '<g fill="url(#gS)">'
     + '<path d="M150 10C145 2 145-8 150-18C155-8 155 2 150 10Z"/>'
@@ -202,7 +260,7 @@
     + '<path d="M141 12C134 12 127 8 122 2C129 3 136 6 141 12Z"/><path d="M159 12C166 12 173 8 178 2C171 3 164 6 159 12Z"/>'
     + '<circle cx="150" cy="-23" r="2.2"/><circle cx="129" cy="-14" r="1.6"/><circle cx="171" cy="-14" r="1.6"/></g>';
 
-  function logo(style, couple, date, fontName) {
+  function logo(style, couple, date, fontName, opts = {}) {
     const A = esc((couple.name1 || '').trim().charAt(0).toUpperCase());
     const B = esc((couple.name2 || '').trim().charAt(0).toUpperCase());
     const id = `lg${Math.random().toString(36).slice(2, 8)}`;
@@ -244,15 +302,22 @@
       dots += `<circle cx="${r1(dx)}" cy="${r1(dy)}" r="1.1"/>`;
     }
     const f = CREST_FONTS[fontName] || CREST_FONTS.cinzel;
-    const letterFill = reduceMotion ? 'url(#gS)' : 'url(#gLogo)';
-    return `<svg class="logo logo-crest" viewBox="0 -28 300 328" ${label}>`
+    const peacock = opts.motif === 'peacock';
+    const strong = opts.anim === 'strong';
+    const letterFill = reduceMotion ? 'url(#gS)' : strong ? 'url(#gLogoStrong)' : 'url(#gLogo)';
+    const corners = f.plain ? '' : peacock ? featherEye(220, 94, 0) + featherEye(80, 208, 180) : paisley(216, 96, 0) + paisley(84, 206, 180);
+    return `<svg class="logo logo-crest motif-${peacock ? 'peacock' : 'paisley'}${strong ? ' anim-strong' : ''}" viewBox="${peacock ? '-26 -28 352 328' : '0 -28 300 328'}" ${label}>`
+      + (peacock ? `${bigFeather()}<g transform="translate(300 0) scale(-1 1)">${bigFeather()}</g>` : '')
+      + (strong ? '<circle class="glow" cx="150" cy="150" r="112" fill="url(#logoGlow)"/>' : '')
       + '<g fill="none" stroke="url(#gS)"><circle class="draw" pathLength="1" cx="150" cy="150" r="140" stroke-width="1.4"/>'
       + '<circle class="draw" pathLength="1" cx="150" cy="150" r="133" stroke-width=".7"/></g>'
       + `<path class="bloom" d="${scallops}" fill="none" stroke="url(#gS)" stroke-width=".8"/><g class="bloom" fill="url(#gS)">${dots}</g>`
-      + `${crown()}<g fill="url(#gS)">${lotusMark(150, 289, -1)}<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/></g>`
-      + (f.plain ? '' : paisley(216, 96, 0) + paisley(84, 206, 180))
+      + `${crown()}<g fill="url(#gS)">${lotusMark(150, 289, -1)}${peacock ? '' : '<path d="M8 150l5-5 5 5-5 5zM282 150l5-5 5 5-5 5z"/>'}</g>`
+      + corners
       + pair(id, f.cls, f.size, f.ax, f.ay, f.bx, f.by, A, B, f.gap).replace(/fill="url\(#gS\)"/g, `fill="${letterFill}"`)
-      + `<text class="lg-date" x="150" y="249" text-anchor="middle">${esc(date)}</text></svg>`;
+      + `<text class="lg-date" x="150" y="249" text-anchor="middle">${esc(date)}</text>`
+      + (strong && !reduceMotion ? sparkles() : '')
+      + '</svg>';
   }
 
   const ICON = {
@@ -402,6 +467,14 @@
     const logoStyle = LOGOS.includes(logoParam) ? logoParam : (LOGOS.includes(t.logo) ? t.logo : '');
     const fontParam = (params.get('logofont') || '').toLowerCase();
     const logoFont = CREST_FONTS[fontParam] ? fontParam : (CREST_FONTS[t.logoFont] ? t.logoFont : 'cinzel');
+    const pick = (param, setting, allowed, fallback) => {
+      const p = (params.get(param) || '').toLowerCase();
+      return allowed.includes(p) ? p : (allowed.includes(setting) ? setting : fallback);
+    };
+    const logoOpts = {
+      motif: pick('motif', t.logoMotif, ['paisley', 'peacock'], 'paisley'),
+      anim: pick('anim', t.logoAnim, ['subtle', 'strong'], 'subtle'),
+    };
 
     $('#invite').innerHTML = `
       <section class="hero silk${logoStyle ? ' has-logo' : ''}">
@@ -413,7 +486,7 @@
           <div class="halo reveal" style="--d:.1s">${mandala('S', true)}${emblemHtml(t.emblem, initialsOf(c), 'emblem')}</div>
           ${t.invocation ? `<p class="invocation reveal${dev ? '' : ' latin'}" style="--d:.4s"${dev ? ' lang="sa"' : ''}>${esc(t.invocation)}</p>` : ''}
           ${logoStyle
-            ? `<h1 class="hero-logo reveal" style="--d:.8s"><span class="sr-only">${esc(c.name1)} &amp; ${esc(c.name2)}</span>${logo(logoStyle, c, inv.logoDate || '', logoFont)}</h1>`
+            ? `<h1 class="hero-logo reveal" style="--d:.8s"><span class="sr-only">${esc(c.name1)} &amp; ${esc(c.name2)}</span>${logo(logoStyle, c, inv.logoDate || '', logoFont, logoOpts)}</h1>`
             : `<h1 class="hero-title script foil write" style="--d:.8s">${heroTitle}</h1>`}
           <div class="reveal" style="--d:1.3s">${divider('S')}</div>
           <p class="hero-date reveal" style="--d:1.5s">${esc(inv.dates)}</p>
