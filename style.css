@@ -899,10 +899,9 @@ svg { color: var(--gold); }
 /* rose petal */
 .fx-petal { width: var(--s); height: calc(var(--s) * 1.2); border-radius: 55% 0 55% 55%; opacity: .92;
   background: radial-gradient(120% 90% at 30% 25%, var(--c2), var(--c1) 70%); box-shadow: inset -1px -2px 3px rgba(0, 0, 0, .18); }
-/* marigold petal and jasmine flower */
+/* marigold petal */
 .fx-marigold { width: var(--s); height: calc(var(--s) * 1.15); border-radius: 45% 45% 50% 50% / 35% 35% 65% 65%; opacity: .95;
   background: radial-gradient(110% 90% at 50% 15%, #ffd166, var(--c1) 75%); }
-.fx-jasmine { width: var(--s); height: var(--s); filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .2)); }
 /* gold leaf (vark): an irregular flake that flashes as it turns */
 .fx-leaf { width: var(--s); height: calc(var(--s) * .8); opacity: .9;
   clip-path: polygon(8% 18%, 42% 0, 78% 10%, 100% 44%, 86% 82%, 52% 100%, 14% 86%, 0 50%);

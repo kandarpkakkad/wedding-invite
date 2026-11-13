@@ -777,15 +777,12 @@
 
   /* ---------------- background effect (Details → background_effect, preview with ?fx=) ----------------
      dust: gold specks rising (the original) · petals: pushp varsha, rose petals falling ·
-     marigold: marigold petals and jasmine flowers falling · sparkle: gold stars glinting in place ·
+     marigold: orange marigold petals falling · sparkle: gold stars glinting in place ·
      diya: soft warm lights drifting and flickering · goldleaf: gold leaf flakes turning as they fall ·
      fireflies: golden glow-dots wandering · none */
   const EFFECTS = ['dust', 'petals', 'marigold', 'sparkle', 'diya', 'goldleaf', 'fireflies', 'none'];
   const rnd = (a, b) => a + Math.random() * (b - a);
   const px = (v) => `${v.toFixed(1)}px`;
-  const JASMINE = '<svg viewBox="0 0 20 20"><g fill="#fffdf6" stroke="#e6d9b8" stroke-width=".5">'
-    + [0, 72, 144, 216, 288].map((a) => `<ellipse cx="10" cy="5.2" rx="3.1" ry="4.6" transform="rotate(${a} 10 10)"/>`).join('')
-    + '</g><circle cx="10" cy="10" r="1.9" fill="#f2c94c"/></svg>';
   const STAR = '<svg viewBox="0 0 20 20"><path d="M10 0L11.5 8.5 20 10 11.5 11.5 10 20 8.5 11.5 0 10 8.5 8.5Z" fill="#fff4cc"/></svg>';
 
   function ambient(setting) {
@@ -822,9 +819,8 @@
         return `<b class="fx-petal" style="--s:${px(rnd(10, 16))};--c1:${a};--c2:${b}"></b>`;
       });
     } else if (fx === 'marigold') {
-      fall(15, (k) => (k % 3 === 2
-        ? `<b class="fx-jasmine" style="--s:${px(rnd(13, 18))}">${JASMINE}</b>`
-        : `<b class="fx-marigold" style="--s:${px(rnd(8, 12))};--c1:${k % 2 ? '#e8760a' : '#f2a516'}"></b>`));
+      // deep and golden orange, like a genda phool garland
+      fall(15, (k) => `<b class="fx-marigold" style="--s:${px(rnd(8, 12))};--c1:${k % 2 ? '#e8760a' : '#f2a516'}"></b>`);
     } else if (fx === 'goldleaf') {
       fall(12, () => `<b class="fx-leaf" style="--s:${px(rnd(9, 16))}"></b>`);
     } else if (fx === 'sparkle') {
