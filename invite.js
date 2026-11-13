@@ -692,7 +692,7 @@
           </div>
           ${divider('P')}
           <h2 class="title foil reveal">Kindly Respond</h2>
-          <p class="lead rsvp-lead reveal">${inv.rsvp && inv.rsvp.deadline ? `We would be grateful for your reply by ${esc(inv.rsvp.deadline)}` : 'We would be grateful for your reply'}</p>
+          <p class="lead rsvp-lead reveal">${inv.rsvp && inv.rsvp.deadline ? `We would be grateful for your reply by ${esc(inv.rsvp.deadline)}` : 'We would be grateful for your reply as soon as possible'}</p>
           <div class="reveal">${rsvp
             ? `<a class="btn-solid" href="${esc(rsvp)}" target="_blank" rel="noopener">RSVP</a>`
             : '<button class="btn-solid" type="button" id="rsvp-soon">RSVP</button>'}</div>
