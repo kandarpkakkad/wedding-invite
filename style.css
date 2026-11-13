@@ -51,16 +51,15 @@
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23dcb867' stroke-opacity='.09' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-[data-theme="emerald"] {
-  /* Royal Emerald: deep emerald silk, bright gold foil, ivory card stock, ruby accents */
-  --silk-1: #0c5a43;
-  --silk-2: #021c14;
+/* the jewel themes share Royal Red's bright gold foil and ivory card stock */
+[data-theme="emerald"],
+[data-theme="maroon"],
+[data-theme="peacock"],
+[data-theme="burgundy"] {
   --silk-ink: #f8f0dc;
   --silk-soft: rgba(248, 240, 220, .76);
   --paper: #fffaf1;
   --paper-2: #fffdf8;
-  --ink: #0b4634;
-  --ink-soft: #5b7669;
   --gs1: #8c6a2a; --gs2: #dcb867; --gs3: #fcefc0; --gs4: #b68e3e;
   --gp1: #6a4a13; --gp2: #a57e2d; --gp3: #d9b866; --gp4: #87621f;
   --gold-s: #d9b466;
@@ -69,6 +68,31 @@
   --line-p: rgba(169, 133, 54, .42);
   --pillar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='26' viewBox='0 0 10 26'%3E%3Cpath d='M5 2l3.2 5.5L5 13 1.8 7.5z' fill='%23d9b466'/%3E%3Ccircle cx='5' cy='19.5' r='1.3' fill='%23d9b466'/%3E%3C/svg%3E");
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23dcb867' stroke-opacity='.09' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* each: silk (centre → edge), ink on the ivory pages, and the pale cover's lettering (--cv-*) */
+[data-theme="emerald"] {
+  /* Royal Emerald: deep emerald silk, ruby accents */
+  --silk-1: #0c5a43; --silk-2: #021c14; --ink: #0b4634; --ink-soft: #5b7669;
+  --cv-ink: #0a4a35; --cv-royal: #0d5a41; --cv-soft: rgba(6, 58, 42, .85); --cv-outline: rgba(13, 90, 65, .4);
+  --cv-f1: #053a2a; --cv-f2: #0e6448; --cv-f3: #2b8a68; --cv-f4: #06412f; --cv-f5: #157553;
+}
+[data-theme="maroon"] {
+  /* Rajwadi Maroon: deep garnet maroon silk, darker and more regal than Royal Red */
+  --silk-1: #6a1222; --silk-2: #22040a; --ink: #5c0f1b; --ink-soft: #8a5a5a;
+  --cv-ink: #5c0f1b; --cv-royal: #6e1524; --cv-soft: rgba(80, 10, 22, .85); --cv-outline: rgba(110, 21, 36, .4);
+  --cv-f1: #3d0710; --cv-f2: #6a1222; --cv-f3: #a33a48; --cv-f4: #45080f; --cv-f5: #7f1d2c;
+}
+[data-theme="peacock"] {
+  /* Peacock Green: deep teal silk, like a peacock's neck */
+  --silk-1: #0b5b5f; --silk-2: #021f22; --ink: #0a4448; --ink-soft: #587476;
+  --cv-ink: #0a4448; --cv-royal: #0c5459; --cv-soft: rgba(6, 52, 56, .85); --cv-outline: rgba(12, 84, 89, .4);
+  --cv-f1: #04333a; --cv-f2: #0b5b5f; --cv-f3: #2b8a8c; --cv-f4: #063d42; --cv-f5: #137077;
+}
+[data-theme="burgundy"] {
+  /* Burgundy: wine-red silk with a hint of purple */
+  --silk-1: #6e1736; --silk-2: #250512; --ink: #5e1030; --ink-soft: #87596a;
+  --cv-ink: #5e1030; --cv-royal: #6e1736; --cv-soft: rgba(80, 14, 40, .85); --cv-outline: rgba(110, 23, 54, .4);
+  --cv-f1: #3c0a1d; --cv-f2: #6e1736; --cv-f3: #a5455f; --cv-f4: #450c22; --cv-f5: #852444;
 }
 
 /* script font for titles, names and function names (Details → script_font) */
@@ -89,6 +113,9 @@
 :root[data-theme="emerald"] {
   --patola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'%3E%3Crect width='28' height='16' fill='%23042a1e'/%3E%3Cpath d='M14 0L28 8L14 16L0 8Z' fill='%23f4e2bd'/%3E%3Cpath d='M14 2.6L23.4 8L14 13.4L4.6 8Z' fill='%230f6b4f'/%3E%3Cpath d='M14 5.2L18.6 8L14 10.8L9.4 8Z' fill='%23a3161f'/%3E%3Ccircle cx='14' cy='8' r='1.3' fill='%23f0b13a'/%3E%3Cg fill='%23f0b13a'%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='28' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='16' r='1.6'/%3E%3Ccircle cx='28' cy='16' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
 }
+:root[data-theme="maroon"] { --patola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'%3E%3Crect width='28' height='16' fill='%233a0610'/%3E%3Cpath d='M14 0L28 8L14 16L0 8Z' fill='%23f4e2bd'/%3E%3Cpath d='M14 2.6L23.4 8L14 13.4L4.6 8Z' fill='%23a3161f'/%3E%3Cpath d='M14 5.2L18.6 8L14 10.8L9.4 8Z' fill='%231f6f52'/%3E%3Ccircle cx='14' cy='8' r='1.3' fill='%23f0b13a'/%3E%3Cg fill='%23f0b13a'%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='28' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='16' r='1.6'/%3E%3Ccircle cx='28' cy='16' r='1.6'/%3E%3C/g%3E%3C/svg%3E"); }
+:root[data-theme="peacock"] { --patola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'%3E%3Crect width='28' height='16' fill='%2303282b'/%3E%3Cpath d='M14 0L28 8L14 16L0 8Z' fill='%23f4e2bd'/%3E%3Cpath d='M14 2.6L23.4 8L14 13.4L4.6 8Z' fill='%230e6b6e'/%3E%3Cpath d='M14 5.2L18.6 8L14 10.8L9.4 8Z' fill='%23a3161f'/%3E%3Ccircle cx='14' cy='8' r='1.3' fill='%23f0b13a'/%3E%3Cg fill='%23f0b13a'%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='28' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='16' r='1.6'/%3E%3Ccircle cx='28' cy='16' r='1.6'/%3E%3C/g%3E%3C/svg%3E"); }
+:root[data-theme="burgundy"] { --patola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'%3E%3Crect width='28' height='16' fill='%2336081a'/%3E%3Cpath d='M14 0L28 8L14 16L0 8Z' fill='%23f4e2bd'/%3E%3Cpath d='M14 2.6L23.4 8L14 13.4L4.6 8Z' fill='%238a1c40'/%3E%3Cpath d='M14 5.2L18.6 8L14 10.8L9.4 8Z' fill='%231f6f52'/%3E%3Ccircle cx='14' cy='8' r='1.3' fill='%23f0b13a'/%3E%3Cg fill='%23f0b13a'%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='28' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='16' r='1.6'/%3E%3Ccircle cx='28' cy='16' r='1.6'/%3E%3C/g%3E%3C/svg%3E"); }
 .acc-red-f { fill: var(--acc-red); }
 .acc-green-f { fill: var(--acc-green); }
 .acc-marigold-f { fill: var(--acc-marigold); }
@@ -721,11 +748,12 @@ svg { color: var(--gold); }
 
 /* ================= Gold cover with royal-red lettering ================= */
 
+/* the pale cover's lettering colours come from the theme (--cv-*); Royal Red's are the defaults */
 .cover.gold-cover {
-  --royal: #8e1a20;
+  --royal: var(--cv-royal, #8e1a20);
   --line: rgba(142, 26, 32, .5);
-  --soft: rgba(110, 12, 18, .85);
-  color: #7a0f17;
+  --soft: var(--cv-soft, rgba(110, 12, 18, .85));
+  color: var(--cv-ink, #7a0f17);
   background:
     linear-gradient(115deg, rgba(255, 255, 255, 0) 28%, rgba(255, 250, 225, .32) 46%, rgba(255, 255, 255, 0) 62%),
     radial-gradient(125% 75% at 50% 30%, #fbedc4 0%, #edcd80 36%, #d4a852 70%, #b5853a 100%);
@@ -734,12 +762,12 @@ svg { color: var(--gold); }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%238e1a20' stroke-opacity='.07' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
 }
 .gold-cover .foil {
-  background-image: linear-gradient(105deg, #5e0910 0%, #9a1820 22%, #c63a40 36%, #9a1820 50%, #6e0b12 66%, #b3252d 82%, #5e0910 100%);
+  background-image: linear-gradient(105deg, var(--cv-f1, #5e0910) 0%, var(--cv-f2, #9a1820) 22%, var(--cv-f3, #c63a40) 36%, var(--cv-f2, #9a1820) 50%, var(--cv-f4, #6e0b12) 66%, var(--cv-f5, #b3252d) 82%, var(--cv-f1, #5e0910) 100%);
 }
 .gold-cover .ganesha { color: var(--royal); filter: none; }
 .gold-cover .gn-foil { --g1: #7a5518; --g2: #c49a45; --g3: #f6dc93; --g4: #a27a2c; --gn-cut: var(--royal); filter: drop-shadow(0 2px 2.5px rgba(90, 50, 10, .3)); }
 :root[data-cover="gold"] .gold-cover .gn-foil { --g1: #5e0910; --g2: #9a1820; --g3: #c63a40; --g4: #6e0b12; --gn-cut: #f3d58a; --gn-red: #f3d58a; }
-.gold-cover .gn-brush { --g1: #5e0910; --g2: #9a1820; --g3: #c0353c; --g4: #6e0b12; }
+.gold-cover .gn-brush { --g1: var(--cv-f1, #5e0910); --g2: var(--cv-f2, #9a1820); --g3: var(--cv-f3, #c0353c); --g4: var(--cv-f4, #6e0b12); }
 .gold-cover .gn-brush .gn-tilak { fill: #c8202c; }
 .gold-cover .cover-lace { opacity: .1; }
 .gold-cover .cover-lace path { stroke: var(--orn, var(--royal)); }
@@ -771,21 +799,15 @@ svg { color: var(--gold); }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23a9832f' stroke-opacity='.12' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
 }
 .gold-cover .c-pearl { fill: #fff7e4; }
-.gold-cover .cover-when { color: #7a0f17; }
+.gold-cover .cover-when { color: var(--cv-ink, #7a0f17); }
 .gold-cover .btn-gold {
   border-color: var(--royal);
-  outline-color: rgba(142, 26, 32, .4);
+  outline-color: var(--cv-outline, rgba(142, 26, 32, .4));
   background: rgba(255, 248, 228, .3);
-  color: #7a0f17;
+  color: var(--cv-ink, #7a0f17);
 }
 .gold-cover .btn-gold::after { background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent); }
 
-/* Royal Emerald: the pale cover's lettering, button and brush Ganesha turn deep emerald */
-:root[data-theme="emerald"] .cover.gold-cover { --royal: #0d5a41; --soft: rgba(6, 58, 42, .85); color: #0a4a35; }
-:root[data-theme="emerald"] .gold-cover .foil { background-image: linear-gradient(105deg, #053a2a 0%, #0e6448 22%, #2b8a68 36%, #0e6448 50%, #06412f 66%, #157553 82%, #053a2a 100%); }
-:root[data-theme="emerald"] .gold-cover .cover-when { color: #0a4a35; }
-:root[data-theme="emerald"] .gold-cover .btn-gold { outline-color: rgba(13, 90, 65, .4); color: #0a4a35; }
-:root[data-theme="emerald"] .gold-cover .gn-brush { --g1: #053a2a; --g2: #0e6448; --g3: #2b8a68; --g4: #06412f; }
 
 /* ================= Gold dust, toast, theme buttons ================= */
 
