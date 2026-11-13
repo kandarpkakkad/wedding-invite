@@ -602,6 +602,10 @@
       : `${esc(c.name1)}<span class="hero-amp">${esc(c.joiner || '&')}</span>${esc(c.name2)}`;
     const rsvp = rsvpUrl(inv, code);
     const contacts = (inv.contacts || []).filter((x) => x.tel);
+    // second page: "&" stays a big script flourish; a word such as "with" is set small, like a printed card
+    const joinerHtml = (j) => (/^[a-z]{2,}$/i.test(j.trim())
+      ? `<p class="and word reveal">${esc(j.trim())}</p>`
+      : `<p class="and script foil reveal">${esc(j)}</p>`);
     // last page: "With Divine Blessings Of", then "With Dearest Love Of", one name per line
     const lines = (s) => String(s || '').split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
     // a long couple ("A & B") breaks at the "&": each person on their own line
@@ -657,9 +661,9 @@
           <div class="kalash-wrap reveal">${kalash()}</div>
           <p class="dear reveal">Dear ${esc(g.name)},</p>
           ${lead ? `<p class="lead reveal">${esc(lead)}</p>` : ''}
+          ${t.parents1 ? `<p class="parents above reveal">${esc(t.parents1)}</p>` : ''}
           <h2 class="person script foil write">${esc(c.name1)}</h2>
-          ${t.parents1 ? `<p class="parents reveal">${esc(t.parents1)}</p>` : ''}
-          <p class="and script foil reveal">${esc(t.namesJoiner || c.joiner || '&')}</p>
+          ${joinerHtml(t.namesJoiner || c.joiner || '&')}
           <h2 class="person script foil write">${esc(c.name2)}</h2>
           ${t.parents2 ? `<p class="parents reveal">${esc(t.parents2)}</p>` : ''}
           ${t.unionLine ? `<p class="lead union reveal">${esc(t.unionLine)}</p>` : ''}

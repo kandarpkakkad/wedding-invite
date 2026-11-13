@@ -359,9 +359,13 @@ svg { color: var(--gold); }
 .dear { font-size: 22px; font-style: italic; font-weight: 600; }
 .lead { max-width: 300px; margin: 10px auto 0; font-size: 19px; font-style: italic; line-height: 1.4; color: var(--soft); white-space: pre-line; }
 .person { margin-top: 18px; font-size: calc(clamp(52px, 15vw, 62px) * var(--script-k)); overflow-wrap: anywhere; }
-.parents { margin-top: 2px; font-size: 16px; font-style: italic; color: var(--soft); }
+.parents { margin-top: 4px; font-size: 16px; font-weight: 600; line-height: 1.45; color: var(--ink); }
+.parents.above { margin: 26px auto 2px; }
+.parents.above + .person { margin-top: 4px; }
+.and.word + .person { margin-top: 0; }
 .lead.union { margin-top: 18px; }
 .and { margin-top: 10px; font-size: calc(40px * var(--script-k)); }
+.and.word { margin: 2px 0; font-size: 20px; font-style: italic; letter-spacing: .04em; color: var(--soft); }
 .when { font-family: var(--caps); font-size: 14px; font-weight: var(--caps-weight); letter-spacing: .26em; text-transform: uppercase; }
 .place { margin-top: 4px; font-size: 17px; font-style: italic; color: var(--soft); }
 .hero-amp { display: block; font-size: .5em; line-height: 1.2; }
