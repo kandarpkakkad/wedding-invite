@@ -56,8 +56,26 @@
     toast('Message copied');
   }
 
+  const metaOf = (g) => {
+    const seats = g.seats === 'all' ? 'All of the family' : g.seats ? `${g.seats} seat${g.seats > 1 ? 's' : ''}` : '';
+    return [seats, g.events.join(', ')].filter(Boolean).join(' · ');
+  };
+
+  // "Invitation sent to …" confirmation, shown when a guest is ticked as sent
+  function showSent(g) {
+    const box = $('#sent-dialog');
+    $('#sd-name').textContent = g.name;
+    $('#sd-meta').textContent = metaOf(g);
+    if (box && typeof box.showModal === 'function') {
+      if (!box.open) box.showModal();
+      box.querySelector('button').focus();
+    } else {
+      window.alert(`Invitation sent to ${g.name}`);
+    }
+  }
+
   function render(list) {
-    const isSent = (g) => g.sent || store.get(`sent:${g.code}`) === '1';
+    const isSent = (g) => Boolean(g.sent) || store.get(`sent:${g.code}`) === '1';
     $('#app').innerHTML = `
       <h1>Send invitations</h1>
       <p class="summary" id="summary"></p>
@@ -66,14 +84,12 @@
         <label><input type="checkbox" id="hide-sent"> Hide sent</label>
       </div>
       <div id="rows">${list.map((g, i) => {
-        const seats = g.seats === 'all' ? 'All of the family' : g.seats ? `${g.seats} seat${g.seats > 1 ? 's' : ''}` : '';
-        const meta = [seats, g.events.join(', ')].filter(Boolean).join(' · ');
         const whatsapp = `https://wa.me/${g.phone}?text=${encodeURIComponent(g.message)}`;
         return `<article class="guest-row${isSent(g) ? ' is-sent' : ''}" data-i="${i}">
           <div class="row-head">
             <div>
               <div class="row-name">${esc(g.name)}</div>
-              <div class="row-meta">${esc(meta)}</div>
+              <div class="row-meta">${esc(metaOf(g))}</div>
               <div class="row-meta">${g.phone ? `+${esc(g.phone)}` : 'No number: pick the contact in WhatsApp'}</div>
             </div>
             <label class="sent-toggle"><input type="checkbox" data-sent="${i}"${isSent(g) ? ' checked' : ''}${g.sent ? ' disabled title="Marked Yes in the workbook"' : ''}> Sent</label>
@@ -85,9 +101,10 @@
           </div>
         </article>`;
       }).join('')}</div>
-      <p class="hint">Ticks are saved on this device only. Also set Sent to Yes in the workbook to keep a permanent record.</p>`;
+      <p class="hint">Sent invitations move to the end and their buttons are switched off. Untick Sent to use them again.<br>Ticks are saved on this device only. Also set Sent to Yes in the workbook to keep a permanent record.</p>`;
 
     const rows = Array.from(document.querySelectorAll('.guest-row'));
+    const box = $('#rows');
     const update = () => {
       const q = $('#search').value.trim().toLowerCase();
       const hideSent = $('#hide-sent').checked;
@@ -98,20 +115,38 @@
         if (done) sent += 1;
         row.classList.toggle('is-sent', done);
         row.hidden = (q && !g.name.toLowerCase().includes(q)) || (hideSent && done);
+        // a sent invitation's buttons stop working until Sent is unticked
+        row.querySelectorAll('.row-actions .btn').forEach((b) => {
+          if (b.tagName === 'BUTTON') b.disabled = done;
+          else if (done) { b.setAttribute('aria-disabled', 'true'); b.setAttribute('tabindex', '-1'); }
+          else { b.removeAttribute('aria-disabled'); b.removeAttribute('tabindex'); }
+        });
       });
-      $('#summary').textContent = `${list.length} invitation${list.length === 1 ? '' : 's'} · ${sent} sent`;
+      // not-yet-sent first, sent ones at the end; each group keeps the workbook order
+      const order = rows.slice().sort((a, b) => (
+        (isSent(list[Number(a.dataset.i)]) - isSent(list[Number(b.dataset.i)])) || (a.dataset.i - b.dataset.i)));
+      if (order.some((row, k) => box.children[k] !== row)) order.forEach((row) => box.appendChild(row));
+      const left = list.length - sent;
+      $('#summary').textContent = `${list.length} invitation${list.length === 1 ? '' : 's'} · ${sent} sent · ${left} to send`;
     };
 
     $('#rows').addEventListener('change', (e) => {
       const i = e.target.dataset.sent;
       if (i === undefined) return;
-      store.set(`sent:${list[Number(i)].code}`, e.target.checked);
+      const g = list[Number(i)];
+      store.set(`sent:${g.code}`, e.target.checked);
       update();
+      if (e.target.checked) showSent(g);
+      else toast(`${g.name} is back in the list to send`);
     });
     $('#rows').addEventListener('click', (e) => {
+      const off = e.target.closest('.row-actions [aria-disabled="true"], .row-actions [disabled]');
+      if (off) { e.preventDefault(); return; }
       const btn = e.target.closest('[data-copy]');
       if (btn) copy(list[Number(btn.dataset.copy)].message);
     });
+    const dlg = $('#sent-dialog');
+    if (dlg) dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
     $('#search').addEventListener('input', update);
     $('#hide-sent').addEventListener('change', update);
     update();
