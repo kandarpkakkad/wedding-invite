@@ -6,7 +6,7 @@
 (() => {
   'use strict';
 
-  const THEMES = ['marigold', 'red'];
+  const THEMES = ['marigold', 'red', 'emerald'];
   const root = document.documentElement;
   const params = new URLSearchParams(location.search);
   const $ = (sel) => document.querySelector(sel);
@@ -912,8 +912,8 @@
 
   function themeBar() {
     if (root.dataset.switcher !== '1' && params.get('themes') !== '1') return;
-    const labels = { marigold: 'Ivory', red: 'Royal Red' };
-    const swatch = { marigold: '#efdfb9', red: '#8e1b1f' };
+    const labels = { marigold: 'Ivory', red: 'Royal Red', emerald: 'Royal Emerald' };
+    const swatch = { marigold: '#efdfb9', red: '#8e1b1f', emerald: '#0c5a43' };
     const bar = document.createElement('div');
     bar.className = 'theme-bar';
     bar.setAttribute('role', 'group');

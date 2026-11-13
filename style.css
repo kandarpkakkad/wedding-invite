@@ -51,6 +51,26 @@
   --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23dcb867' stroke-opacity='.09' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
 }
 
+[data-theme="emerald"] {
+  /* Royal Emerald: deep emerald silk, bright gold foil, ivory card stock, ruby accents */
+  --silk-1: #0c5a43;
+  --silk-2: #021c14;
+  --silk-ink: #f8f0dc;
+  --silk-soft: rgba(248, 240, 220, .76);
+  --paper: #fffaf1;
+  --paper-2: #fffdf8;
+  --ink: #0b4634;
+  --ink-soft: #5b7669;
+  --gs1: #8c6a2a; --gs2: #dcb867; --gs3: #fcefc0; --gs4: #b68e3e;
+  --gp1: #6a4a13; --gp2: #a57e2d; --gp3: #d9b866; --gp4: #87621f;
+  --gold-s: #d9b466;
+  --gold-p: #a98536;
+  --line-s: rgba(217, 180, 102, .5);
+  --line-p: rgba(169, 133, 54, .42);
+  --pillar: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='26' viewBox='0 0 10 26'%3E%3Cpath d='M5 2l3.2 5.5L5 13 1.8 7.5z' fill='%23d9b466'/%3E%3Ccircle cx='5' cy='19.5' r='1.3' fill='%23d9b466'/%3E%3C/svg%3E");
+  --pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Cg fill='none' stroke='%23dcb867' stroke-opacity='.09' stroke-width='.8'%3E%3Cpath d='M32 5c6 8 6 15 0 22c-6-7-6-14 0-22zM32 59c6-8 6-15 0-22c-6 7-6 14 0 22zM5 32c8-6 15-6 22 0c-7 6-14 6-22 0zM59 32c-8-6-15-6-22 0c7 6 14 6 22 0z'/%3E%3Ccircle cx='32' cy='32' r='3'/%3E%3Cpath d='M0 0l9 9M64 0l-9 9M0 64l9-9M64 64l-9-9'/%3E%3C/g%3E%3C/svg%3E");
+}
+
 /* script font for titles, names and function names (Details → script_font) */
 :root[data-script="pinyon"] { --script: 'Pinyon Script', cursive; --script-k: 1.02; --script-weight: 400; }
 :root[data-script="imperial"] { --script: 'Imperial Script', cursive; --script-k: 1.08; --script-weight: 400; }
@@ -64,6 +84,10 @@
   --acc-pink: #b23a6e;
   /* Patola double-ikat diamond lattice */
   --patola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'%3E%3Crect width='28' height='16' fill='%235c0b12'/%3E%3Cpath d='M14 0L28 8L14 16L0 8Z' fill='%23f4e2bd'/%3E%3Cpath d='M14 2.6L23.4 8L14 13.4L4.6 8Z' fill='%23a3161f'/%3E%3Cpath d='M14 5.2L18.6 8L14 10.8L9.4 8Z' fill='%231f6f52'/%3E%3Ccircle cx='14' cy='8' r='1.3' fill='%23f0b13a'/%3E%3Cg fill='%23f0b13a'%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='28' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='16' r='1.6'/%3E%3Ccircle cx='28' cy='16' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
+}
+/* Royal Emerald: the Patola strips are woven on emerald instead of red */
+:root[data-theme="emerald"] {
+  --patola: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='16' viewBox='0 0 28 16'%3E%3Crect width='28' height='16' fill='%23042a1e'/%3E%3Cpath d='M14 0L28 8L14 16L0 8Z' fill='%23f4e2bd'/%3E%3Cpath d='M14 2.6L23.4 8L14 13.4L4.6 8Z' fill='%230f6b4f'/%3E%3Cpath d='M14 5.2L18.6 8L14 10.8L9.4 8Z' fill='%23a3161f'/%3E%3Ccircle cx='14' cy='8' r='1.3' fill='%23f0b13a'/%3E%3Cg fill='%23f0b13a'%3E%3Ccircle cx='0' cy='0' r='1.6'/%3E%3Ccircle cx='28' cy='0' r='1.6'/%3E%3Ccircle cx='0' cy='16' r='1.6'/%3E%3Ccircle cx='28' cy='16' r='1.6'/%3E%3C/g%3E%3C/svg%3E");
 }
 .acc-red-f { fill: var(--acc-red); }
 .acc-green-f { fill: var(--acc-green); }
@@ -755,6 +779,13 @@ svg { color: var(--gold); }
   color: #7a0f17;
 }
 .gold-cover .btn-gold::after { background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .55), transparent); }
+
+/* Royal Emerald: the pale cover's lettering, button and brush Ganesha turn deep emerald */
+:root[data-theme="emerald"] .cover.gold-cover { --royal: #0d5a41; --soft: rgba(6, 58, 42, .85); color: #0a4a35; }
+:root[data-theme="emerald"] .gold-cover .foil { background-image: linear-gradient(105deg, #053a2a 0%, #0e6448 22%, #2b8a68 36%, #0e6448 50%, #06412f 66%, #157553 82%, #053a2a 100%); }
+:root[data-theme="emerald"] .gold-cover .cover-when { color: #0a4a35; }
+:root[data-theme="emerald"] .gold-cover .btn-gold { outline-color: rgba(13, 90, 65, .4); color: #0a4a35; }
+:root[data-theme="emerald"] .gold-cover .gn-brush { --g1: #053a2a; --g2: #0e6448; --g3: #2b8a68; --g4: #06412f; }
 
 /* ================= Gold dust, toast, theme buttons ================= */
 
