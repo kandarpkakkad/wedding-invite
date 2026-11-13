@@ -548,6 +548,12 @@
           : `all ${WORDS[n] || n} of you`;
     return template.replace(/\{you\}/g, you).replace(/\{count\}/g, typeof n === 'number' ? (WORDS[n] || String(n)) : '');
   }
+  // the same line as HTML, with the "you" words set in the parents' style (upright, semi-bold, deep red)
+  function fillInviteHtml(template, n) {
+    if (!template) return '';
+    return template.split('{you}').map((part) => esc(fillInvite(part, n)))
+      .join(`<span class="you">${esc(fillInvite('{you}', n))}</span>`);
+  }
 
   const initialsOf = (c) => [c.name1, c.name2].map((n) => (n || '').trim().charAt(0).toUpperCase()).filter(Boolean).join(' & ');
   const emblemHtml = (emblem, initials, cls) => {
@@ -660,7 +666,7 @@
           ${corner('tl')}${corner('tr')}${corner('bl')}${corner('br')}
           <div class="kalash-wrap reveal">${kalash()}</div>
           <p class="dear reveal">Dear ${esc(g.name)},</p>
-          ${lead ? `<p class="lead reveal">${esc(lead)}</p>` : ''}
+          ${lead ? `<p class="lead reveal">${fillInviteHtml(t.invite, g.seats)}</p>` : ''}
           ${t.parents1 ? `<p class="parents above reveal">${esc(t.parents1)}</p>` : ''}
           <h2 class="person script foil write">${esc(c.name1)}</h2>
           ${joinerHtml(t.namesJoiner || c.joiner || '&')}

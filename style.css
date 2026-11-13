@@ -364,6 +364,7 @@ svg { color: var(--gold); }
 .parents.above + .person { margin-top: 4px; }
 .and.word + .person { margin-top: 0; }
 .lead.union { margin-top: 18px; }
+.lead .you { font-style: normal; font-weight: 600; color: var(--ink); }
 .and { margin-top: 10px; font-size: calc(40px * var(--script-k)); }
 .and.word { margin: 2px 0; font-size: 20px; font-style: italic; letter-spacing: .04em; color: var(--soft); }
 .when { font-family: var(--caps); font-size: 14px; font-weight: var(--caps-weight); letter-spacing: .26em; text-transform: uppercase; }
