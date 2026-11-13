@@ -61,17 +61,31 @@
     return [seats, g.events.join(', ')].filter(Boolean).join(' · ');
   };
 
-  // "Invitation sent to …" confirmation, shown when a guest is ticked as sent
+  // "Invitation sent to …" notification: bottom-left (bottom on a phone), closes itself
+  const NOTE_MS = 4500;
+  let noteTimer;
+  let noteOut;
+  function hideSent() {
+    const note = $('#sent-note');
+    clearTimeout(noteTimer);
+    if (!note || note.hidden) return;
+    note.classList.add('is-out');
+    clearTimeout(noteOut);
+    noteOut = setTimeout(() => { note.hidden = true; note.classList.remove('is-out'); }, 250);
+  }
   function showSent(g) {
-    const box = $('#sent-dialog');
-    $('#sd-name').textContent = g.name;
-    $('#sd-meta').textContent = metaOf(g);
-    if (box && typeof box.showModal === 'function') {
-      if (!box.open) box.showModal();
-      box.querySelector('button').focus();
-    } else {
-      window.alert(`Invitation sent to ${g.name}`);
-    }
+    const note = $('#sent-note');
+    if (!note) { toast(`Invitation sent to ${g.name}`); return; }
+    clearTimeout(noteTimer);
+    clearTimeout(noteOut);
+    note.classList.remove('is-out');
+    note.hidden = true;
+    void note.offsetWidth; // restart the slide-in and the timer bar
+    note.style.setProperty('--sn-time', `${NOTE_MS}ms`);
+    $('#sn-name').textContent = g.name;
+    $('#sn-meta').textContent = metaOf(g);
+    note.hidden = false;
+    noteTimer = setTimeout(hideSent, NOTE_MS);
   }
 
   // small line icons (stroke = currentColor)
@@ -127,12 +141,12 @@
           <div class="row-actions">
             <a class="btn btn-wa" href="${esc(whatsapp)}" target="_blank" rel="noopener">${ICONS.send}Send on WhatsApp</a>
             <button class="btn" type="button" data-copy="${i}">${ICONS.copy}<span>Copy<span class="wide"> message</span></span></button>
-            <a class="btn" href="${esc(g.link)}" target="_blank" rel="noopener">${ICONS.eye}Preview</a>
+            <a class="btn btn-preview" href="${esc(g.link)}" target="_blank" rel="noopener">${ICONS.eye}Preview</a>
           </div>
         </article>`;
       }).join('')}</div>
       ${DIVIDER}
-      <p class="hint">Sent invitations move to the end and their buttons are switched off. Untick Sent to use them again.<br>Ticks are saved on this device only. Also set Sent to Yes in the workbook to keep a permanent record.</p>`;
+      <p class="hint">Sent invitations move to the end and their WhatsApp button is switched off. Untick Sent to send again.<br>Ticks are saved on this device only. Also set Sent to Yes in the workbook to keep a permanent record.</p>`;
 
     const rows = Array.from(document.querySelectorAll('.guest-row'));
     const box = $('#rows');
@@ -146,12 +160,10 @@
         if (done) sent += 1;
         row.classList.toggle('is-sent', done);
         row.hidden = (q && !g.name.toLowerCase().includes(q)) || (hideSent && done);
-        // a sent invitation's buttons stop working until Sent is unticked
-        row.querySelectorAll('.row-actions .btn').forEach((b) => {
-          if (b.tagName === 'BUTTON') b.disabled = done;
-          else if (done) { b.setAttribute('aria-disabled', 'true'); b.setAttribute('tabindex', '-1'); }
-          else { b.removeAttribute('aria-disabled'); b.removeAttribute('tabindex'); }
-        });
+        // a sent invitation's WhatsApp button stops working until Sent is unticked (Copy and Preview stay on)
+        const wa = row.querySelector('.btn-wa');
+        if (done) { wa.setAttribute('aria-disabled', 'true'); wa.setAttribute('tabindex', '-1'); }
+        else { wa.removeAttribute('aria-disabled'); wa.removeAttribute('tabindex'); }
       });
       // not-yet-sent first, sent ones at the end; each group keeps the workbook order
       const order = rows.slice().sort((a, b) => (
@@ -170,16 +182,16 @@
       store.set(`sent:${g.code}`, e.target.checked);
       update();
       if (e.target.checked) showSent(g);
-      else toast(`${g.name} is back in the list to send`);
+      else { hideSent(); toast(`${g.name} is back in the list to send`); }
     });
     $('#rows').addEventListener('click', (e) => {
-      const off = e.target.closest('.row-actions [aria-disabled="true"], .row-actions [disabled]');
+      const off = e.target.closest('.row-actions [aria-disabled="true"]');
       if (off) { e.preventDefault(); return; }
       const btn = e.target.closest('[data-copy]');
       if (btn) copy(list[Number(btn.dataset.copy)].message);
     });
-    const dlg = $('#sent-dialog');
-    if (dlg) dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+    const close = document.querySelector('#sent-note .sn-close');
+    if (close) close.addEventListener('click', hideSent);
     $('#search').addEventListener('input', update);
     $('#hide-sent').addEventListener('change', update);
     update();
