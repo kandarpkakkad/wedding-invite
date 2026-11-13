@@ -602,6 +602,13 @@
       : `${esc(c.name1)}<span class="hero-amp">${esc(c.joiner || '&')}</span>${esc(c.name2)}`;
     const rsvp = rsvpUrl(inv, code);
     const contacts = (inv.contacts || []).filter((x) => x.tel);
+    // last page: "With Divine Blessings Of", then "With Dearest Love Of", one name per line
+    const lines = (s) => String(s || '').split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+    const famCol = (title, names) => (names.length
+      ? `<div class="fam-col"><h3 class="fam-title script foil">${esc(title)}</h3>${names.map((n) => `<p class="fam-name">${esc(n)}</p>`).join('')}</div>`
+      : '');
+    const family = famCol(t.blessingsTitle || 'With Divine Blessings Of', lines(t.blessingsNames))
+      + famCol(t.loveTitle || 'With Dearest Love Of', lines(t.loveNames));
     const first = inv.events[0];
     const dev = isDevanagari(t.invocation);
     const LOGOS = ['crest', 'script', 'arch'];
@@ -696,11 +703,12 @@
       <section class="foot silk">
         <div class="patola top"></div>
         <div class="lace">${mandala('S', false)}</div>
-        ${logoStyle ? `<div class="foot-crest hero-logo reveal">${logo(logoStyle, c, inv.logoDate || '', logoFont, { motif: logoOpts.motif, anim: 'subtle' })}</div>` : ''}
+        ${family ? `<div class="family reveal">${family}</div>` : ''}
         ${t.closing ? `<p class="closing reveal">${esc(t.closing)}</p>` : ''}
         ${t.hashtag ? `<div class="tag reveal"><span class="title foil">${esc(t.hashtag)}</span></div>` : ''}
         ${t.signoff ? `<p class="signoff script foil reveal">${esc(t.signoff)}</p>` : ''}
         <div class="reveal">${divider('S')}</div>
+        ${logoStyle ? `<div class="foot-crest hero-logo reveal">${logo(logoStyle, c, inv.logoDate || '', logoFont, { motif: logoOpts.motif, anim: 'subtle' })}</div>` : ''}
       </section>`;
 
     document.title = `${c.name1} ${c.joiner || '&'} ${c.name2}`;
