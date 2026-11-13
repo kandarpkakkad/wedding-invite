@@ -492,12 +492,13 @@ svg { color: var(--gold); }
 .ev-dress { margin-top: 14px; font-size: 17px; }
 .ev-dress .tiny { display: block; margin-bottom: 2px; font-size: 9.5px; }
 .ev-notes { margin-top: 8px; font-size: 16px; font-style: italic; color: var(--soft); }
-/* a function's programme (Events → schedule): name, dotted leader, time */
-.ev-sched { max-width: 232px; margin: 16px auto 0; text-align: left; }
-.ev-sched .tiny { display: block; margin-bottom: 6px; font-size: 9.5px; text-align: center; color: var(--ev-acc); }
-.ev-sched p { display: flex; align-items: baseline; gap: 8px; margin: 5px 0; font-size: 17px; }
-.sch-dots { flex: 1; min-width: 12px; border-bottom: 1px dotted var(--line); transform: translateY(-4px); }
-.sch-time { font-family: var(--caps); font-size: 12.5px; font-weight: var(--caps-weight); letter-spacing: .12em; white-space: nowrap; }
+/* a function's programme (Events → schedule): a compact centred list of names and times */
+.ev-sched { margin: 16px auto 0; }
+.ev-sched .tiny { display: block; margin-bottom: 8px; font-size: 9.5px; color: var(--ev-acc); }
+.sch-list { display: inline-grid; grid-template-columns: auto auto; align-items: baseline; gap: 6px 18px; text-align: left; }
+.sch-name { font-size: 16px; line-height: 1.3; }
+.sch-wide { grid-column: 1 / -1; text-align: center; }
+.sch-time { font-family: var(--caps); font-size: 11.5px; font-weight: var(--caps-weight); letter-spacing: .12em; white-space: nowrap; }
 .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 22px; }
 
 /* ================= Buttons ================= */

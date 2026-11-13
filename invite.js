@@ -584,8 +584,9 @@
       ${ev.venue ? `<p class="ev-venue">${esc(ev.venue)}</p>` : ''}
       ${ev.address ? `<p class="ev-addr">${esc(ev.address)}</p>` : ''}
       ${ev.dress ? `<p class="ev-dress"><span class="tiny">Dress code</span>${esc(ev.dress)}</p>` : ''}
-      ${(ev.schedule || []).length ? `<div class="ev-sched"><span class="tiny">Programme</span>${ev.schedule.map((s) => `<p><span class="sch-name">${esc(s.name)}</span>${s.time
-        ? `<span class="sch-dots" aria-hidden="true"></span><span class="sch-time">${esc(s.time)}</span>` : ''}</p>`).join('')}</div>` : ''}
+      ${(ev.schedule || []).length ? `<div class="ev-sched"><span class="tiny">Programme</span><div class="sch-list">${ev.schedule.map((s) => (s.time
+        ? `<span class="sch-name">${esc(s.name)}</span><span class="sch-time">${esc(s.time)}</span>`
+        : `<span class="sch-name sch-wide">${esc(s.name)}</span>`)).join('')}</div></div>` : ''}
       ${ev.notes ? `<p class="ev-notes">${esc(ev.notes)}</p>` : ''}
       <div class="actions">
         ${maps ? `<a class="btn-line" href="${esc(maps)}" target="_blank" rel="noopener">${ICON.pin}Directions</a>` : ''}
