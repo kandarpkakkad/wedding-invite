@@ -659,9 +659,10 @@
           ${lead ? `<p class="lead reveal">${esc(lead)}</p>` : ''}
           <h2 class="person script foil write">${esc(c.name1)}</h2>
           ${t.parents1 ? `<p class="parents reveal">${esc(t.parents1)}</p>` : ''}
-          <p class="and script foil reveal">${esc(c.joiner || '&')}</p>
+          <p class="and script foil reveal">${esc(t.namesJoiner || c.joiner || '&')}</p>
           <h2 class="person script foil write">${esc(c.name2)}</h2>
           ${t.parents2 ? `<p class="parents reveal">${esc(t.parents2)}</p>` : ''}
+          ${t.unionLine ? `<p class="lead union reveal">${esc(t.unionLine)}</p>` : ''}
           <div class="reveal">${divider('P')}</div>
           <p class="when reveal">${esc(inv.dates)}</p>
           ${t.location ? `<p class="place reveal">${esc(t.location)}</p>` : ''}
