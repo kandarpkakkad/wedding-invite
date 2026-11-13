@@ -126,7 +126,7 @@
           <div class="row-phone">${ICONS.phone}${g.phone ? `+${esc(g.phone)}` : 'No number: pick the contact in WhatsApp'}</div>
           <div class="row-actions">
             <a class="btn btn-wa" href="${esc(whatsapp)}" target="_blank" rel="noopener">${ICONS.send}Send on WhatsApp</a>
-            <button class="btn" type="button" data-copy="${i}">${ICONS.copy}Copy<span class="wide">&nbsp;message</span></button>
+            <button class="btn" type="button" data-copy="${i}">${ICONS.copy}<span>Copy<span class="wide"> message</span></span></button>
             <a class="btn" href="${esc(g.link)}" target="_blank" rel="noopener">${ICONS.eye}Preview</a>
           </div>
         </article>`;
