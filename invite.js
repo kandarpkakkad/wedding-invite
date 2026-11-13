@@ -775,6 +775,74 @@
     items.forEach((n) => io.observe(n));
   }
 
+  /* ---------------- background effect (Details → background_effect, preview with ?fx=) ----------------
+     dust: gold specks rising (the original) · petals: pushp varsha, rose petals falling ·
+     marigold: marigold petals and jasmine flowers falling · sparkle: gold stars glinting in place ·
+     diya: soft warm lights drifting and flickering · goldleaf: gold leaf flakes turning as they fall ·
+     fireflies: golden glow-dots wandering · none */
+  const EFFECTS = ['dust', 'petals', 'marigold', 'sparkle', 'diya', 'goldleaf', 'fireflies', 'none'];
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const px = (v) => `${v.toFixed(1)}px`;
+  const JASMINE = '<svg viewBox="0 0 20 20"><g fill="#fffdf6" stroke="#e6d9b8" stroke-width=".5">'
+    + [0, 72, 144, 216, 288].map((a) => `<ellipse cx="10" cy="5.2" rx="3.1" ry="4.6" transform="rotate(${a} 10 10)"/>`).join('')
+    + '</g><circle cx="10" cy="10" r="1.9" fill="#f2c94c"/></svg>';
+  const STAR = '<svg viewBox="0 0 20 20"><path d="M10 0L11.5 8.5 20 10 11.5 11.5 10 20 8.5 11.5 0 10 8.5 8.5Z" fill="#fff4cc"/></svg>';
+
+  function ambient(setting) {
+    if (reduceMotion || root.classList.contains('static')) return;
+    const pick = (params.get('fx') || '').toLowerCase();
+    const fx = EFFECTS.includes(pick) ? pick : (EFFECTS.includes(setting) ? setting : 'dust');
+    if (fx === 'none') return;
+    if (fx === 'dust') { goldDust(); return; }
+    const add = (cls, vars, html) => {
+      const el = document.createElement('span');
+      el.className = `fx ${cls}`;
+      el.setAttribute('aria-hidden', 'true');
+      Object.entries(vars).forEach(([k, v]) => el.style.setProperty(k, v));
+      el.innerHTML = html;
+      document.body.appendChild(el);
+    };
+    // things that fall: an outer drop, a sway, and the piece itself turning over
+    const fall = (count, piece) => {
+      for (let k = 0; k < count; k += 1) {
+        const t = rnd(13, 22);
+        add('fx-fall', {
+          '--x': `${rnd(-2, 98).toFixed(1)}vw`, '--dx': px(rnd(-60, 60)), '--t': `${t.toFixed(1)}s`, '--d': `${(-rnd(0, t)).toFixed(1)}s`,
+          '--sw': `${rnd(2.4, 4.2).toFixed(1)}s`, '--fl': `${rnd(3.5, 7).toFixed(1)}s`,
+        }, `<i>${piece(k)}</i>`);
+      }
+    };
+    const scatter = (count, cls, vars, html = '') => {
+      for (let k = 0; k < count; k += 1) add(cls, { '--x': `${rnd(3, 95).toFixed(1)}vw`, '--y': `${rnd(4, 94).toFixed(1)}vh`, ...vars(k) }, html);
+    };
+    if (fx === 'petals') {
+      const tones = [['#8f1028', '#d94f6b'], ['#b3123a', '#f08aa0'], ['#a3161f', '#e2574c'], ['#c2185b', '#f6a5c0']];
+      fall(13, (k) => {
+        const [a, b] = tones[k % tones.length];
+        return `<b class="fx-petal" style="--s:${px(rnd(10, 16))};--c1:${a};--c2:${b}"></b>`;
+      });
+    } else if (fx === 'marigold') {
+      fall(15, (k) => (k % 3 === 2
+        ? `<b class="fx-jasmine" style="--s:${px(rnd(13, 18))}">${JASMINE}</b>`
+        : `<b class="fx-marigold" style="--s:${px(rnd(8, 12))};--c1:${k % 2 ? '#e8760a' : '#f2a516'}"></b>`));
+    } else if (fx === 'goldleaf') {
+      fall(12, () => `<b class="fx-leaf" style="--s:${px(rnd(9, 16))}"></b>`);
+    } else if (fx === 'sparkle') {
+      scatter(16, 'fx-spark', () => ({ '--s': px(rnd(8, 17)), '--t': `${rnd(2.8, 5.5).toFixed(1)}s`, '--d': `${(-rnd(0, 6)).toFixed(1)}s` }), STAR);
+    } else if (fx === 'diya') {
+      scatter(12, 'fx-diya', () => ({
+        '--s': px(rnd(14, 34)), '--wx': px(rnd(-40, 40)), '--wy': px(rnd(-60, 20)),
+        '--t': `${rnd(9, 16).toFixed(1)}s`, '--f': `${rnd(1.2, 2.6).toFixed(1)}s`, '--d': `${(-rnd(0, 16)).toFixed(1)}s`,
+      }));
+    } else if (fx === 'fireflies') {
+      scatter(14, 'fx-fly', () => ({
+        '--ax': px(rnd(-60, 60)), '--ay': px(rnd(-60, 60)), '--bx': px(rnd(-60, 60)), '--by': px(rnd(-60, 60)),
+        '--cx': px(rnd(-60, 60)), '--cy': px(rnd(-60, 60)), '--t': `${rnd(10, 18).toFixed(1)}s`,
+        '--b': `${rnd(2.5, 4.5).toFixed(1)}s`, '--d': `${(-rnd(0, 18)).toFixed(1)}s`,
+      }));
+    }
+  }
+
   function goldDust() {
     if (reduceMotion || root.classList.contains('static')) return;
     for (let k = 0; k < 18; k += 1) {
@@ -950,7 +1018,7 @@
     if (!result.invite) { showCoverMessage(result.error); return; }
     render(result.invite, code);
     armCover(result.invite);
-    goldDust();
+    ambient(((result.invite.text || {}).effect || '').toLowerCase());
   }
 
   // someone pasted a different invite code into the address: load that one
