@@ -604,8 +604,10 @@
     const contacts = (inv.contacts || []).filter((x) => x.tel);
     // last page: "With Divine Blessings Of", then "With Dearest Love Of", one name per line
     const lines = (s) => String(s || '').split(/\r?\n/).map((x) => x.trim()).filter(Boolean);
+    // a couple ("A & B") always breaks at the "&": each person on their own line
+    const famName = (n) => n.split(/\s+&\s+/).map(esc).join('<br>&amp; ');
     const famCol = (title, names) => (names.length
-      ? `<div class="fam-col"><h3 class="fam-title script foil">${esc(title)}</h3>${names.map((n) => `<p class="fam-name">${esc(n)}</p>`).join('')}</div>`
+      ? `<div class="fam-col"><h3 class="fam-title script foil">${esc(title)}</h3>${names.map((n) => `<p class="fam-name">${famName(n)}</p>`).join('')}</div>`
       : '');
     const family = famCol(t.blessingsTitle || 'With Divine Blessings Of', lines(t.blessingsNames))
       + famCol(t.loveTitle || 'With Dearest Love Of', lines(t.loveNames));
