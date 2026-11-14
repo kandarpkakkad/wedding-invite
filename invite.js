@@ -25,8 +25,9 @@
   if (SCRIPTS.includes(scriptParam)) root.dataset.script = scriptParam;
   const coverParam = (params.get('cover') || '').toLowerCase();
   if (['gold', 'green', 'ivory'].includes(coverParam)) root.dataset.cover = coverParam;
-  // the border round the cover and the ivory pages (Details → page_border, written into <html data-frame>):
-  // pichhwai is the lotus border of the function cards, classic the plain gold one; ?frame= previews the other
+  // the border round the ivory pages (Details → page_border, written into <html data-frame>): pichhwai is the
+  // lotus border of the function cards, and the cover then has no border; classic is the plain gold frame on the
+  // pages and the cover; ?frame= previews the other
   const FRAMES = { classic: 'classic', pichhwai: 'pichhwai', pichwai: 'pichhwai', pichhvai: 'pichhwai', pichvai: 'pichhwai' };
   root.dataset.frame = FRAMES[(params.get('frame') || '').toLowerCase()] || FRAMES[(root.dataset.frame || '').toLowerCase()] || '';
 
@@ -876,7 +877,6 @@
 
     document.title = `${c.name1} ${c.joiner || '&'} ${c.name2}`;
     drawPichhwai(document.querySelectorAll('.card.pichhwai, .framed.pichhwai'));
-    pichhwaiCover();
 
     document.querySelectorAll('[data-ics]').forEach((btn) => {
       btn.addEventListener('click', () => downloadIcs(inv.events[Number(btn.dataset.ics)], inv));
@@ -1100,16 +1100,6 @@
     when.textContent = MESSAGES[kind] || MESSAGES.failed;
   }
 
-  // the cover's border: the lotus border when the pages have it (called again once the invitation is open,
-  // in case the setting only arrived with it)
-  function pichhwaiCover() {
-    const frame = $('.cover-frame');
-    if (!frame || root.dataset.frame !== 'pichhwai' || frame.classList.contains('pichhwai')) return;
-    frame.classList.add('pichhwai');
-    frame.innerHTML = PW_SVG;
-    drawPichhwai([frame]);
-  }
-
   function armCover(inv) {
     const t = inv.text || {};
     $('#cover-emblem').outerHTML = emblemHtml(t.emblem, initialsOf(inv.couple), 'cover-emblem');
@@ -1162,7 +1152,6 @@
     $('#cover-lace').innerHTML = mandala('S', false);
     $('#cover-chains').innerHTML = jhalar() + chains();
     $('#cover-div').innerHTML = divider('S');
-    pichhwaiCover();
     const code = getCode();
     let result;
     try {
