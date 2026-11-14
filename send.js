@@ -29,6 +29,20 @@
 
   const notice = (message) => { $('#app').innerHTML = `<p class="notice">${esc(message)}</p>`; };
 
+  // the Pichhwai border, as on the invitation: Details → page_border = pichhwai (in <html data-frame>) and
+  // pichhwai_style (in <html data-pichhwai>); ?frame=classic and ?pichhwai=<style> preview the others
+  const params = new URLSearchParams(location.search);
+  const FRAMES = { classic: 'classic', pichhwai: 'pichhwai', pichwai: 'pichhwai', pichhvai: 'pichhwai', pichvai: 'pichhwai' };
+  root.dataset.frame = FRAMES[(params.get('frame') || '').toLowerCase()] || FRAMES[(root.dataset.frame || '').toLowerCase()] || '';
+  const withPichhwai = root.dataset.frame === 'pichhwai' && Boolean(window.Pichhwai);
+  if (withPichhwai) Pichhwai.choose(params.get('pichhwai'), root.dataset.pichhwai);
+  function pichhwaiBands() {
+    if (!withPichhwai) return;
+    const bands = document.querySelectorAll('.sp-patola');
+    bands.forEach((band) => { band.classList.add('pw-band'); band.innerHTML = Pichhwai.SVG; });
+    Pichhwai.draw(bands);
+  }
+
   async function decryptList(secret) {
     const res = await fetch(`send.json?v=${encodeURIComponent(root.dataset.build || '')}`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`send.json: HTTP ${res.status}`);
@@ -128,7 +142,7 @@
       <div id="rows">${list.map((g, i) => {
         const whatsapp = `https://wa.me/${g.phone}?text=${encodeURIComponent(g.message)}`;
         const seats = seatsOf(g);
-        return `<article class="guest-row${isSent(g) ? ' is-sent' : ''}" data-i="${i}">
+        return `<article class="guest-row${withPichhwai ? ' pw-img' : ''}${isSent(g) ? ' is-sent' : ''}" data-i="${i}">
           <div class="row-head">
             <div>
               <div class="row-name">${esc(g.name)}</div>
@@ -149,6 +163,7 @@
       <p class="hint">Sent invitations move to the end and their WhatsApp button is switched off. Untick Sent to send again.<br>Ticks are saved on this device only. Also set Sent to Yes in the workbook to keep a permanent record.</p>`;
 
     const rows = Array.from(document.querySelectorAll('.guest-row'));
+    if (withPichhwai) Pichhwai.draw(rows);
     const box = $('#rows');
     const update = () => {
       const q = $('#search').value.trim().toLowerCase();
@@ -198,6 +213,7 @@
   }
 
   async function main() {
+    pichhwaiBands();
     const secret = decodeURIComponent(location.hash.slice(1)).trim();
     if (!secret) { notice('Open this page with your private sending link (Details → send_page in the workbook).'); return; }
     if (!window.crypto || !crypto.subtle) { notice('Please open this page in Chrome or Safari.'); return; }

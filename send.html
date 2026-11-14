@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="burgundy" data-build="20261114160201" data-script="luxurious">
+<html lang="en" data-theme="burgundy" data-build="20261114162252" data-script="luxurious" data-frame="pichhwai" data-pichhwai="peacock">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -10,23 +10,23 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Kandarp &amp; Janvi">
   <meta property="og:description" content="Wedding Invitation · 28 – 29 January 2027 · Rajkot, Gujarat">
-  <meta property="og:image" content="https://kandarpkakkad.github.io/wedding-invite/preview-burgundy.jpg?v=20261114160201">
+  <meta property="og:image" content="https://kandarpkakkad.github.io/wedding-invite/preview-burgundy.jpg?v=20261114162252">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://kandarpkakkad.github.io/wedding-invite/">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="referrer" content="no-referrer">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=20261114160201">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20261114160201">
-  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png?v=20261114160201">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=20261114160201">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20261114160201">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=20261114162252">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=20261114162252">
+  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png?v=20261114162252">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=20261114162252">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20261114162252">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <!-- only the script font the workbook picks is actually downloaded -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Cormorant+SC:wght@500;600&family=Corinthia:wght@400;700&family=Pinyon+Script&family=Imperial+Script&family=Luxurious+Script&display=swap">
-  <link rel="stylesheet" href="style.css?v=20261114160201">
+  <link rel="stylesheet" href="style.css?v=20261114162252">
   <style>
     /* ---------- the page: the invitation's silk, with ivory cards on it ---------- */
     body.sp { min-height: 100vh; background: var(--silk-2); color: var(--silk-ink); }
@@ -101,6 +101,15 @@
     .guest-row.is-sent .ev-chip { opacity: .7; }
     .guest-row.is-sent .row-actions .btn-wa { pointer-events: none; cursor: default; border-color: #d6cdbd; background: #e7e0d3; color: #a1968a; box-shadow: none; }
 
+    /* the Pichhwai border, as on the invitation (Details → page_border = pichhwai, pichhwai_style; drawn by
+       pichhwai.js): on the bands at the top and bottom, and round each guest card as a picture */
+    .sp-patola { position: relative; }
+    .sp-patola.pw-band { border-color: #d9ac4a; background: none; }
+    .sp-patola > .pw-frame { overflow: hidden; }
+    .guest-row.pw-img { --pw-band: 18px; padding: 30px 30px 28px; border: 0; border-radius: 0; }
+    .guest-row.pw-img::before { inset: 0; border: 0; border-radius: 0; background: var(--pw-img) 0 0 / 100% 100% no-repeat; }
+    .guest-row.pw-img::after { display: none; }
+
     .hint { max-width: 460px; margin: 26px auto 0; font-size: 15.5px; font-style: italic; line-height: 1.5; text-align: center; color: var(--silk-soft); }
     .notice { margin-top: 30vh; padding: 0 12px; font-size: 1.15rem; font-style: italic; text-align: center; color: var(--silk-soft); }
 
@@ -147,6 +156,7 @@
       <i class="sn-timer" aria-hidden="true"></i>
     </div>
   </div>
-  <script src="send.js?v=20261114160201"></script>
+  <script src="pichhwai.js?v=20261114162252"></script>
+  <script src="send.js?v=20261114162252"></script>
 </body>
 </html>
