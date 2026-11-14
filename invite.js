@@ -624,7 +624,7 @@
     lotus: { field: '#0f3e3c', strip: '#7c1733', rule: GOLD, ring: '#d9ac4a', run: 'vine', stem: '#d9ac4a', leaf: ['#3f8f52', '#2a6a3a'], flower: 'pwRose' },
     moonlit: { field: '#1a2456', strip: '#7c1733', rule: GOLD, ring: '#e6e9f2', run: 'vine', stem: '#e6e9f2', leaf: ['#a9c7b6', '#6f9584'], flower: 'pwRoseW', small: 'pwJasmine' },
     gold: { field: '#d4a243', strip: '#7c1733', rule: '#7c1733', ring: '#7c1733', run: 'buds', stem: '#2f6b3a', flower: 'pwRose' },
-    marigold: { field: '#8e1b1f', strip: '#1f4d2c', rule: GOLD, ring: '#f2c96a', run: 'garland', leaf: ['#4f9a4a', '#2a6a3a'], flower: 'pwMari', colours: ['#f08519', '#f7c22c'] },
+    marigold: { field: '#1d4a2c', strip: '#7c1733', rule: GOLD, ring: '#f2c96a', run: 'garland', leaf: ['#8cc66a', '#3d7a35'], flower: 'pwMari', colours: ['#f08519', '#f7c22c'] },
     peacock: { field: '#f3e2bd', strip: '#7c1733', rule: GOLD, ring: '#b8862b', run: 'feathers', flower: 'pwEye' },
   };
   const PW_NAMES = {
