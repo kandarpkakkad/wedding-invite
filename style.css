@@ -943,3 +943,32 @@ svg { color: var(--gold); }
   .reveal, .write { opacity: 1; transform: none; clip-path: none; }
   .dust, .fx { display: none; }
 }
+
+/* ================= Option: Pichhwai border (Details → page_border = pichhwai; preview with ?frame=pichhwai) =================
+   a lotus-vine border round the ivory pages and the cover, a lotus pond at their foot,
+   and lotus bands in place of the patola bands on the coloured sections */
+:root[data-frame="pichhwai"] .framed { padding: 80px 40px 104px; }
+:root[data-frame="pichhwai"] .framed::before {
+  inset: 0;
+  border: 26px solid transparent;
+  border-image: url(pichhwai-frame.svg) 40 round;
+}
+:root[data-frame="pichhwai"] .framed::after,
+:root[data-frame="pichhwai"] .cover-frame::after {
+  inset: auto 26px 26px;
+  height: 46px;
+  border: 0;
+  opacity: 1;
+  background: url(pichhwai-pond.svg) round no-repeat center bottom / auto 100%;
+}
+:root[data-frame="pichhwai"] .framed > .corner { display: none; }
+:root[data-frame="pichhwai"] .cover-frame {
+  inset: 10px;
+  border: 24px solid transparent;
+  border-image: url(pichhwai-frame.svg) 40 round;
+}
+:root[data-frame="pichhwai"] .cover-frame::after { inset: auto 0 0; height: 54px; }
+:root[data-frame="pichhwai"] .patola {
+  border-color: #d9ac4a;
+  background: url(pichhwai-band.svg) round no-repeat center / auto 100%;
+}

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="120" height="52" viewBox="0 0 120 52">
+  <!-- Pichhwai-style lotus pond (kamal talai), repeats sideways. Original drawing. -->
+  <defs>
+    <linearGradient id="pk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c63f6b"/><stop offset=".45" stop-color="#ee8eac"/><stop offset="1" stop-color="#fde4ec"/>
+    </linearGradient>
+    <linearGradient id="pkb" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a92d58"/><stop offset="1" stop-color="#e57c9e"/>
+    </linearGradient>
+    <linearGradient id="lf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6fb56b"/><stop offset="1" stop-color="#2c7442"/>
+    </linearGradient>
+    <!-- full lotus in profile, base at 0,0 -->
+    <g id="lotus" stroke="#9c2a52" stroke-width=".4" stroke-linejoin="round">
+      <path d="M0 0C-5-4-7-11-5.5-17C-2.5-12-.5-6 0 0Z" fill="url(#pkb)"/>
+      <path d="M0 0C5-4 7-11 5.5-17C2.5-12 .5-6 0 0Z" fill="url(#pkb)"/>
+      <path d="M0 0C-4.6-5-4.6-13.5 0-20.5C4.6-13.5 4.6-5 0 0Z" fill="url(#pk)"/>
+      <path d="M0 0C-4-1-10-5-12-12.5C-6-11.5-2-6.5 0 0Z" fill="url(#pk)"/>
+      <path d="M0 0C4-1 10-5 12-12.5C6-11.5 2-6.5 0 0Z" fill="url(#pk)"/>
+      <path d="M0 .6C-6 1-13-1.2-16.5-5.6C-10.5-7.4-4.5-4.2 0 .6Z" fill="url(#pk)"/>
+      <path d="M0 .6C6 1 13-1.2 16.5-5.6C10.5-7.4 4.5-4.2 0 .6Z" fill="url(#pk)"/>
+      <path d="M-3.4 .4C-2.4 3 2.4 3 3.4 .4C1.4 1.4-1.4 1.4-3.4 .4Z" fill="#3f8f52" stroke="#2a6a3a"/>
+      <g fill="#f2c14e" stroke="none"><circle cx="-1.6" cy="-9.5" r=".7"/><circle cx="0" cy="-10.6" r=".7"/><circle cx="1.6" cy="-9.5" r=".7"/></g>
+    </g>
+    <path id="bud" d="M0 0C-3.6-3-3.8-9 0-14.5C3.8-9 3.6-3 0 0Z" fill="url(#pk)" stroke="#9c2a52" stroke-width=".4"/>
+    <!-- a floating lotus leaf -->
+    <g id="pad">
+      <path d="M-12 0C-12-3.8 12-3.8 12 0C12 3 -12 3 -12 0Z" fill="#245f37"/>
+      <path d="M-11.2-.4C-11.2-3.4 11.2-3.4 11.2-.4C9-1.4 4-1.8 1.2-.6L0-2.2L-1.2-.6C-4-1.8-9-1.4-11.2-.4Z" fill="url(#lf)"/>
+      <path d="M0-2.2L-5-1.4M0-2.2L5-1.4M0-2.2L-8.5-.9M0-2.2L8.5-.9" stroke="#9fd39a" stroke-width=".3" fill="none"/>
+    </g>
+    <path id="wave" d="M0 0Q2.5-2.2 5 0T10 0" fill="none" stroke="#7fc2bb" stroke-width=".6"/>
+  </defs>
+
+  <!-- stems behind the water line -->
+  <g stroke="#2f7a45" stroke-width="1.1" fill="none">
+    <path d="M26 27C26 31 25 35 26 40"/>
+    <path d="M70 26C71 31 69 35 70 40"/>
+    <path d="M97 28C97 32 98 36 97 40"/>
+  </g>
+
+  <!-- water -->
+  <path d="M0 32Q6 30.2 12 32T24 32T36 32T48 32T60 32T72 32T84 32T96 32T108 32T120 32V52H0Z" fill="#0f3e3c"/>
+  <path d="M0 32Q6 30.2 12 32T24 32T36 32T48 32T60 32T72 32T84 32T96 32T108 32T120 32" fill="none" stroke="#c8962f" stroke-width=".8"/>
+  <g opacity=".85">
+    <use xlink:href="#wave" x="6" y="39"/><use xlink:href="#wave" x="32" y="38"/><use xlink:href="#wave" x="58" y="40"/><use xlink:href="#wave" x="84" y="38.5"/><use xlink:href="#wave" x="106" y="40"/>
+    <use xlink:href="#wave" x="18" y="45.5"/><use xlink:href="#wave" x="44" y="46"/><use xlink:href="#wave" x="72" y="45"/><use xlink:href="#wave" x="96" y="46"/>
+  </g>
+
+  <!-- leaves floating on the water -->
+  <use xlink:href="#pad" transform="translate(48 33.4)"/>
+  <use xlink:href="#pad" transform="translate(0 35) scale(.85)"/>
+  <use xlink:href="#pad" transform="translate(120 35) scale(.85)"/>
+  <use xlink:href="#pad" transform="translate(84 36) scale(.7)"/>
+
+  <!-- flowers -->
+  <use xlink:href="#lotus" transform="translate(26 27)"/>
+  <use xlink:href="#bud" transform="translate(70 26) rotate(6)"/>
+  <use xlink:href="#lotus" transform="translate(97 28) scale(.78)"/>
+</svg>

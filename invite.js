@@ -25,6 +25,10 @@
   if (SCRIPTS.includes(scriptParam)) root.dataset.script = scriptParam;
   const coverParam = (params.get('cover') || '').toLowerCase();
   if (['gold', 'green', 'ivory'].includes(coverParam)) root.dataset.cover = coverParam;
+  // ?frame=pichhwai previews the Pichhwai lotus border (Details → page_border); ?frame=classic the plain gold one
+  const FRAMES = { classic: 'classic', pichhwai: 'pichhwai', pichwai: 'pichhwai', pichhvai: 'pichhwai', pichvai: 'pichhwai' };
+  const frameParam = FRAMES[(params.get('frame') || '').toLowerCase()];
+  if (frameParam) root.dataset.frame = frameParam;
 
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -643,6 +647,7 @@
       pastel: pick('cards', t.cardBg, ['ivory', 'pastel'], 'ivory') === 'pastel',
       decor: pick('border', t.cardBorder, ['plain', 'decorated'], 'plain') === 'decorated',
     };
+    if (!root.dataset.frame && FRAMES[t.pageBorder]) root.dataset.frame = FRAMES[t.pageBorder];
 
     $('#invite').innerHTML = `
       <section class="hero silk${logoStyle ? ' has-logo' : ''}">
