@@ -36,12 +36,6 @@
   root.dataset.frame = FRAMES[(params.get('frame') || '').toLowerCase()] || FRAMES[(root.dataset.frame || '').toLowerCase()] || '';
   const withPichhwai = root.dataset.frame === 'pichhwai' && Boolean(window.Pichhwai);
   if (withPichhwai) Pichhwai.choose(params.get('pichhwai'), root.dataset.pichhwai);
-  function pichhwaiBands() {
-    if (!withPichhwai) return;
-    const bands = document.querySelectorAll('.sp-patola');
-    bands.forEach((band) => { band.classList.add('pw-band'); band.innerHTML = Pichhwai.SVG; });
-    Pichhwai.draw(bands);
-  }
 
   async function decryptList(secret) {
     const res = await fetch(`send.json?v=${encodeURIComponent(root.dataset.build || '')}`, { cache: 'no-cache' });
@@ -213,7 +207,6 @@
   }
 
   async function main() {
-    pichhwaiBands();
     const secret = decodeURIComponent(location.hash.slice(1)).trim();
     if (!secret) { notice('Open this page with your private sending link (Details → send_page in the workbook).'); return; }
     if (!window.crypto || !crypto.subtle) { notice('Please open this page in Chrome or Safari.'); return; }
