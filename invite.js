@@ -575,9 +575,10 @@
   function eventCard(ev, index, inv, look = {}) {
     const maps = safeUrl(ev.maps);
     const withProps = look.decor && ['mandap', 'haldi', 'sangeet', 'wedding'].includes(ev.id);
-    const cls = `${look.pastel ? ' pastel' : ''}${look.decor ? ' decor' : ''}${withProps ? ' has-props' : ''}`;
+    const cls = `${look.pastel ? ' pastel' : ''}${look.decor ? ' decor' : ''}${withProps ? ' has-props' : ''}${look.pichhwai ? ' pichhwai' : ''}`;
     return `<div class="card reveal ev-${esc(ev.id)}${cls}">
       ${look.decor ? corner('bl') + corner('br') : ''}
+      ${look.pichhwai ? '<svg class="pw-frame" aria-hidden="true" focusable="false"></svg>' : ''}
       ${eventIcon(ev.id)}
       <h3 class="ev-name script foil">${esc(ev.name)}</h3>
       <p class="ev-day tiny">${esc(ev.weekday)}</p>
@@ -603,6 +604,128 @@
         </details>
       </div>
     </div>`;
+  }
+
+  /* ---------------- Pichhwai lotus border round a function card (Details → card_border = pichhwai) ----------------
+     Drawn to each card's size so it follows the arch: a gold rule, a burgundy strip with gold dots, a deep-teal
+     field with a lotus vine, a gold rule and gold scallops inside. Bigger lotuses sit at the bottom corners and
+     the top of the arch. Measured in units of 40 per band, like site/pichhwai-frame.svg. */
+  const PW_BAND = 24;   // px
+  function pichhwaiFrame(card) {
+    const svg = card.querySelector('.pw-frame');
+    const w = card.offsetWidth;
+    const h = card.offsetHeight;
+    if (!svg || !w || !h || svg.dataset.size === `${w}x${h}`) return;
+    svg.dataset.size = `${w}x${h}`;
+    const k = PW_BAND / 40;
+    const W = w / k;
+    const H = h / k;
+    const R = Math.min((parseFloat(getComputedStyle(card).borderTopLeftRadius) || 0) / k, W / 2, H / 2);
+    // the outline at inset d, walked from the bottom-left corner: up, over the arch, down, back along the bottom
+    const loop = (d) => {
+      const r = Math.max(R - d, 0.01);
+      const arc = (cx, from) => (u) => {
+        const a = from + u / r;
+        return [cx + r * Math.cos(a), R + r * Math.sin(a), -Math.sin(a), Math.cos(a)];
+      };
+      const segs = [
+        [H - d - R, (u) => [d, H - d - u, 0, -1]],
+        [r * Math.PI / 2, arc(R, Math.PI)],
+        [W - 2 * R, (u) => [R + u, d, 1, 0]],
+        [r * Math.PI / 2, arc(W - R, 1.5 * Math.PI)],
+        [H - d - R, (u) => [W - d, R + u, 0, 1]],
+        [W - 2 * d, (u) => [W - d - u, H - d, -1, 0]],
+      ];
+      const len = segs.reduce((sum, sg) => sum + sg[0], 0);
+      const at = (s) => {
+        let rest = ((s % len) + len) % len;
+        for (const [l, f] of segs) { if (rest <= l) return f(rest); rest -= l; }
+        return segs[5][1](segs[5][0]);
+      };
+      const path = `M${r1(d)} ${r1(H - d)}V${r1(R)}A${r1(r)} ${r1(r)} 0 0 1 ${r1(R)} ${r1(d)}H${r1(W - R)}`
+        + `A${r1(r)} ${r1(r)} 0 0 1 ${r1(W - d)} ${r1(R)}V${r1(H - d)}Z`;
+      return { len, at, path, segs };
+    };
+    const GOLD = '#c8962f';
+    const rule = (d, width, colour) => `<path d="${loop(d).path}" fill="none" stroke="${colour}" stroke-width="${width}"/>`;
+    let out = rule(1, 2, GOLD) + rule(4, 4, '#7c1733') + rule(6.65, 1.3, GOLD) + rule(19.25, 23.9, '#0f3e3c') + rule(31.85, 1.3, GOLD);
+
+    // gold dots along the burgundy strip
+    const strip = loop(4);
+    const nDots = Math.max(1, Math.round(strip.len / 10));
+    let dots = '';
+    for (let i = 0; i < nDots; i++) {
+      const [x, y] = strip.at((i + 0.5) * strip.len / nDots);
+      dots += `<circle cx="${r1(x)}" cy="${r1(y)}" r=".85"/>`;
+    }
+    out += `<g fill="#f2c96a">${dots}</g>`;
+
+    // gold scallops, each with a dot, on the card side of the border
+    const inner = loop(32.5);
+    const nSc = Math.max(1, Math.round(inner.len / 10));
+    let sc = '';
+    let pearls = '';
+    for (let i = 0; i < nSc; i++) {
+      const [x0, y0] = inner.at(i * inner.len / nSc);
+      const [x1, y1] = inner.at((i + 1) * inner.len / nSc);
+      const [mx, my, tx, ty] = inner.at((i + 0.5) * inner.len / nSc);
+      sc += `M${r1(x0)} ${r1(y0)}Q${r1(mx - ty * 8.4)} ${r1(my + tx * 8.4)} ${r1(x1)} ${r1(y1)}`;
+      pearls += `<circle cx="${r1(mx - ty * 5.5)}" cy="${r1(my + tx * 5.5)}" r="1"/>`;
+    }
+    out += `<path d="${sc}" fill="none" stroke="#b8862b" stroke-width=".8"/><g fill="#b8862b">${pearls}</g>`;
+
+    // the lotus vine: a lotus every ~40 units, the stem waving out and in between them, a leaf at each bend
+    const mid = loop(19.25);
+    const L = mid.segs.map((sg) => sg[0]);
+    const apex = L[0] + L[1] + L[2] / 2;
+    const corner2 = L[0] + L[1] + L[2] + L[3] + L[4];
+    const stops = [];
+    const spread = (a, b) => {
+      const n = Math.max(1, Math.round((b - a) / 40));
+      for (let i = 0; i < n; i++) stops.push(a + (b - a) * i / n);
+    };
+    spread(0, apex);
+    spread(apex, corner2);
+    spread(corner2, mid.len);
+    let vine = '';
+    let leaves = '';
+    stops.forEach((a, i) => {
+      const b = i + 1 < stops.length ? stops[i + 1] : mid.len;
+      const m = Math.max(6, Math.round((b - a) / 2));
+      for (let j = 0; j <= m; j++) {
+        const [x, y, tx, ty] = mid.at(a + (b - a) * j / m);
+        const o = 4.5 * Math.sin(2 * Math.PI * j / m);   // + is outwards
+        vine += `${j ? 'L' : 'M'}${r1(x + ty * o)} ${r1(y - tx * o)}`;
+      }
+      for (const [f, o, turn] of [[0.25, 4.4, -150], [0.75, -4.4, 30]]) {
+        const [x, y, tx, ty] = mid.at(a + (b - a) * f);
+        leaves += `<use href="#pwLeaf" transform="translate(${r1(x + ty * o)} ${r1(y - tx * o)}) rotate(${r1(Math.atan2(ty, tx) * 180 / Math.PI + turn)})"/>`;
+      }
+    });
+    out += `<path d="${vine}" fill="none" stroke="#d9ac4a" stroke-width=".9"/>`
+      + `<g fill="#3f8f52" stroke="#2a6a3a" stroke-width=".35">${leaves}</g>`;
+    out += stops.map((s) => {
+      const [x, y] = mid.at(s);
+      const big = s === 0 || s === apex || s === corner2;
+      return `${big ? `<circle cx="${r1(x)}" cy="${r1(y)}" r="10.4" fill="#0f3e3c" stroke="#d9ac4a" stroke-width=".7"/>` : ''}`
+        + `<use href="#pwRose" transform="translate(${r1(x)} ${r1(y)}) scale(${big ? 1.12 : 1.02})"/>`;
+    }).join('');
+
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = out;
+  }
+  function drawPichhwaiCards() {
+    const cards = document.querySelectorAll('.card.pichhwai');
+    if (!cards.length) return;
+    const draw = () => cards.forEach(pichhwaiFrame);
+    draw();
+    if ('ResizeObserver' in window) {
+      const ro = new ResizeObserver(draw);
+      cards.forEach((card) => ro.observe(card));
+    } else {
+      window.addEventListener('resize', draw);
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(draw);
   }
 
   function render(inv, code) {
@@ -643,9 +766,16 @@
       motif: pick('motif', t.logoMotif, ['paisley', 'peacock'], 'paisley'),
       anim: pick('anim', t.logoAnim, ['subtle', 'strong'], 'subtle'),
     };
+    // card borders: plain, decorated or pichhwai (any spelling: pichwai, pichhvai…); ?border= previews another
+    const BORDERS = ['plain', 'decorated', 'pichhwai'];
+    const asBorder = (s) => (FRAMES[s] === 'pichhwai' ? 'pichhwai' : s);
+    const borderParam = asBorder((params.get('border') || '').toLowerCase());
+    const borderSetting = asBorder(t.cardBorder);
+    const cardBorder = BORDERS.includes(borderParam) ? borderParam : (BORDERS.includes(borderSetting) ? borderSetting : 'plain');
     const cardLook = {
       pastel: pick('cards', t.cardBg, ['ivory', 'pastel'], 'ivory') === 'pastel',
-      decor: pick('border', t.cardBorder, ['plain', 'decorated'], 'plain') === 'decorated',
+      decor: cardBorder === 'decorated',
+      pichhwai: cardBorder === 'pichhwai',
     };
     if (!root.dataset.frame && FRAMES[t.pageBorder]) root.dataset.frame = FRAMES[t.pageBorder];
 
@@ -687,7 +817,7 @@
         </div>
       </section>
 
-      <section class="events silk">
+      <section class="events silk${cardLook.pichhwai ? ' pw-bands' : ''}">
         <div class="patola top"></div>
         <div class="lace l1">${mandala('S', false)}</div>
         <div class="lace l2">${mandala('S', false)}</div>
@@ -733,6 +863,7 @@
       </section>`;
 
     document.title = `${c.name1} ${c.joiner || '&'} ${c.name2}`;
+    drawPichhwaiCards();
 
     document.querySelectorAll('[data-ics]').forEach((btn) => {
       btn.addEventListener('click', () => downloadIcs(inv.events[Number(btn.dataset.ics)], inv));

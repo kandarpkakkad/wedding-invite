@@ -959,7 +959,8 @@ svg { color: var(--gold); }
   height: 46px;
   border: 0;
   opacity: 1;
-  background: url(pichhwai-pond.svg) round no-repeat center bottom / auto 100%;
+  /* solid water underneath hides hairline seams between the repeated pond tiles */
+  background: url(pichhwai-pond.svg) round no-repeat center bottom / auto 100%, linear-gradient(transparent 64%, #0f3e3c 64%);
 }
 :root[data-frame="pichhwai"] .framed > .corner { display: none; }
 :root[data-frame="pichhwai"] .cover-frame {
@@ -968,7 +969,28 @@ svg { color: var(--gold); }
   border-image: url(pichhwai-frame.svg) 40 round;
 }
 :root[data-frame="pichhwai"] .cover-frame::after { inset: auto 0 0; height: 54px; }
+.events.pw-bands .patola,
 :root[data-frame="pichhwai"] .patola {
   border-color: #d9ac4a;
   background: url(pichhwai-band.svg) round no-repeat center / auto 100%;
+}
+
+/* ================= Option: Pichhwai function cards (Details → card_border = pichhwai; preview with ?border=pichhwai) =================
+   invite.js draws the lotus border (.pw-frame) to each card's size so it follows the arch; a lotus pond sits at the foot,
+   and the bands at the top and bottom of the functions section become lotus bands */
+.events .card.pichhwai {
+  padding: 50px 40px 94px;
+  box-shadow: 0 0 0 1px var(--gold-s), 0 22px 44px rgba(0, 0, 0, .38);
+}
+.card .pw-frame { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.card.pichhwai::after {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  bottom: 24px;
+  height: 44px;
+  /* solid water underneath hides hairline seams between the repeated pond tiles */
+  background: url(pichhwai-pond.svg) round no-repeat center bottom / auto 100%, linear-gradient(transparent 64%, #0f3e3c 64%);
+  pointer-events: none;
 }
