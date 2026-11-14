@@ -232,6 +232,13 @@ svg { color: var(--gold); }
 .paper .foil, .card .foil {
   background-image: linear-gradient(105deg, var(--gp1) 0%, var(--gp2) 20%, var(--gp3) 34%, var(--gp2) 48%, var(--gp4) 64%, var(--gp3) 80%, var(--gp1) 100%);
 }
+/* script on ivory (the couple's names, event names, titles): the pale highlight vanished into the paper and the
+   hairlines were thin, so it gets a deeper antique gold, a fine outline to give the strokes body, and a soft lift */
+.paper .script.foil, .card .script.foil {
+  background-image: linear-gradient(105deg, #5a3a0b 0%, #86601a 20%, #b0862c 34%, #86601a 48%, #6e4c12 64%, #b0862c 80%, #5a3a0b 100%);
+  -webkit-text-stroke: .6px #6e4c12;
+  filter: drop-shadow(0 1px .6px rgba(90, 55, 10, .22));
+}
 
 /* ================= Ornaments ================= */
 
