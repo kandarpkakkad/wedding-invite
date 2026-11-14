@@ -25,10 +25,10 @@
   if (SCRIPTS.includes(scriptParam)) root.dataset.script = scriptParam;
   const coverParam = (params.get('cover') || '').toLowerCase();
   if (['gold', 'green', 'ivory'].includes(coverParam)) root.dataset.cover = coverParam;
-  // ?frame=pichhwai previews the Pichhwai lotus border (Details → page_border); ?frame=classic the plain gold one
+  // the border round the cover and the ivory pages (Details → page_border, written into <html data-frame>):
+  // pichhwai is the lotus border of the function cards, classic the plain gold one; ?frame= previews the other
   const FRAMES = { classic: 'classic', pichhwai: 'pichhwai', pichwai: 'pichhwai', pichhvai: 'pichhwai', pichvai: 'pichhwai' };
-  const frameParam = FRAMES[(params.get('frame') || '').toLowerCase()];
-  if (frameParam) root.dataset.frame = frameParam;
+  root.dataset.frame = FRAMES[(params.get('frame') || '').toLowerCase()] || FRAMES[(root.dataset.frame || '').toLowerCase()] || '';
 
   const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -578,7 +578,7 @@
     const cls = `${look.pastel ? ' pastel' : ''}${look.decor ? ' decor' : ''}${withProps ? ' has-props' : ''}${look.pichhwai ? ' pichhwai' : ''}`;
     return `<div class="card reveal ev-${esc(ev.id)}${cls}">
       ${look.decor ? corner('bl') + corner('br') : ''}
-      ${look.pichhwai ? '<svg class="pw-frame" aria-hidden="true" focusable="false"></svg>' : ''}
+      ${look.pichhwai ? PW_SVG : ''}
       ${eventIcon(ev.id)}
       <h3 class="ev-name script foil">${esc(ev.name)}</h3>
       <p class="ev-day tiny">${esc(ev.weekday)}</p>
@@ -606,87 +606,96 @@
     </div>`;
   }
 
-  /* ---------------- Pichhwai lotus border round a function card (Details → card_border = pichhwai) ----------------
-     Drawn to each card's size so it follows the arch: a gold rule, a burgundy strip with gold dots, a deep-teal
-     field with a lotus vine, a gold rule and gold scallops inside. Bigger lotuses sit at the bottom corners and
-     the top of the arch. Measured in units of 40 per band, like site/pichhwai-frame.svg. */
+  /* ---------------- Pichhwai lotus border (Details → card_border / page_border = pichhwai) ----------------
+     Drawn to each box's size, so on a function card it follows the arch and on a page it turns square corners:
+     a gold rule, a burgundy strip with gold dots, a deep-teal field with a lotus vine, a gold rule and gold
+     scallops inside. Bigger lotuses sit at the corners (and the top of an arch). Units of 40 per band. */
   const PW_BAND = 24;   // px
-  function pichhwaiFrame(card) {
-    const svg = card.querySelector('.pw-frame');
-    const w = card.offsetWidth;
-    const h = card.offsetHeight;
+  const PW_SVG = '<svg class="pw-frame" aria-hidden="true" focusable="false"></svg>';
+  // marks along a loop of length len, with n places about `step` apart on each stretch between two marks
+  const spread = (marks, len, step) => {
+    const out = [];
+    marks.forEach((a, i) => {
+      const b = i + 1 < marks.length ? marks[i + 1] : len;
+      const n = Math.max(1, Math.round((b - a) / step));
+      for (let j = 0; j < n; j++) out.push(a + (b - a) * j / n);
+    });
+    return out;
+  };
+  function pichhwaiFrame(box) {
+    const svg = box.querySelector(':scope > .pw-frame');
+    const w = box.offsetWidth;
+    const h = box.offsetHeight;
     if (!svg || !w || !h || svg.dataset.size === `${w}x${h}`) return;
     svg.dataset.size = `${w}x${h}`;
     const k = PW_BAND / 40;
     const W = w / k;
     const H = h / k;
-    const R = Math.min((parseFloat(getComputedStyle(card).borderTopLeftRadius) || 0) / k, W / 2, H / 2);
-    // the outline at inset d, walked from the bottom-left corner: up, over the arch, down, back along the bottom
+    let R = Math.min((parseFloat(getComputedStyle(box).borderTopLeftRadius) || 0) / k, W / 2, H / 2);
+    if (R < 40) R = 0;   // a square-cornered page, not an arch
+    // the outline at inset d, walked from the bottom-left corner: up, over the top, down, back along the bottom
     const loop = (d) => {
-      const r = Math.max(R - d, 0.01);
+      const C = Math.max(R, d);   // centre of the top corners' curve
+      const r = C - d;            // 0 on a square corner
       const arc = (cx, from) => (u) => {
-        const a = from + u / r;
-        return [cx + r * Math.cos(a), R + r * Math.sin(a), -Math.sin(a), Math.cos(a)];
+        const a = from + (r ? u / r : 0);
+        return [cx + r * Math.cos(a), C + r * Math.sin(a), -Math.sin(a), Math.cos(a)];
       };
       const segs = [
-        [H - d - R, (u) => [d, H - d - u, 0, -1]],
-        [r * Math.PI / 2, arc(R, Math.PI)],
-        [W - 2 * R, (u) => [R + u, d, 1, 0]],
-        [r * Math.PI / 2, arc(W - R, 1.5 * Math.PI)],
-        [H - d - R, (u) => [W - d, R + u, 0, 1]],
+        [H - d - C, (u) => [d, H - d - u, 0, -1]],
+        [r * Math.PI / 2, arc(C, Math.PI)],
+        [W - 2 * C, (u) => [C + u, d, 1, 0]],
+        [r * Math.PI / 2, arc(W - C, 1.5 * Math.PI)],
+        [H - d - C, (u) => [W - d, C + u, 0, 1]],
         [W - 2 * d, (u) => [W - d - u, H - d, -1, 0]],
       ];
-      const len = segs.reduce((sum, sg) => sum + sg[0], 0);
+      const ends = [];
+      segs.reduce((sum, sg) => { ends.push(sum + sg[0]); return sum + sg[0]; }, 0);
+      const len = ends[5];
       const at = (s) => {
         let rest = ((s % len) + len) % len;
         for (const [l, f] of segs) { if (rest <= l) return f(rest); rest -= l; }
         return segs[5][1](segs[5][0]);
       };
-      const path = `M${r1(d)} ${r1(H - d)}V${r1(R)}A${r1(r)} ${r1(r)} 0 0 1 ${r1(R)} ${r1(d)}H${r1(W - R)}`
-        + `A${r1(r)} ${r1(r)} 0 0 1 ${r1(W - d)} ${r1(R)}V${r1(H - d)}Z`;
-      return { len, at, path, segs };
+      const path = r
+        ? `M${r1(d)} ${r1(H - d)}V${r1(C)}A${r1(r)} ${r1(r)} 0 0 1 ${r1(C)} ${r1(d)}H${r1(W - C)}`
+          + `A${r1(r)} ${r1(r)} 0 0 1 ${r1(W - d)} ${r1(C)}V${r1(H - d)}Z`
+        : `M${r1(d)} ${r1(H - d)}V${r1(d)}H${r1(W - d)}V${r1(H - d)}Z`;
+      // the sharp corners: the bottom two, and the top two as well on a square frame
+      const corners = r ? [0, ends[4]] : [0, ends[0], ends[2], ends[4]];
+      return { len, at, path, segs, ends, corners };
     };
     const GOLD = '#c8962f';
     const rule = (d, width, colour) => `<path d="${loop(d).path}" fill="none" stroke="${colour}" stroke-width="${width}"/>`;
     let out = rule(1, 2, GOLD) + rule(4, 4, '#7c1733') + rule(6.65, 1.3, GOLD) + rule(19.25, 23.9, '#0f3e3c') + rule(31.85, 1.3, GOLD);
 
-    // gold dots along the burgundy strip
+    // gold dots along the burgundy strip, between the corners, and a bigger one in each corner
     const strip = loop(4);
-    const nDots = Math.max(1, Math.round(strip.len / 10));
-    let dots = '';
-    for (let i = 0; i < nDots; i++) {
-      const [x, y] = strip.at((i + 0.5) * strip.len / nDots);
-      dots += `<circle cx="${r1(x)}" cy="${r1(y)}" r=".85"/>`;
-    }
-    out += `<g fill="#f2c96a">${dots}</g>`;
+    const dotAt = (s, size) => { const [x, y] = strip.at(s); return `<circle cx="${r1(x)}" cy="${r1(y)}" r="${size}"/>`; };
+    const dotMarks = spread(strip.corners, strip.len, 10);
+    out += `<g fill="#f2c96a">${dotMarks.map((s, i) => dotAt((s + (i + 1 < dotMarks.length ? dotMarks[i + 1] : strip.len)) / 2, '.85')).join('')}`
+      + `${strip.corners.map((s) => dotAt(s, '1.1')).join('')}</g>`;
 
-    // gold scallops, each with a dot, on the card side of the border
+    // gold scallops, each with a dot, on the inner side of the border
     const inner = loop(32.5);
-    const nSc = Math.max(1, Math.round(inner.len / 10));
+    const scMarks = spread(inner.corners, inner.len, 10);
     let sc = '';
     let pearls = '';
-    for (let i = 0; i < nSc; i++) {
-      const [x0, y0] = inner.at(i * inner.len / nSc);
-      const [x1, y1] = inner.at((i + 1) * inner.len / nSc);
-      const [mx, my, tx, ty] = inner.at((i + 0.5) * inner.len / nSc);
+    scMarks.forEach((a, i) => {
+      const b = i + 1 < scMarks.length ? scMarks[i + 1] : inner.len;
+      const [x0, y0] = inner.at(a);
+      const [x1, y1] = inner.at(b);
+      const [mx, my, tx, ty] = inner.at((a + b) / 2);
       sc += `M${r1(x0)} ${r1(y0)}Q${r1(mx - ty * 8.4)} ${r1(my + tx * 8.4)} ${r1(x1)} ${r1(y1)}`;
       pearls += `<circle cx="${r1(mx - ty * 5.5)}" cy="${r1(my + tx * 5.5)}" r="1"/>`;
-    }
+    });
     out += `<path d="${sc}" fill="none" stroke="#b8862b" stroke-width=".8"/><g fill="#b8862b">${pearls}</g>`;
 
-    // the lotus vine: a lotus every ~40 units, the stem waving out and in between them, a leaf at each bend
+    // the lotus vine: a lotus every ~40 units, the stem waving out and in between them, a leaf at each bend;
+    // the big lotuses sit on the corners, and on the top of an arch
     const mid = loop(19.25);
-    const L = mid.segs.map((sg) => sg[0]);
-    const apex = L[0] + L[1] + L[2] / 2;
-    const corner2 = L[0] + L[1] + L[2] + L[3] + L[4];
-    const stops = [];
-    const spread = (a, b) => {
-      const n = Math.max(1, Math.round((b - a) / 40));
-      for (let i = 0; i < n; i++) stops.push(a + (b - a) * i / n);
-    };
-    spread(0, apex);
-    spread(apex, corner2);
-    spread(corner2, mid.len);
+    const bigs = R ? [0, mid.ends[1] + mid.segs[2][0] / 2, mid.ends[4]] : mid.corners;
+    const stops = spread(bigs, mid.len, 40);
     let vine = '';
     let leaves = '';
     stops.forEach((a, i) => {
@@ -706,7 +715,7 @@
       + `<g fill="#3f8f52" stroke="#2a6a3a" stroke-width=".35">${leaves}</g>`;
     out += stops.map((s) => {
       const [x, y] = mid.at(s);
-      const big = s === 0 || s === apex || s === corner2;
+      const big = bigs.includes(s);
       return `${big ? `<circle cx="${r1(x)}" cy="${r1(y)}" r="10.4" fill="#0f3e3c" stroke="#d9ac4a" stroke-width=".7"/>` : ''}`
         + `<use href="#pwRose" transform="translate(${r1(x)} ${r1(y)}) scale(${big ? 1.12 : 1.02})"/>`;
     }).join('');
@@ -714,14 +723,15 @@
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = out;
   }
-  function drawPichhwaiCards() {
-    const cards = document.querySelectorAll('.card.pichhwai');
-    if (!cards.length) return;
-    const draw = () => cards.forEach(pichhwaiFrame);
+  // draw the border in each of these boxes now, and again whenever one changes size
+  function drawPichhwai(boxes) {
+    boxes = Array.from(boxes);
+    if (!boxes.length) return;
+    const draw = () => boxes.forEach(pichhwaiFrame);
     draw();
     if ('ResizeObserver' in window) {
-      const ro = new ResizeObserver(draw);
-      cards.forEach((card) => ro.observe(card));
+      const ro = new ResizeObserver((entries) => entries.forEach((e) => pichhwaiFrame(e.target)));
+      boxes.forEach((box) => ro.observe(box));
     } else {
       window.addEventListener('resize', draw);
     }
@@ -778,6 +788,10 @@
       pichhwai: cardBorder === 'pichhwai',
     };
     if (!root.dataset.frame && FRAMES[t.pageBorder]) root.dataset.frame = FRAMES[t.pageBorder];
+    // the ivory pages: the lotus border, or the gold lines with a corner ornament in each corner
+    const framed = root.dataset.frame === 'pichhwai'
+      ? `<div class="framed pichhwai">${PW_SVG}`
+      : `<div class="framed">${corner('tl')}${corner('tr')}${corner('bl')}${corner('br')}`;
 
     $('#invite').innerHTML = `
       <section class="hero silk${logoStyle ? ' has-logo' : ''}">
@@ -800,8 +814,7 @@
 
       <section class="couple paper" id="welcome">
         <div class="paper-lace">${mandala('P', false)}</div>
-        <div class="framed">
-          ${corner('tl')}${corner('tr')}${corner('bl')}${corner('br')}
+        ${framed}
           <div class="kalash-wrap reveal">${kalash()}</div>
           <p class="dear reveal">Dear ${esc(g.name)},</p>
           ${lead ? `<p class="lead reveal">${fillInviteHtml(t.invite, g.seats)}</p>` : ''}
@@ -830,8 +843,7 @@
 
       <section class="info paper">
         <div class="paper-lace">${mandala('P', false)}</div>
-        <div class="framed">
-          ${corner('tl')}${corner('tr')}${corner('bl')}${corner('br')}
+        ${framed}
           <div id="countdown">
             <h2 class="title foil reveal">Counting the Days</h2>
             <p class="sub reveal">until the ${esc(first.name)}</p>
@@ -863,7 +875,8 @@
       </section>`;
 
     document.title = `${c.name1} ${c.joiner || '&'} ${c.name2}`;
-    drawPichhwaiCards();
+    drawPichhwai(document.querySelectorAll('.card.pichhwai, .framed.pichhwai'));
+    pichhwaiCover();
 
     document.querySelectorAll('[data-ics]').forEach((btn) => {
       btn.addEventListener('click', () => downloadIcs(inv.events[Number(btn.dataset.ics)], inv));
@@ -1087,6 +1100,16 @@
     when.textContent = MESSAGES[kind] || MESSAGES.failed;
   }
 
+  // the cover's border: the lotus border when the pages have it (called again once the invitation is open,
+  // in case the setting only arrived with it)
+  function pichhwaiCover() {
+    const frame = $('.cover-frame');
+    if (!frame || root.dataset.frame !== 'pichhwai' || frame.classList.contains('pichhwai')) return;
+    frame.classList.add('pichhwai');
+    frame.innerHTML = PW_SVG;
+    drawPichhwai([frame]);
+  }
+
   function armCover(inv) {
     const t = inv.text || {};
     $('#cover-emblem').outerHTML = emblemHtml(t.emblem, initialsOf(inv.couple), 'cover-emblem');
@@ -1139,6 +1162,7 @@
     $('#cover-lace').innerHTML = mandala('S', false);
     $('#cover-chains').innerHTML = jhalar() + chains();
     $('#cover-div').innerHTML = divider('S');
+    pichhwaiCover();
     const code = getCode();
     let result;
     try {
