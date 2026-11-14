@@ -607,12 +607,121 @@
     </div>`;
   }
 
-  /* ---------------- Pichhwai lotus border (Details → card_border / page_border = pichhwai) ----------------
+  /* ---------------- Pichhwai border (Details → card_border / page_border = pichhwai; pichhwai_style) ----------------
      Drawn to each box's size, so on a function card it follows the arch and on a page it turns square corners:
-     a gold rule, a burgundy strip with gold dots, a deep-teal field with a lotus vine, a gold rule and gold
-     scallops inside. Bigger lotuses sit at the corners (and the top of an arch). Units of 40 per band. */
+     a gold rule, a coloured strip with gold dots, a coloured field with a running motif, a rule and gold scallops
+     inside. Bigger flowers sit at the corners (and the top of an arch). The bands between the sections carry the
+     same motif. Units of 40 per border width. Each style has its colours and a way of filling the field (run):
+       vine      a waving stem with leaves and a flower every 40 (and a small flower between, with `small`)
+       buds      a straight stem, a lotus bud facing out every 40 and a lotus leaf between
+       garland   marigolds every 10 in two colours by turns, with a leaf between each
+       feathers  peacock feathers laid along the border, tipped in and out by turns
+     ?pichhwai=<style> previews another style. */
   const PW_BAND = 24;   // px
   const PW_SVG = '<svg class="pw-frame" aria-hidden="true" focusable="false"></svg>';
+  const GOLD = '#c8962f';
+  const PW_STYLES = {
+    lotus: { field: '#0f3e3c', strip: '#7c1733', rule: GOLD, ring: '#d9ac4a', run: 'vine', stem: '#d9ac4a', leaf: ['#3f8f52', '#2a6a3a'], flower: 'pwRose' },
+    moonlit: { field: '#1a2456', strip: '#7c1733', rule: GOLD, ring: '#e6e9f2', run: 'vine', stem: '#e6e9f2', leaf: ['#a9c7b6', '#6f9584'], flower: 'pwRoseW', small: 'pwJasmine' },
+    gold: { field: '#d4a243', strip: '#7c1733', rule: '#7c1733', ring: '#7c1733', run: 'buds', stem: '#2f6b3a', flower: 'pwRose' },
+    marigold: { field: '#8e1b1f', strip: '#1f4d2c', rule: GOLD, ring: '#f2c96a', run: 'garland', leaf: ['#4f9a4a', '#2a6a3a'], flower: 'pwMari', colours: ['#f08519', '#f7c22c'] },
+    peacock: { field: '#f3e2bd', strip: '#7c1733', rule: GOLD, ring: '#b8862b', run: 'feathers', flower: 'pwEye' },
+  };
+  const PW_NAMES = {
+    lotus: 'lotus', vine: 'lotus', moonlit: 'moonlit', moon: 'moonlit', night: 'moonlit', sharad: 'moonlit', white: 'moonlit',
+    gold: 'gold', golden: 'gold', buds: 'gold', kamal: 'gold', marigold: 'marigold', genda: 'marigold',
+    peacock: 'peacock', mor: 'peacock', feather: 'peacock', feathers: 'peacock',
+  };
+  let pw = PW_STYLES.lotus;   // the style in use, chosen in render()
+
+  // the running motif along a line ({ at(s) → [x, y, tx, ty] }): a flower at each stop (a big one with a ring at
+  // the stops in bigs), the last stretch running from the last stop to `end`
+  function pwRun(line, stops, bigs, end) {
+    const st = pw;
+    const place = (s, o) => {   // o > 0 is outwards
+      const [x, y, tx, ty] = line.at(s);
+      return [x + ty * o, y - tx * o, Math.atan2(ty, tx) * 180 / Math.PI];
+    };
+    const use = (id, s, o = 0, turn = 0, scale = 1, attrs = '') => {
+      const [x, y, a] = place(s, o);
+      return `<use href="#${id}"${attrs} transform="translate(${r1(x)} ${r1(y)}) rotate(${r1(a + turn)})${scale === 1 ? '' : ` scale(${scale})`}"/>`;
+    };
+    const next = (i) => (i + 1 < stops.length ? stops[i + 1] : end);
+    // a stem along the middle, waving `wave` units out and in between the stops
+    const stem = (wave, colour, width) => `<path d="${stops.map((a, i) => {
+      const b = next(i);
+      const m = Math.max(6, Math.round((b - a) / 2));
+      let d = '';
+      for (let j = 0; j <= m; j++) {
+        const [x, y] = place(a + (b - a) * j / m, wave * Math.sin(2 * Math.PI * j / m));
+        d += `${j ? 'L' : 'M'}${r1(x)} ${r1(y)}`;
+      }
+      return d;
+    }).join('')}" fill="none" stroke="${colour}" stroke-width="${width}"/>`;
+    const tint = (i) => (st.colours ? ` color="${st.colours[i % st.colours.length]}"` : '');
+    const isBig = (s) => bigs.includes(s);
+    let back = '';
+    let front = '';
+    if (st.run === 'vine') {
+      let leaves = '';
+      stops.forEach((a, i) => {
+        const b = next(i);
+        leaves += use('pwLeaf', a + (b - a) * 0.25, 4.4, -150) + use('pwLeaf', a + (b - a) * 0.75, -4.4, 30);
+        if (st.small) front += use(st.small, (a + b) / 2, 0, 0, 1.1);
+      });
+      back += stem(4.5, st.stem, 0.9) + `<g fill="${st.leaf[0]}" stroke="${st.leaf[1]}" stroke-width=".35">${leaves}</g>`;
+      front += stops.filter((s) => !isBig(s)).map((s) => use(st.flower, s, 0, 0, 1.02)).join('');
+    } else if (st.run === 'buds') {
+      back += stem(0, st.stem, 0.8);
+      stops.forEach((a, i) => {
+        back += use('pwPad', (a + next(i)) / 2);
+        if (!isBig(a)) front += use('pwBud', a, -5.6, 0, 0.9);
+      });
+    } else if (st.run === 'garland') {
+      let leaves = '';
+      let count = 0;
+      stops.forEach((a, i) => {
+        const b = next(i);
+        const n = Math.max(1, Math.round((b - a) / 10));
+        for (let j = 0; j < n; j++) {
+          leaves += use('pwLeaf', a + (b - a) * (j + 0.5) / n, 0, j % 2 ? 90 : -90, 0.85);
+          if (j || !isBig(a)) front += use('pwMari', a + (b - a) * j / n, 0, 0, 1, tint(count++));
+        }
+      });
+      back += `<g fill="${st.leaf[0]}" stroke="${st.leaf[1]}" stroke-width=".35">${leaves}</g>`;
+    } else if (st.run === 'feathers') {
+      let count = 0;
+      stops.forEach((a, i) => {
+        const b = next(i);
+        const n = Math.max(1, Math.round((b - a) / 20));
+        for (let j = 0; j < n; j++) back += use('pwFeather', a + (b - a) * (j + 0.5) / n, 0, count++ % 2 ? 9 : -9, 0.72);
+      });
+    }
+    const big = stops.filter(isBig).map((s) => {
+      const [x, y] = place(s, 0);
+      return `<circle cx="${r1(x)}" cy="${r1(y)}" r="10.4" fill="${st.field}" stroke="${st.ring}" stroke-width=".7"/>`
+        + use(st.flower, s, 0, 0, st.run === 'garland' ? 1.75 : 1.12, tint(0));
+    }).join('');
+    return back + front + big;
+  }
+
+  // a band between two sections: the border's field and motif, running straight across
+  function pichhwaiBand(band) {
+    const svg = band.querySelector(':scope > .pw-frame');
+    const w = band.clientWidth;
+    const h = band.clientHeight;
+    if (!svg || !w || !h || svg.dataset.size === `${w}x${h}`) return;
+    svg.dataset.size = `${w}x${h}`;
+    const k = PW_BAND / 40;
+    const W = w / k;
+    const H = h / k;
+    const n = Math.max(1, Math.round(W / 40));
+    const g = W / n;
+    const stops = Array.from({ length: n + 1 }, (_, j) => (j - 0.5) * g);
+    svg.setAttribute('viewBox', `0 0 ${r1(W)} ${r1(H)}`);
+    svg.innerHTML = `<rect width="${r1(W)}" height="${r1(H)}" fill="${pw.field}"/>`
+      + pwRun({ at: (s) => [s, H / 2, 1, 0] }, stops, [], W + g / 2);
+  }
   // marks along a loop of length len, with n places about `step` apart on each stretch between two marks
   const spread = (marks, len, step) => {
     const out = [];
@@ -624,6 +733,7 @@
     return out;
   };
   function pichhwaiFrame(box) {
+    if (box.classList.contains('pw-band')) { pichhwaiBand(box); return; }
     const svg = box.querySelector(':scope > .pw-frame');
     const w = box.offsetWidth;
     const h = box.offsetHeight;
@@ -666,9 +776,8 @@
       const corners = r ? [0, ends[4]] : [0, ends[0], ends[2], ends[4]];
       return { len, at, path, segs, ends, corners };
     };
-    const GOLD = '#c8962f';
     const rule = (d, width, colour) => `<path d="${loop(d).path}" fill="none" stroke="${colour}" stroke-width="${width}"/>`;
-    let out = rule(1, 2, GOLD) + rule(4, 4, '#7c1733') + rule(6.65, 1.3, GOLD) + rule(19.25, 23.9, '#0f3e3c') + rule(31.85, 1.3, GOLD);
+    let out = rule(1, 2, GOLD) + rule(4, 4, pw.strip) + rule(6.65, 1.3, pw.rule) + rule(19.25, 23.9, pw.field) + rule(31.85, 1.3, pw.rule);
 
     // gold dots along the burgundy strip, between the corners, and a bigger one in each corner
     const strip = loop(4);
@@ -692,34 +801,11 @@
     });
     out += `<path d="${sc}" fill="none" stroke="#b8862b" stroke-width=".8"/><g fill="#b8862b">${pearls}</g>`;
 
-    // the lotus vine: a lotus every ~40 units, the stem waving out and in between them, a leaf at each bend;
-    // the big lotuses sit on the corners, and on the top of an arch
+    // the motif runs along the middle of the field, a flower about every 40 units;
+    // the big flowers sit on the corners, and on the top of an arch
     const mid = loop(19.25);
     const bigs = R ? [0, mid.ends[1] + mid.segs[2][0] / 2, mid.ends[4]] : mid.corners;
-    const stops = spread(bigs, mid.len, 40);
-    let vine = '';
-    let leaves = '';
-    stops.forEach((a, i) => {
-      const b = i + 1 < stops.length ? stops[i + 1] : mid.len;
-      const m = Math.max(6, Math.round((b - a) / 2));
-      for (let j = 0; j <= m; j++) {
-        const [x, y, tx, ty] = mid.at(a + (b - a) * j / m);
-        const o = 4.5 * Math.sin(2 * Math.PI * j / m);   // + is outwards
-        vine += `${j ? 'L' : 'M'}${r1(x + ty * o)} ${r1(y - tx * o)}`;
-      }
-      for (const [f, o, turn] of [[0.25, 4.4, -150], [0.75, -4.4, 30]]) {
-        const [x, y, tx, ty] = mid.at(a + (b - a) * f);
-        leaves += `<use href="#pwLeaf" transform="translate(${r1(x + ty * o)} ${r1(y - tx * o)}) rotate(${r1(Math.atan2(ty, tx) * 180 / Math.PI + turn)})"/>`;
-      }
-    });
-    out += `<path d="${vine}" fill="none" stroke="#d9ac4a" stroke-width=".9"/>`
-      + `<g fill="#3f8f52" stroke="#2a6a3a" stroke-width=".35">${leaves}</g>`;
-    out += stops.map((s) => {
-      const [x, y] = mid.at(s);
-      const big = bigs.includes(s);
-      return `${big ? `<circle cx="${r1(x)}" cy="${r1(y)}" r="10.4" fill="#0f3e3c" stroke="#d9ac4a" stroke-width=".7"/>` : ''}`
-        + `<use href="#pwRose" transform="translate(${r1(x)} ${r1(y)}) scale(${big ? 1.12 : 1.02})"/>`;
-    }).join('');
+    out += pwRun(mid, spread(bigs, mid.len, 40), bigs, mid.len);
 
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = out;
@@ -789,6 +875,7 @@
       pichhwai: cardBorder === 'pichhwai',
     };
     if (!root.dataset.frame && FRAMES[t.pageBorder]) root.dataset.frame = FRAMES[t.pageBorder];
+    pw = PW_STYLES[PW_NAMES[(params.get('pichhwai') || '').toLowerCase()] || PW_NAMES[(t.pichhwaiStyle || '').toLowerCase()] || 'lotus'];
     // the ivory pages: the lotus border, or the gold lines with a corner ornament in each corner
     const framed = root.dataset.frame === 'pichhwai'
       ? `<div class="framed pichhwai">${PW_SVG}`
@@ -831,7 +918,7 @@
         </div>
       </section>
 
-      <section class="events silk${cardLook.pichhwai ? ' pw-bands' : ''}">
+      <section class="events silk">
         <div class="patola top"></div>
         <div class="lace l1">${mandala('S', false)}</div>
         <div class="lace l2">${mandala('S', false)}</div>
@@ -876,7 +963,11 @@
       </section>`;
 
     document.title = `${c.name1} ${c.joiner || '&'} ${c.name2}`;
-    drawPichhwai(document.querySelectorAll('.card.pichhwai, .framed.pichhwai'));
+    // the Pichhwai bands: on every coloured section with the page border, else round the functions with the cards
+    const bandSel = root.dataset.frame === 'pichhwai' ? '.patola' : (cardLook.pichhwai ? '.events .patola' : '');
+    const bands = bandSel ? Array.from(document.querySelectorAll(bandSel)) : [];
+    bands.forEach((band) => { band.classList.add('pw-band'); band.innerHTML = PW_SVG; });
+    drawPichhwai([...document.querySelectorAll('.card.pichhwai, .framed.pichhwai'), ...bands]);
 
     document.querySelectorAll('[data-ics]').forEach((btn) => {
       btn.addEventListener('click', () => downloadIcs(inv.events[Number(btn.dataset.ics)], inv));
