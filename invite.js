@@ -560,6 +560,15 @@
       .join(`<span class="you">${esc(fillInvite('{you}', n))}</span>`);
   }
 
+  // "Dear Mr. Arjun," but "Shri Jayeshbhai," on its own: an honorific already carries the respect
+  const greeting = (name) => (/^shri\b/i.test((name || '').trim()) ? `${name},` : `Dear ${name},`);
+  // the line under the invocation: one phrase on the left, one on the right (Details → invocation_left / _right)
+  const invocationPair = (left, right) => {
+    if (!left && !right) return '';
+    const side = (s, cls) => `<span class="${cls}${isDevanagari(s) ? '' : ' latin'}"${isDevanagari(s) ? ' lang="sa"' : ''}>${esc(s || '')}</span>`;
+    return `<p class="invocation-pair reveal" style="--d:.4s">${side(left, 'inv-l')}${side(right, 'inv-r')}</p>`;
+  };
+
   const initialsOf = (c) => [c.name1, c.name2].map((n) => (n || '').trim().charAt(0).toUpperCase()).filter(Boolean).join(' & ');
   const emblemHtml = (emblem, initials, cls) => {
     const e = (emblem || '').trim().toLowerCase();
@@ -675,6 +684,7 @@
         <div class="hero-inner">
           <div class="halo reveal" style="--d:.1s">${mandala('S', true)}${emblemHtml(t.emblem, initialsOf(c), 'emblem')}</div>
           ${t.invocation ? `<p class="invocation reveal${dev ? '' : ' latin'}" style="--d:.3s"${dev ? ' lang="sa"' : ''}>${esc(t.invocation)}</p>` : ''}
+          ${invocationPair(t.invocationLeft, t.invocationRight)}
           ${logoStyle
             ? `<h1 class="hero-logo reveal" style="--d:.5s"><span class="sr-only">${esc(c.name1)} &amp; ${esc(c.name2)}</span>${logo(logoStyle, c, inv.logoDate || '', logoFont, logoOpts)}</h1>`
             : `<h1 class="hero-title script foil write" style="--d:.5s">${heroTitle}</h1>`}
@@ -689,7 +699,7 @@
         <div class="paper-lace">${mandala('P', false)}</div>
         ${framed}
           <div class="kalash-wrap reveal">${kalash()}</div>
-          <p class="dear reveal">Dear ${esc(g.name)},</p>
+          <p class="dear reveal">${esc(greeting(g.name))}</p>
           ${lead ? `<p class="lead reveal">${fillInviteHtml(t.invite, g.seats)}</p>` : ''}
           ${t.parents1 ? `<p class="parents above reveal">${esc(t.parents1)}</p>` : ''}
           <h2 class="person script foil write">${esc(c.name1)}</h2>
@@ -979,7 +989,7 @@
   function armCover(inv) {
     const t = inv.text || {};
     $('#cover-emblem').outerHTML = emblemHtml(t.emblem, initialsOf(inv.couple), 'cover-emblem');
-    $('#cover-dear').textContent = `Dear ${inv.guest.name},`;
+    $('#cover-dear').textContent = greeting(inv.guest.name);
     $('#cover-title').textContent = t.coverTitle || 'Wedding Invitation';
     $('#cover-when').textContent = inv.dates;
     $('#cover-place').textContent = t.location || '';

@@ -371,6 +371,12 @@ svg { color: var(--gold); }
 .emblem.initials { font-family: var(--script); font-size: calc(clamp(30px, 9vw, 40px) * var(--script-k)); }
 .invocation { margin-top: 4px; font-family: 'Tiro Devanagari Sanskrit', serif; font-size: 17px; color: var(--gold); }
 .invocation.latin { font-family: var(--serif); font-style: italic; font-size: 19px; }
+/* one line under it: a phrase at the left and one at the right, kept on a single line even on small phones */
+.invocation-pair { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; width: min(100%, 420px); margin: 2px auto 0;
+  font-family: 'Tiro Devanagari Sanskrit', serif; font-size: clamp(11px, 3.4vw, 15px); color: var(--gold); white-space: nowrap; }
+.invocation-pair .inv-l { text-align: left; }
+.invocation-pair .inv-r { text-align: right; }
+.invocation-pair .latin { font-family: var(--serif); font-style: italic; }
 .hero-title { font-size: calc(clamp(50px, 15vw, 64px) * var(--script-k)); }
 .hero .divider { margin: 6px auto; }
 .hero-date { font-family: var(--caps); font-size: 13px; font-weight: var(--caps-weight); letter-spacing: .34em; text-transform: uppercase; }
