@@ -113,7 +113,7 @@
     <path d="M110 1l6 7-6 7-6-7z"/><path d="M110 4.6l2.9 3.4-2.9 3.4-2.9-3.4z" fill="#fff4d6" opacity=".55"/>
     <path d="M98 8c3-3.2 6-3.2 8 0-2 3.2-5 3.2-8 0zM122 8c-3-3.2-6-3.2-8 0 2 3.2 5 3.2 8 0z" opacity=".85"/></g></svg>`;
 
-  // Guests → side (Family, Friend, Colleague…): spelt the same way it's grouped, blank ones under "Other"
+  // Guests → side: Family, Friends or Colleagues (the build allows nothing else)
   const sideOf = (g) => {
     const s = String(g.side || '').trim().toLowerCase();
     return s ? s.charAt(0).toUpperCase() + s.slice(1) : 'Other';
