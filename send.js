@@ -113,8 +113,20 @@
     <path d="M110 1l6 7-6 7-6-7z"/><path d="M110 4.6l2.9 3.4-2.9 3.4-2.9-3.4z" fill="#fff4d6" opacity=".55"/>
     <path d="M98 8c3-3.2 6-3.2 8 0-2 3.2-5 3.2-8 0zM122 8c-3-3.2-6-3.2-8 0 2 3.2 5 3.2 8 0z" opacity=".85"/></g></svg>`;
 
+  // Guests → side (Family, Friend, Colleague…): spelt the same way it's grouped, blank ones under "Other"
+  const sideOf = (g) => {
+    const s = String(g.side || '').trim().toLowerCase();
+    return s ? s.charAt(0).toUpperCase() + s.slice(1) : 'Other';
+  };
+
   function render(list) {
     const isSent = (g) => Boolean(g.sent) || store.get(`sent:${g.code}`) === '1';
+    // the sides in workbook order, each with how many invitations it has
+    const sides = [];
+    const sideCount = {};
+    list.forEach((g) => { const s = sideOf(g); if (!(s in sideCount)) { sides.push(s); sideCount[s] = 0; } sideCount[s] += 1; });
+    let side = store.get('side-filter') || '';
+    if (side && !(side in sideCount)) side = '';
     const seatsOf = (g) => (g.seats === 'all' ? 'All of the family' : g.seats ? `${g.seats} seat${g.seats > 1 ? 's' : ''}` : '');
     $('#app').innerHTML = `
       <header class="sp-head">
@@ -133,6 +145,9 @@
         <div class="search">${ICONS.search}<input type="search" id="search" placeholder="Search names" aria-label="Search names" autocomplete="off"></div>
         <label><input type="checkbox" id="hide-sent"> Hide sent</label>
       </div>
+      ${sides.length > 1 ? `<div class="sides" id="sides" role="group" aria-label="Show one side">
+        ${['', ...sides].map((s) => `<button type="button" class="side-chip" data-side="${esc(s)}" aria-pressed="false">${esc(s || 'All')}<span>${s ? sideCount[s] : list.length}</span></button>`).join('')}
+      </div>` : ''}
       <div id="rows">${list.map((g, i) => {
         const whatsapp = `https://wa.me/${g.phone}?text=${encodeURIComponent(g.message)}`;
         const seats = seatsOf(g);
@@ -140,7 +155,7 @@
           <div class="row-head">
             <div>
               <div class="row-name">${esc(g.name)}</div>
-              ${seats ? `<div class="row-seats">${ICONS.people}${esc(seats)}</div>` : ''}
+              ${seats || g.side ? `<div class="row-seats">${ICONS.people}${esc([seats, g.side ? sideOf(g) : ''].filter(Boolean).join(' · '))}</div>` : ''}
             </div>
             <label class="sent-toggle"><input type="checkbox" data-sent="${i}"${isSent(g) ? ' checked' : ''}${g.sent ? ' disabled title="Marked Yes in the workbook"' : ''}> Sent</label>
           </div>
@@ -154,7 +169,7 @@
         </article>`;
       }).join('')}</div>
       ${DIVIDER}
-      <p class="hint">Sent invitations move to the end and their WhatsApp button is switched off. Untick Sent to send again.<br>Ticks are saved on this device only. Also set Sent to Yes in the workbook to keep a permanent record.</p>`;
+      <p class="hint">Tap a side to see only those guests; the counts above follow it.<br>Sent invitations move to the end and their WhatsApp button is switched off. Untick Sent to send again.<br>Ticks are saved on this device only. Also set Sent to Yes in the workbook to keep a permanent record.</p>`;
 
     const rows = Array.from(document.querySelectorAll('.guest-row'));
     if (withPichhwai) Pichhwai.draw(rows);
@@ -162,13 +177,16 @@
     const update = () => {
       const q = $('#search').value.trim().toLowerCase();
       const hideSent = $('#hide-sent').checked;
+      // the counts and the progress bar are for the side being shown
       let sent = 0;
+      let total = 0;
       rows.forEach((row) => {
         const g = list[Number(row.dataset.i)];
         const done = isSent(g);
-        if (done) sent += 1;
+        const onSide = !side || sideOf(g) === side;
+        if (onSide) { total += 1; if (done) sent += 1; }
         row.classList.toggle('is-sent', done);
-        row.hidden = (q && !g.name.toLowerCase().includes(q)) || (hideSent && done);
+        row.hidden = !onSide || (q && !g.name.toLowerCase().includes(q)) || (hideSent && done);
         // a sent invitation's WhatsApp button stops working until Sent is unticked (Copy and Preview stay on)
         const wa = row.querySelector('.btn-wa');
         if (done) { wa.setAttribute('aria-disabled', 'true'); wa.setAttribute('tabindex', '-1'); }
@@ -178,11 +196,23 @@
       const order = rows.slice().sort((a, b) => (
         (isSent(list[Number(a.dataset.i)]) - isSent(list[Number(b.dataset.i)])) || (a.dataset.i - b.dataset.i)));
       if (order.some((row, k) => box.children[k] !== row)) order.forEach((row) => box.appendChild(row));
-      $('#st-total').textContent = list.length;
+      $('#st-total').textContent = total;
       $('#st-sent').textContent = sent;
-      $('#st-left').textContent = list.length - sent;
-      $('#st-bar').style.width = `${list.length ? Math.round((sent / list.length) * 100) : 0}%`;
+      $('#st-left').textContent = total - sent;
+      $('#st-bar').style.width = `${total ? Math.round((sent / total) * 100) : 0}%`;
+      document.querySelectorAll('.side-chip').forEach((chip) => chip.setAttribute('aria-pressed', String(chip.dataset.side === side)));
     };
+    const sideBar = $('#sides');
+    if (sideBar) {
+      sideBar.addEventListener('click', (e) => {
+        const chip = e.target.closest('.side-chip');
+        if (!chip) return;
+        side = chip.dataset.side;
+        store.set('side-filter', false);
+        if (side) try { localStorage.setItem('side-filter', side); } catch (_) { /* private mode */ }
+        update();
+      });
+    }
 
     $('#rows').addEventListener('change', (e) => {
       const i = e.target.dataset.sent;
